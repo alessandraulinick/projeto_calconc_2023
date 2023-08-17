@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/cadastros.css' %}">
+    <title>ConCalc</title>
+</head>
+<body>
+    {% if user.is_anonymous %}
+        <div class="container-login100-form-btn">
+            <script>
+                window.location.href = "{% url 'login' %}"
+            </script>
+        </div>
+    {% else %}
+    <div class="header">
+        <div class="logo">
+            <img src="{% static 'images/img-01.png' %}" alt="IMG">
+        </div>
+        <ul class="menu">
+            <li><a class="btn-logout" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+    <h1>Cadastrar Agregado</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="field">
+            {{ form.nome.label_tag }}
+            {{ form.nome }}
+            {{ form.nome.errors }}
+        </div>
+        <div class="field">
+            {{ form.tipo_agregado.label_tag }}
+            {{ form.tipo_agregado }}
+            {{ form.tipo_agregado.errors }}
+        </div>
+        <div class="field">
+            {{ form.umidade.label_tag }}
+            {{ form.umidade }}
+            {{ form.umidade.errors }}
+        </div>
+        <div class="field">
+            {{ form.massa_especifica.label_tag }}
+            {{ form.massa_especifica }}
+            {{ form.massa_especifica.errors }}
+        </div>
+        <p>Granulometria</p>
+        <div class="field">
+            {{ form.pen_6_30_mm.label_tag }}
+            {{ form.pen_6_30_mm }}
+            {{ form.pen_6_30_mm.errors }}
+        </div>
+        <div class="field">
+            {{ form.pen_4_80_mm.label_tag }}
+            {{ form.pen_4_80_mm }}
+            {{ form.pen_4_80_mm.errors }}
+        </div>
+        <div class="field">
+            {{ form.pen_2_40_mm.label_tag }}
+            {{ form.pen_2_40_mm }}
+            {{ form.pen_2_40_mm.errors }}
+        </div>
+        <div class="field">
+            {{ form.pen_1_20_mm.label_tag }}
+            {{ form.pen_1_20_mm }}
+            {{ form.pen_1_20_mm.errors }}
+        </div>
+        <div class="field">
+            {{ form.pen_600_um.label_tag }}
+            {{ form.pen_600_um }}
+            {{ form.pen_600_um.errors }}
+        </div>
+        <div class="field">
+            {{ form.pen_300_um.label_tag }}
+            {{ form.pen_300_um }}
+            {{ form.pen_300_um.errors }}
+        </div>
+        <div class="field">
+            {{ form.pen_150_um.label_tag }}
+            {{ form.pen_150_um }}
+            {{ form.pen_150_um.errors }}
+        </div>
+        <div class="field">
+            {{ form.pen_75_um.label_tag }}
+            {{ form.pen_75_um }}
+            {{ form.pen_75_um.errors }}
+        </div>
+        <div class="field">
+            {{ form.fundo.label_tag }}
+            {{ form.fundo }}
+            {{ form.fundo.errors }}
+        </div>
+        <!-- Save Button -->
+        <div class="button-container">
+            <button type="submit" class="save-button">Cadastrar</button>
+            <button type="button" onclick="goBack()" class="exit-button">Sair</button>
+        </div>
+        </form>
+
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+    {% endif %}
+</body>
+{% endblock %}
+</html>

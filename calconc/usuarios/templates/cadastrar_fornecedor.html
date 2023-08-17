@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Cadastrar Fornecedor</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="field">
+      {{ form.nome.label_tag }}
+      {{ form.nome }}
+      {{ form.nome.errors }}
+    </div>
+    <!-- Repita os passos acima para os outros campos -->
+    <button type="submit">Cadastrar</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% load static %}
+
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <title>ConCalc</title>
+</head>
+<body>
+    {% if user.is_anonymous %}
+        <div class="container-login100-form-btn">
+            <script>
+                window.location.href = "{% url 'login' %}"
+            </script>
+        </div>
+
+    {% else %}
+    <div class="header">
+        <div class="texto-header">
+            <div class="logo">
+                <img src="{% static 'images/img-01.png' %}" alt="IMG">
+            </div>
+            <ul><li><a class="btn-logout" href="{% url 'logout' %}">Logout</a></li></ul>
+        </div>
+    </div>
+    <div class="menu-principal">
+        <p> Menu Principal </p>
+    </div>
+    <div class="container">
+     <div class="box-row">
+        <a href="{% url 'agregados' %}" class="box">
+          <span class="box-title">Agregado</span>
+          <span class="box-description">Gerenciamento de agregados</span>
+        </a>
+        <a href="{% url 'tipo_agregado' %}" class="box">
+          <span class="box-title">Tipo de Agregado</span>
+          <span class="box-description">Gerenciamento do tipo de agregado</span>
+        </a>
+        <a href="{% url 'calculator' %}" class="box">
+          <span class="box-title">Calculadora</span>
+          <span class="box-description">Realizar cálculos</span>
+        </a>
+        <a href="{% url 'traco' %}" class="box">
+          <span class="box-title">Traço</span>
+          <span class="box-description">Gerenciamento de traços</span>
+        </a>
+      </div>
+      <div class="box-row-2">
+        <a href="{% url 'listar_fornecedores' %}" class="box-2">
+          <span class="box-title">Fornecedor</span>
+          <span class="box-description">Gerenciamento de fornecedores</span>
+        </a>
+        <a href= "{% url 'usuarios' %}" class="box-2">
+          <span class="box-title">Usuários</span>
+          <span class="box-description">Gerenciamento de usuários</span>
+        </a>
+        <a href="{% url 'historico' %}" class="box-2">
+          <span class="box-title">Histórico</span>
+          <span class="box-description">Histórico de cálculos</span>
+        </a>
+      </div>
+    </div>
+
+    {% endif %}
+</body>
+{% endblock %}

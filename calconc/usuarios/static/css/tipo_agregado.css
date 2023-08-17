@@ -1,0 +1,57 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  background: #F5F5F5;
+}
+
+.header {
+  background: #171717;
+  height: 50px;
+}
+
+.logo,
+.texto-header {
+  display: flex;
+  align-items: center; /* Centraliza verticalmente */
+}
+
+.logo {
+  width: 50px;
+  margin-left: 10px;
+}
+
+.logo img {
+  text-decoration: none;
+  list-style: none;
+  max-width: 80%;
+}
+
+.texto-header {
+    text-decoration: none;
+    list-style: none;
+    color: #171717;
+    display: flex;
+    justify-content: space-between; /* Adicionado para alinhar os elementos nas extremidades */
+    align-items: center; /* Centralizar verticalmente os elementos */
+    margin-right: 10px;
+}
+
+.btn-logout {
+    font-size: 16px;
+    color: white;
+    text-decoration: none;
+    list-style: none;
+}
+
+.menu-principal {
+  color: black;
+  margin: 15px;
+  font-size: 25px;
+  font-weight: bold;
+}
+

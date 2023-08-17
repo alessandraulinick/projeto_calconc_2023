@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculadora</title>
+</head>
+<body>
+    <h1>Calculadora</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="num1">Número 1:</label>
+        <input type="number" name="num1" required>
+        <br>
+        <label for="num2">Número 2:</label>
+        <input type="number" name="num2" required>
+        <br>
+        <input type="submit" value="Somar">
+    </form>
+
+    {% if result is not None %}
+        <h2>Resultado: {{ result }}</h2>
+    {% endif %}
+
+    <script>
+        // Função para limpar o resultado ao atualizar a página
+        function clearResultOnRefresh() {
+            var resultElement = document.getElementById('result');
+            if (resultElement) {
+                resultElement.innerHTML = '';
+            }
+        }
+
+        // Chama a função quando a página é carregada
+        window.onload = clearResultOnRefresh;
+    </script>
+</body>
+</html>

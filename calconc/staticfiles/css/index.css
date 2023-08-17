@@ -1,0 +1,132 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  background: #F5F5F5;
+}
+
+.header {
+  background: #171717;
+}
+
+.logo,
+.texto-header {
+  display: inline-block;
+  width: 50%;
+  vertical-align: top;
+}
+
+.logo {
+  width: 50px;
+  margin-left: 10px;
+}
+
+.logo img {
+  max-width: 50%;
+}
+
+.texto-header {
+  text-decoration: none;
+  display: flex;
+}
+
+.btn-logout {
+    color: white;
+    display: flex;
+    text-decoration: none;
+    justify-content: right;
+    list-style: none;
+    margin-top: 5px;
+    margin-left: 90%;
+    padding: 0;
+    width: 100%;
+}
+
+.menu-principal {
+  color: black;
+  margin: 15px;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-left: 15px;
+  margin-top: 15px;
+  margin-right: 15px;
+}
+
+.box-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+
+.box-row.align-left {
+  justify-content: flex-start;
+}
+
+.box-row-2 {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 75%;
+  margin-bottom: 20px;
+}
+
+.box-row-2.align-left {
+  justify-content: flex-start;
+}
+
+.box {
+  font-size: 16px;
+  font-weight: 600;
+  width: calc(25% - 10px);
+  height: 150px;
+  background-color: #E6E6FA;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: #000;
+  border-radius: 10px;
+}
+
+.box-2 {
+  font-size: 16px;
+  font-weight: 600;
+  width: calc(33.3% - 10px);
+  height: 150px;
+  background-color: #E6E6FA;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: #000;
+  border-radius: 10px;
+}
+
+
+/* Estilos adicionais para hover (opcional) */
+.box:hover {
+  background-color: #F8F8FF;
+  color: black;
+  border-radius: 10px;
+}
+
+.box-2:hover {
+  background-color: #F8F8FF;
+  color: black;
+  border-radius: 10px;
+}

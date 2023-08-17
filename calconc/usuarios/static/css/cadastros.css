@@ -1,0 +1,80 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  background: #F5F5F5;
+}
+
+.header {
+  background: #171717;
+  height: 50px;
+}
+
+.logo,
+.texto-header {
+  display: flex;
+  align-items: center; /* Centraliza verticalmente */
+}
+
+.logo {
+  width: 50px;
+  margin-left: 10px;
+}
+
+.logo img {
+  text-decoration: none;
+  list-style: none;
+  max-width: 50%;
+}
+
+.texto-header {
+    text-decoration: none;
+    list-style: none;
+    color: #171717;
+    display: flex;
+    justify-content: space-between; /* Adicionado para alinhar os elementos nas extremidades */
+    align-items: center; /* Centralizar verticalmente os elementos */
+    margin-right: 10px;
+}
+
+.btn-logout {
+    font-size: 16px;
+    color: white;
+    text-decoration: none;
+    list-style: none;
+}
+
+.menu-principal {
+  color: black;
+  margin: 15px;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+/* Style for the button container */
+.button-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+/* Style for the Save button */
+.save-button {
+    width: 100px;
+    height: 50px;
+    background-color: green;
+    color: white;
+}
+
+/* Style for the Exit button */
+.exit-button {
+    width: 100px;
+    background-color: red;
+    color: white;
+}

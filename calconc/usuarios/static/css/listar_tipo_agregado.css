@@ -1,0 +1,130 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  background: #F5F5F5;
+  min-height: 100vh;
+}
+
+.header {
+  background: #171717;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px; /* Adiciona um espaçamento interno para os elementos dentro do cabeçalho */
+}
+
+.logo {
+  width: 50px;
+}
+
+.logo img {
+  max-width: 100%;
+}
+
+.btn-logout {
+  font-size: 16px;
+  color: white;
+  text-decoration: none;
+  list-style: none;
+}
+
+.menu {
+  list-style: none;
+}
+
+.menu li {
+  display: inline-block; /* Para que os itens do menu fiquem na mesma linha */
+  margin-right: 10px; /* Adiciona um espaçamento entre os itens do menu */
+}
+
+.container {
+  display: flex;
+  min-height: calc(100vh - 50px);
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #C0C0C0;
+}
+
+.sidebar ul {
+  list-style: none;
+  margin: none;
+}
+
+.sidebar ul li {
+    width: 100%;
+    height: calc(9%);
+    display: flex;
+    align-items: center;
+}
+
+.sidebar ul li.active {
+        background-color: white;
+}
+
+.sidebar ul li a {
+    text-decoration:none;
+    color: black;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.content {
+  flex: 1;
+  margin: 15px;
+}
+
+.nome-pagina{
+    text-align: left;
+    font-size: 18px;
+}
+
+.cadastrar_tipo_agregado_btn {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.btn_cadastrar_tipo_agregado {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.all-content {
+    margin-top: 25px;
+    width: 100%;
+    height:92%;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.filtros{
+    margin-top:20px;
+    margin-left:20px;
+}
+
+.sidebar ul li:hover{
+    background-color: white;
+}
+
+.lista-tipos-agregados table {
+    width: 40%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    font-size: 15px; /* Aumentar o tamanho da fonte */
+}
+
+.lista-tipos-agregados th, .lista-tipos-agregados td {
+    padding: 12px; /* Aumentar o espaçamento interno */
+    border: 1px solid #ccc;
+    text-align: left;
+}
