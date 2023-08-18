@@ -33,84 +33,97 @@
         <div class="form-columns">
             <div class="form-column">
                 <div class="field">
-                    {{ form.nome.label_tag }}
+                    <label for="{{ form.nome.id_for_label }}">Nome<span class="required-label">*</span></label>
                     {{ form.nome }}
-                    <span class="error-message">{{ form.nome.errors }}</span>
+                    <ul class="error-message">{{ form.nome.errors }}</ul>
                 </div>
+
                 <div class="field">
-                    {{ form.tipo_agregado.label_tag }}
+                    <label for="{{ form.tipo_agregado.id_for_label }}">Tipo Agregado<span class="required-label">*</span></label>
                     {{ form.tipo_agregado }}
-                    <span class="error-message">{{ form.tipo_agregado.errors }}</span>
+                    <ul class="error-message">{{ form.tipo_agregado.errors }}</ul>
                 </div>
+
                 <div class="field">
-                    {{ form.umidade.label_tag }}
+                    <label for="{{ form.umidade.id_for_label }}">Umidade<span class="required-label">*</span></label>
                     {{ form.umidade }}
-                    <span class="error-message">{{ form.umidade.errors }}</span>
+                    <ul class="error-message">{{ form.umidade.errors }}</ul>
                 </div>
+
                 <div class="field">
-                    {{ form.massa_especifica.label_tag }}
+                    <label for="{{ form.massa_especifica.id_for_label }}">Massa Específica<span class="required-label">*</span></label>
                     {{ form.massa_especifica }}
-                    <span class="error-message">{{ form.massa_especifica.errors }}</span>
+                    <ul class="error-message">{{ form.massa_especifica.errors }}</ul>
                 </div>
-                 <div class="field">
-                    {{ form.fornecedor.label_tag }}
+
+                <div class="field">
+                    <label for="{{ form.fornecedor.id_for_label }}">Fornecedor<span class="required-label">*</span></label>
                     {{ form.fornecedor }}
-                     <span class="error-message">{{ form.fornecedor.errors }}</span>
+                    <ul class="error-message">{{ form.fornecedor.errors }}</ul>
                 </div>
+
                 <h1>Granulometria</h1>
+
                 <div class="field">
-                    {{ form.pen_6_30_mm.label_tag }}
+                    <label for="{{ form.pen_6_30_mm.id_for_label }}">Pen 6.30 mm<span class="required-label">*</span></label>
                     {{ form.pen_6_30_mm }}
-                     <span class="error-message">{{ form.pen_6_30_mm.errors }}</span>
+                    <ul class="error-message">{{ form.pen_6_30_mm.errors }}</ul>
                 </div>
+
                 <div class="field">
-                    {{ form.pen_4_80_mm.label_tag }}
+                    <label for="{{ form.pen_4_80_mm.id_for_label }}">Pen 4.80 mm<span class="required-label">*</span></label>
                     {{ form.pen_4_80_mm }}
-                    {{ form.pen_4_80_mm.errors }}
+                    <ul class="error-message">{{ form.pen_4_80_mm.errors }}</ul>
                 </div>
             </div>
             <div class="form-column">
                 <div class="field">
-                    {{ form.pen_2_40_mm.label_tag }}
+                    <label for="{{ form.pen_2_40_mm.id_for_label }}">Pen 2.40 mm<span class="required-label">*</span></label>
                     {{ form.pen_2_40_mm }}
-                    {{ form.pen_2_40_mm.errors }}
+                    <ul class="error-message">{{ form.pen_2_40_mm.errors }}</ul>
                 </div>
+
                 <div class="field">
-                    {{ form.pen_1_20_mm.label_tag }}
+                    <label for="{{ form.pen_1_20_mm.id_for_label }}">Pen 1.20 mm<span class="required-label">*</span></label>
                     {{ form.pen_1_20_mm }}
-                    {{ form.pen_1_20_mm.errors }}
+                    <ul class="error-message">{{ form.pen_1_20_mm.errors }}</ul>
                 </div>
+
                 <div class="field">
-                    {{ form.pen_600_um.label_tag }}
+                    <label for="{{ form.pen_600_um.id_for_label }}">Pen 600 um<span class="required-label">*</span></label>
                     {{ form.pen_600_um }}
-                    {{ form.pen_600_um.errors }}
+                    <ul class="error-message">{{ form.pen_600_um.errors }}</ul>
                 </div>
+
                 <div class="field">
-                    {{ form.pen_300_um.label_tag }}
+                    <label for="{{ form.pen_300_um.id_for_label }}">Pen 300 um<span class="required-label">*</span></label>
                     {{ form.pen_300_um }}
-                    {{ form.pen_300_um.errors }}
+                    <ul class="error-message">{{ form.pen_300_um.errors }}</ul>
                 </div>
+
                 <div class="field">
-                    {{ form.pen_150_um.label_tag }}
+                    <label for="{{ form.pen_150_um.id_for_label }}">Pen 150 um<span class="required-label">*</span></label>
                     {{ form.pen_150_um }}
-                    {{ form.pen_150_um.errors }}
+                    <ul class="error-message">{{ form.pen_150_um.errors }}</ul>
                 </div>
+
                 <div class="field">
-                    {{ form.pen_75_um.label_tag }}
+                    <label for="{{ form.pen_75_um.id_for_label }}">Pen 75 um<span class="required-label">*</span></label>
                     {{ form.pen_75_um }}
-                    {{ form.pen_75_um.errors }}
+                    <ul class="error-message">{{ form.pen_75_um.errors }}</ul>
                 </div>
+
                 <div class="field">
-                    {{ form.fundo.label_tag }}
+                    <label for="{{ form.fundo.id_for_label }}">Fundo<span class="required-label">*</span></label>
                     {{ form.fundo }}
-                    {{ form.fundo.errors }}
+                    <ul class="error-message">{{ form.fundo.errors }}</ul>
                 </div>
             </div>
         </div>
         <div class="button-container">
-                    <button type="submit" class="save-button">Cadastrar</button>
-                    <button type="button" onclick="goBack()" class="exit-button">Sair</button>
-                </div>
+            <button type="submit" class="save-button">Cadastrar</button>
+            <button type="button" onclick="goBack()" class="exit-button">Sair</button>
+        </div>
         <script>
         function goBack() {
             window.history.back();
