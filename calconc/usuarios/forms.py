@@ -37,11 +37,7 @@ class TipoAgregadoForms(forms.ModelForm):
 class AgregadoForms(forms.ModelForm):
     class Meta:
         model = Agregado
-        fields = ['fk_tipo_agregado', 'nome', 'pen_6_30_mm', ...]  # Outros campos omitidos para brevidade
-
-    class Meta:
-        model = Agregado
-        fields = ['fk_tipo_agregado', 'nome', 'pen_6_30_mm', 'pen_4_80_mm', 'pen_2_40_mm', 'pen_1_20_mm', 'pen_600_um', 'pen_300_um', 'pen_150_um', 'pen_75_um', 'fundo', 'umidade', 'massa_especifica', 'fk_fornecedor', 'data_cadastro']
+        fields = ['fk_tipo_agregado', 'nome', 'pen_6_30_mm', 'pen_4_80_mm', 'pen_2_40_mm', 'pen_1_20_mm', 'pen_600_um', 'pen_300_um', 'pen_150_um', 'pen_75_um', 'fundo', 'umidade', 'massa_especifica', 'fk_fornecedor']
 
     def clean_pen_6_30_mm(self):
         pen_6_30_mm = self.cleaned_data.get('pen_6_30_mm')

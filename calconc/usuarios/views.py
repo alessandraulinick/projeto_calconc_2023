@@ -76,13 +76,12 @@ def cadastrar_agregado(request):
         form = AgregadoForms(request.POST)
         if form.is_valid():
             agregado = form.save(commit=False)
-            agregado.data_cadastro = timezone.now()
-            agregado.usuario = request.user
+            agregado.fk_usuario_id = request.user.id
             agregado.save()
 
             Agregado.objects.filter(pk=agregado.pk).update(num_modificacao=F('num_modificacao') + 1)
 
-            return redirect('index')
+            return redirect('cadastrar_agregado')
     else:
         form = AgregadoForms()
 

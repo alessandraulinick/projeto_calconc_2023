@@ -125,13 +125,27 @@ body {
 
 .lista-tipos-agregados table {
     width: 100%;
+    font-size: 14px;
+    table-layout: fixed;
     border-collapse: collapse;
     border: 1px solid #ccc;
-    font-size: 15px; /* Aumentar o tamanho da fonte */
+}
+
+.lista-tipos-agregados th.align-right,
+.lista-tipos-agregados td.align-right {
+    text-align: right;
+    font-size: 15px;
+}
+
+.lista-tipos-agregados td {
+    font-size: 12px;
+    width: 25%;
 }
 
 .lista-tipos-agregados th, .lista-tipos-agregados td {
-    padding: 12px; /* Aumentar o espaçamento interno */
-    border: 1px solid #ccc;
+    padding: 10px;
     text-align: left;
+    border: 1px solid #ccc;
+    width: 18%;
 }
+

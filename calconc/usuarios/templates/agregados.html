@@ -62,18 +62,21 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>Data de Cadastro</th>
                                 <th>Nome</th>
                                 <th>Umidade</th>
                                 <th>Massa Específica</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for tipo in agregados %}
                                 <tr>
+                                    <td>{{ tipo.data_cadastro }}</td>
                                     <td>{{ tipo.nome }}</td>
                                     <td>{{ tipo.umidade }}</td>
                                     <td>{{ tipo.massa_especifica }}</td>
-                                    <td>
+                                    <td class="align-right">
                                         <a href="{% url 'visualizar_agregado' tipo.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
                                         <a href="{% url 'editar_agregado' tipo.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
                                         <button class="btn-action btn-deletar" data-id="{{ tipo.id }}" data-url="{% url 'deletar_agregado' tipo.id %}"><i class="fa fa-trash"></i></button>

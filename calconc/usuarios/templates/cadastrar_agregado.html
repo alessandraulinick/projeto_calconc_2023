@@ -118,19 +118,35 @@
                     {{ form.fundo }}
                     <ul class="error-message">{{ form.fundo.errors }}</ul>
                 </div>
+                {% if form.errors %}
+                <div class="error-message">
+                    <strong>Erro no formulário:</strong>
+                    <ul>
+                        {% for field in form %}
+                        {% if field.errors %}
+                        <li>{{ field.label }}: {{ field.errors|join:", " }}</li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
             </div>
         </div>
         <div class="button-container">
             <button type="submit" class="save-button">Cadastrar</button>
             <button type="button" onclick="goBack()" class="exit-button">Sair</button>
         </div>
-        <script>
-        function goBack() {
-            window.history.back();
-        }
-    </script>
         </form>
+        <div id="mensagemSucesso" style="display: none;">Agregado cadastrado com sucesso!</div>
+        <script>
+            function goBack() {
+                window.history.back();
+            }
 
+            function exibirMensagemConfirmacao() {
+                alert("Agregado cadastrado com sucesso!");
+            }
+        </script>
     {% endif %}
 </body>
 {% endblock %}

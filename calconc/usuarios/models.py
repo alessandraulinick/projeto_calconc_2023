@@ -91,7 +91,7 @@ class Agregado(models.Model):
     num_modificacao = models.IntegerField(default=0)
     data_cadastro = models.DateTimeField(default=timezone.now)
     fk_fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE)
-    fk_tipo_agregado = models.ForeignKey(TipoAgregado, on_delete=models.CASCADE, related_name='agregados')
+    fk_tipo_agregado = models.ForeignKey(TipoAgregado, on_delete=models.CASCADE)
     def __str__(self):
         return self.nome
 
