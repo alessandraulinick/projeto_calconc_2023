@@ -13,7 +13,7 @@ body {
 
 .header {
   background: #171717;
-  height: 50px;
+  height: 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -21,7 +21,7 @@ body {
 }
 
 .logo {
-  width: 50px;
+  width: 36px;
 }
 
 .logo img {
@@ -119,8 +119,12 @@ body {
     background-color: white;
 }
 
+.lista-tipos-agregados{
+    margin: 15px;
+}
+
 .lista-tipos-agregados table {
-    width: 40%;
+    width: 100%;
     border-collapse: collapse;
     border: 1px solid #ccc;
     font-size: 15px; /* Aumentar o tamanho da fonte */

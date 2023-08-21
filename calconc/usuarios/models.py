@@ -90,7 +90,8 @@ class Agregado(models.Model):
     fk_usuario_id = models.IntegerField()  # Você pode querer usar ForeignKey em vez de IntegerField
     num_modificacao = models.IntegerField(default=0)
     data_cadastro = models.DateTimeField(default=timezone.now)
-
+    fk_fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE)
+    fk_tipo_agregado = models.ForeignKey(TipoAgregado, on_delete=models.CASCADE, related_name='agregados')
     def __str__(self):
         return self.nome
 

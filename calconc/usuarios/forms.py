@@ -35,12 +35,13 @@ class TipoAgregadoForms(forms.ModelForm):
 
 
 class AgregadoForms(forms.ModelForm):
-    tipo_agregado = forms.ModelChoiceField(queryset=TipoAgregado.objects.all(), label="Tipo de Agregado")
-    fornecedor = forms.ModelChoiceField(queryset=Fornecedor.objects.all(), label="Fornecedor")
+    class Meta:
+        model = Agregado
+        fields = ['fk_tipo_agregado', 'nome', 'pen_6_30_mm', ...]  # Outros campos omitidos para brevidade
 
     class Meta:
         model = Agregado
-        fields = ['tipo_agregado', 'nome', 'pen_6_30_mm', 'pen_4_80_mm', 'pen_2_40_mm', 'pen_1_20_mm', 'pen_600_um', 'pen_300_um', 'pen_150_um', 'pen_75_um', 'fundo', 'umidade', 'massa_especifica']
+        fields = ['fk_tipo_agregado', 'nome', 'pen_6_30_mm', 'pen_4_80_mm', 'pen_2_40_mm', 'pen_1_20_mm', 'pen_600_um', 'pen_300_um', 'pen_150_um', 'pen_75_um', 'fundo', 'umidade', 'massa_especifica', 'fk_fornecedor', 'data_cadastro']
 
     def clean_pen_6_30_mm(self):
         pen_6_30_mm = self.cleaned_data.get('pen_6_30_mm')
@@ -107,3 +108,8 @@ class AgregadoForms(forms.ModelForm):
         if massa_especifica <= 0:
             raise forms.ValidationError("O valor deve ser maior que zero.")
         return massa_especifica
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['fk_tipo_agregado'].queryset = TipoAgregado.objects.all()
+        self.fields['fk_fornecedor'].queryset = Fornecedor.objects.all()

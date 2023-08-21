@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
 from .forms import FornecedorForm, TipoAgregadoForms, AgregadoForms
 from .models import Fornecedor, TipoAgregado, Agregado, Historico, Traco, Usuarios
@@ -24,37 +24,37 @@ def listar_fornecedores(request):
 
 @login_required
 def listar_tipo_agregado(request):
-    listar_tipo_agregado = TipoAgregado.objects.all()  # Fetch all records from the table
-    return render(request, 'tipo_agregado.html', {'listar_tipo_agregado': listar_tipo_agregado})
+    tipos_agregados = TipoAgregado.objects.all()  # Renomeei a variável para ficar mais claro
+    return render(request, 'tipo_agregado.html', {'tipos_agregados': tipos_agregados})
 
 @login_required
-def agregados(request):
-    agregados = Agregado.objects.all()  # Fetch all records from the table
+def listar_agregados(request):  # Renomeei a função para ser mais descritiva
+    agregados = Agregado.objects.all()
     return render(request, 'agregados.html', {'agregados': agregados})
 
 @login_required
-def historico(request):
+def listar_historico(request):  # Renomeei a função para ser mais descritiva
     historico = Historico.objects.all()
     return render(request, 'historico.html', {'historico': historico})
 
 @login_required
-def traco(request):
+def listar_traco(request):  # Renomeei a função para ser mais descritiva
     traco = Traco.objects.all()
     return render(request, 'traco.html', {'traco': traco})
 
 @login_required
-def usuarios(request):
+def listar_usuarios(request):  # Renomeei a função para ser mais descritiva
     usuarios = Usuarios.objects.all()
     return render(request, 'usuarios.html', {'usuarios': usuarios})
 
-##Cadastros
+## Cadastros
 @login_required
 def cadastrar_fornecedor(request):
     if request.method == 'POST':
         form = FornecedorForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('index')  # Redirecione para a página desejada após o cadastro bem-sucedido
+            return redirect('index')
     else:
         form = FornecedorForm()
     return render(request, 'cadastrar_fornecedor.html', {'form': form})
@@ -65,7 +65,7 @@ def cadastrar_tipo_agregado(request):
         form = TipoAgregadoForms(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('index')  # Substitua pelo nome da URL a ser redirecionada após o cadastro
+            return redirect('index')
     else:
         form = TipoAgregadoForms()
     return render(request, 'cadastrar_tipo_agregado.html', {'form': form})
@@ -77,15 +77,54 @@ def cadastrar_agregado(request):
         if form.is_valid():
             agregado = form.save(commit=False)
             agregado.data_cadastro = timezone.now()
-            agregado.fk_usuario_id = request.user.id
+            agregado.usuario = request.user
             agregado.save()
 
-            # Atualize o campo num_modificacao usando F()
             Agregado.objects.filter(pk=agregado.pk).update(num_modificacao=F('num_modificacao') + 1)
 
             return redirect('index')
     else:
         form = AgregadoForms()
+
+    tipo_agregado_id = int(request.GET.get('fk_tipo_agregado', 0))
+    fornecedor_id = int(request.GET.get('fk_fornecedor', 0))
+
+    form.fields['fk_tipo_agregado'].queryset = TipoAgregado.objects.all()
+    form.fields['fk_fornecedor'].queryset = Fornecedor.objects.all()
+
+    if tipo_agregado_id:
+        form.fields['fk_tipo_agregado'].initial = tipo_agregado_id
+
+    if fornecedor_id:
+        form.fields['fk_fornecedor'].initial = fornecedor_id
+
     return render(request, 'cadastrar_agregado.html', {'form': form})
 
+@login_required
+def visualizar_agregado(request, pk):
+    agregado = get_object_or_404(Agregado, pk=pk)  # Alterei para Agregado
+    return render(request, 'visualizar_agregado.html', {'agregado': agregado})
+
+def editar_agregado(request, pk):
+    agregado = get_object_or_404(Agregado, id=pk)
+
+    if request.method == 'POST':
+        form = AgregadoForms(request.POST, instance=agregado)
+        if form.is_valid():
+            form.save()
+            return redirect('agregados')  # Redireciona para a página de listagem de agregados
+    else:
+        form = AgregadoForms(instance=agregado)
+
+    context = {
+        'form': form,
+        'agregado': agregado,
+    }
+    return render(request, 'editar_agregado.html', context)
+
+def deletar_agregado(request, pk):
+    agregado = get_object_or_404(Agregado, pk=pk)
+    if request.method == 'POST':
+        agregado.delete()
+    return redirect('agregados')
 
