@@ -14,7 +14,6 @@ urlpatterns = [
     path('tipo_agregado/', views.listar_tipo_agregado, name='tipo_agregado'),
     path('cadastrar_tipo_agregado/', views.cadastrar_tipo_agregado, name='cadastrar_tipo_agregado'),
     path('editar_tipo_agregado/<int:pk>/', views.editar_tipo_agregado, name='editar_tipo_agregado'),
-    path('deletar_tipo_agregado/<int:pk>/', views.deletar_tipo_agregado, name='deletar_tipo_agregado'),
     path('historico/', views.listar_historico, name='historico'),
     path('traco/', views.listar_traco, name='traco'),
     path('usuarios/', views.listar_usuarios, name='usuarios'),
@@ -25,5 +24,5 @@ urlpatterns = [
     path('deletar_agregado/<int:pk>/', views.deletar_agregado, name='deletar_agregado'),
     path('fornecedor/', views.listar_fornecedor, name='fornecedor'),
     path('cadastrar_fornecedor/', views.cadastrar_fornecedor, name='cadastrar_fornecedor'),
-    path('editar_fornecedor/', views.editar_fornecedor, name='editar_fornecedor'),
+    path('editar_fornecedor/<int:pk>', views.editar_fornecedor, name='editar_fornecedor'),
 ]

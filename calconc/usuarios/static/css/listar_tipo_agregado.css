@@ -89,12 +89,15 @@ body {
     font-size: 18px;
 }
 
-.cadastrar_tipo_agregado_btn {
-  text-align: right;
-  margin-top: 10px;
+.cadastrar_btn {
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
 }
 
-.btn_cadastrar_tipo_agregado {
+.btn_cadastrar {
+  text-align: right;
   background-color: #007bff;
   color: white;
   padding: 10px 20px;
@@ -119,11 +122,11 @@ body {
     background-color: white;
 }
 
-.lista-tipos-agregados{
+.lista {
     margin: 15px;
 }
 
-.lista-tipos-agregados table {
+.lista table {
     width: 100%;
     font-size: 14px;
     table-layout: fixed;
@@ -131,18 +134,18 @@ body {
     border: 1px solid #ccc;
 }
 
-.lista-tipos-agregados th.align-right,
-.lista-tipos-agregados td.align-right {
+.lista th.align-right,
+.lista td.align-right {
     text-align: right;
     font-size: 15px;
 }
 
-.lista-tipos-agregados td {
+.lista td {
     font-size: 12px;
     width: 25%;
 }
 
-.lista-tipos-agregados th, .lista-tipos-agregados td {
+.lista th, .lista td {
     padding: 10px;
     text-align: left;
     border: 1px solid #ccc;
