@@ -5,9 +5,10 @@ from .forms import FornecedorForm, TipoAgregadoForms, AgregadoForms
 from .models import Fornecedor, TipoAgregado, Agregado, Historico, Traco, Usuarios
 from django.utils import timezone
 from django.db.models import F
+from django.utils.decorators import method_decorator
 
 
-@login_required
+@method_decorator(login_required, name='dispatch')
 class CalculatorView(TemplateView):
     template_name = 'calculator.html'
 
@@ -61,7 +62,7 @@ def cadastrar_fornecedor(request):
         form = FornecedorForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect('listar_fornecedores')
     else:
         form = FornecedorForm()
     return render(request, 'cadastrar_fornecedor.html', {'form': form})
@@ -73,7 +74,7 @@ def cadastrar_tipo_agregado(request):
         form = TipoAgregadoForms(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect('tipo_agregado')
     else:
         form = TipoAgregadoForms()
     return render(request, 'cadastrar_tipo_agregado.html', {'form': form})

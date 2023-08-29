@@ -1,0 +1,80 @@
+{% load static %}
+
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/listar_tipo_agregado.css' %}">
+    <title>ConCalc</title>
+</head>
+<body>
+    {% if user.is_anonymous %}
+        <div class="container-login100-form-btn">
+            <script>
+                window.location.href = "{% url 'login' %}"
+            </script>
+        </div>
+    {% else %}
+    <div class="header">
+        <div class="logo">
+            <img src="{% static 'images/img-01.png' %}" alt="IMG">
+        </div>
+        <ul class="menu">
+            <li><a class="btn-logout" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Conteúdo do menu lateral -->
+            <ul>
+                <li><a href="{% url 'index' %}">Menu Inicial</a></li>
+
+                <li class="{% if request.resolver_match.view_name == 'agregados' %}active{% endif %}">
+                    <a href="{% url 'agregados' %}">Agregado</a>
+                </li>
+
+                <li class="{% if request.resolver_match.view_name == 'tipo_agregado' %}active{% endif %}">
+                    <a href="{% url 'tipo_agregado' %}">Tipo de Agregado</a>
+                </li>
+
+                <li class="{% if request.resolver_match.view_name == 'calculator' %}active{% endif %}">
+                    <a href="{% url 'calculator' %}">Calculadora</a>
+                </li>
+
+                <li class="{% if request.resolver_match.view_name == 'traco' %}active{% endif %}">
+                    <a href="{% url 'traco' %}">Traço</a>
+                </li>
+
+                <li class="{% if request.resolver_match.view_name == 'listar_fornecedores' %}active{% endif %}">
+                    <a href="{% url 'listar_fornecedores' %}">Fornecedor</a>
+                </li>
+
+                <li class="{% if request.resolver_match.view_name == 'usuarios' %}active{% endif %}">
+                    <a href="{% url 'usuarios' %}">Usuários</a>
+                </li>
+
+                <li class="{% if request.resolver_match.view_name == 'historico' %}active{% endif %}">
+                    <a href="{% url 'historico' %}">Histórico</a>
+                </li>
+            </ul>
+        </div>
+        <div class="content">
+            <div class="cadastrar_tipo_agregado_btn">
+                <a class="nome-pagina">Usuário</a>
+                <a href="{% url 'cadastrar_agregado' %}" class="btn_cadastrar_tipo_agregado">Cadastrar Usuário</a>
+            </div>
+
+            <div class = 'all-content'>
+                <div class = 'filtros'>
+                    Filtros
+                </div>
+            </div>
+        </div>
+        </div>
+
+    </div>
+    {% endif %}
+</body>
+{% endblock %}

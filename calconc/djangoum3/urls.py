@@ -9,7 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('contas/', include('django.contrib.auth.urls')),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
-    path('calculator', views.CalculatorView, name='calculator'),
+    path('calculator/', views.CalculatorView.as_view(), name='calculator'),
     path('listar_fornecedores/', views.listar_fornecedores, name='listar_fornecedores'),
     path('agregados/', views.listar_agregados, name='agregados'),
     path('tipo_agregado/', views.listar_tipo_agregado, name='tipo_agregado'),
