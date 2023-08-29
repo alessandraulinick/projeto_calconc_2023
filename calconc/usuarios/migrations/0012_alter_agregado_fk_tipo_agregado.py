@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name='agregado',
-            name='fk_tipo_agregado',
+            name='fk_tipo_agregado_id',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='agregados', to='usuarios.tipoagregado'),
         ),
     ]

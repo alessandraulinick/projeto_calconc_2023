@@ -50,31 +50,44 @@ class CustomUsuario(AbstractUser):
 
     objects = UsuarioManager()
 
+
 class Fornecedor(models.Model):
-    nome = models.CharField(max_length=20)
-    cidade = models.CharField(max_length=100)
-    id = models.CharField(max_length=18, primary_key=True)
-    bairro = models.CharField(max_length=200)
-    logradouro = models.CharField(max_length=100)
-    CEP = models.CharField(max_length=18)
-    complemento = models.CharField(max_length=200)
-    cpf_cnpj = models.CharField(max_length=20)
-    fone_1 = models.CharField(max_length=100)
-    ie = models.CharField(max_length=18)
-    observacao = models.CharField(max_length=20)
+    nome = models.CharField(max_length=50)
+    cidade = models.CharField(max_length=50)
+    # id = models.CharField(max_length=18, primary_key=True)
+    bairro = models.CharField(max_length=50)
+    logradouro = models.CharField(max_length=50)
+    CEP = models.CharField(max_length=8)
+    complemento = models.CharField(max_length=150)
+    cpf_cnpj = models.CharField(max_length=14)
+    fone_1 = models.CharField(max_length=11)
+    fone_2 = models.CharField(max_length=11, null=True)
+    ie = models.CharField(max_length=9)
+    observacao = models.CharField(max_length=200)
+
+    class Meta:
+        db_table = "fornecedor"
+
     def __str__(self):
         return self.nome
 
+
 class TipoAgregado(models.Model):
-    nome = models.CharField(max_length=20)
+    nome = models.CharField(max_length=40, unique=True, null=False)
+
     def __str__(self):
         return self.nome
+
+    class Meta:
+        db_table = "tipo_agregado"
+
 
 def positive_float_field():
     return models.FloatField(null=False, unique=False, validators=[MinValueValidator(0.00001)])
 
+
 class Agregado(models.Model):
-    nome = models.CharField(max_length=20, unique=True)
+    nome = models.CharField(max_length=40, unique=True)
     pen_6_30_mm = models.FloatField()
     pen_4_80_mm = models.FloatField()
     pen_2_40_mm = models.FloatField()
@@ -87,25 +100,42 @@ class Agregado(models.Model):
     umidade = models.FloatField()
     massa_especifica = models.FloatField()
     is_deleted = models.BooleanField(default=False)
-    fk_usuario_id = models.IntegerField()  # Você pode querer usar ForeignKey em vez de IntegerField
+    fk_usuario_id = models.IntegerField()  # TODO Você pode querer usar ForeignKey em vez de IntegerField
     num_modificacao = models.IntegerField(default=0)
     data_cadastro = models.DateTimeField(default=timezone.now)
-    fk_fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE)
-    fk_tipo_agregado = models.ForeignKey(TipoAgregado, on_delete=models.CASCADE)
+    fk_fornecedor_id = models.ForeignKey(Fornecedor, on_delete=models.CASCADE)
+    fk_tipo_agregado_id = models.ForeignKey(TipoAgregado, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "agregado"
+
     def __str__(self):
         return self.nome
 
+
 class Historico(models.Model):
     nome = models.CharField(max_length=20, unique=True)
+
     def __str__(self):
-        return  self.nome
+        return self.nome
+
 
 class Traco(models.Model):
     nome = models.CharField(max_length=20, unique=True)
+
+
+    class Meta:
+        db_table = "traco"
+
     def __str__(self):
-        return  self.nome
+        return self.nome
+
 
 class Usuarios(models.Model):
     nome = models.CharField(max_length=20, unique=True)
+
+    class Meta:
+        db_table = "usuarios"
+
     def __str__(self):
-        return  self.nome
+        return self.nome

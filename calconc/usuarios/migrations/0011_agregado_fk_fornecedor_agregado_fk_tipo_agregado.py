@@ -12,13 +12,13 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='agregado',
-            name='fk_fornecedor',
+            name='fk_fornecedor_id',
             field=models.IntegerField(default=1),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='agregado',
-            name='fk_tipo_agregado',
+            name='fk_tipo_agregado_id',
             field=models.IntegerField(default=1),
             preserve_default=False,
         ),

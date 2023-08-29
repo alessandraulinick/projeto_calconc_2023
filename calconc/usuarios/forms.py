@@ -4,6 +4,7 @@ from django import forms
 from .models import Fornecedor
 from .models import TipoAgregado, Agregado
 
+
 class CustomUsuarioCreateForm(UserCreationForm):
     class Meta:
         model = CustomUsuario
@@ -18,15 +19,18 @@ class CustomUsuarioCreateForm(UserCreationForm):
             user.save()
         return user
 
+
 class CustomUsuarioChangeForm(UserChangeForm):
     class Meta:
         model = CustomUsuario
         fields = ('first_name', 'last_name', 'fone')
 
+
 class FornecedorForm(forms.ModelForm):
     class Meta:
         model = Fornecedor
         fields = ['nome', 'cidade', 'id', 'bairro', 'logradouro', 'CEP', 'complemento', 'cpf_cnpj', 'fone_1', 'ie', 'observacao']
+
 
 class TipoAgregadoForms(forms.ModelForm):
     class Meta:
@@ -37,7 +41,7 @@ class TipoAgregadoForms(forms.ModelForm):
 class AgregadoForms(forms.ModelForm):
     class Meta:
         model = Agregado
-        fields = ['fk_tipo_agregado', 'nome', 'pen_6_30_mm', 'pen_4_80_mm', 'pen_2_40_mm', 'pen_1_20_mm', 'pen_600_um', 'pen_300_um', 'pen_150_um', 'pen_75_um', 'fundo', 'umidade', 'massa_especifica', 'fk_fornecedor']
+        fields = ['fk_tipo_agregado_id', 'nome', 'pen_6_30_mm', 'pen_4_80_mm', 'pen_2_40_mm', 'pen_1_20_mm', 'pen_600_um', 'pen_300_um', 'pen_150_um', 'pen_75_um', 'fundo', 'umidade', 'massa_especifica', 'fk_fornecedor_id']
 
     def clean_pen_6_30_mm(self):
         pen_6_30_mm = self.cleaned_data.get('pen_6_30_mm')
@@ -107,5 +111,5 @@ class AgregadoForms(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['fk_tipo_agregado'].queryset = TipoAgregado.objects.all()
-        self.fields['fk_fornecedor'].queryset = Fornecedor.objects.all()
+        self.fields['fk_tipo_agregado_id'].queryset = TipoAgregado.objects.all()
+        self.fields['fk_fornecedor_id'].queryset = Fornecedor.objects.all()

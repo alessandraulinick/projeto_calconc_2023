@@ -18,8 +18,16 @@
         {{ form.nome }}
         {{ form.nome.errors }}
     </div>
-    <button type="submit">Cadastrar</button>
+    <div class="button-container">
+        <button type="submit" class="save-button">Cadastrar</button>
+        <button type="button" onclick="goBack()" class="exit-button">Sair</button>
+    </div>
   </form>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
 </html>
 {% endblock %}

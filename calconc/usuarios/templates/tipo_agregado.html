@@ -33,7 +33,7 @@
                 <li class="{% if request.resolver_match.view_name == 'agregados' %}active{% endif %}">
                     <a href="{% url 'agregados' %}">Agregado</a>
                 </li>
-                <li class="{% if request.resolver_match.view_name == 'tipo_agregado' %}active{% endif %}">
+                <li class="{% if request.resolver_match.view_name == 'listar_tipo_agregado' %}active{% endif %}">
                     <a href="{% url 'tipo_agregado' %}">Tipo de Agregado</a>
                 </li>
                 <li><a href="#">Calculadora</a></li>
@@ -44,7 +44,7 @@
                 <li><a href="#">Usuários</a></li>
                 <li><a href="#">Histórico</a></li>
             </ul>
-        </div>/
+        </div>
 
         <!-- Conteúdo principal -->
         <div class="content">
@@ -65,9 +65,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for tipo in listar_tipo_agregado %}
+                            {% for tipo_agregado in tipos_agregados %}
                                 <tr>
-                                    <td>{{ tipo.nome }}</td>
+                                    <td>{{ tipo_agregado.nome }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
