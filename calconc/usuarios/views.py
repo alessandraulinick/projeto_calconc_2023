@@ -139,3 +139,10 @@ def deletar_agregado(request, pk):
     if request.method == 'POST':
         agregado.delete()
     return redirect('agregados')
+
+
+def deletar_tipo_agregado(request, pk):
+    tipo_agregado = get_object_or_404(TipoAgregado, pk=pk)
+    if request.method == 'POST':
+        tipo_agregado.delete()
+    return redirect('tipo_agregado')

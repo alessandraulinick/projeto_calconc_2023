@@ -22,4 +22,5 @@ urlpatterns = [
     path('visualizar_agregado/<int:pk>/', views.visualizar_agregado, name='visualizar_agregado'),
     path('editar_agregado/<int:pk>/', views.editar_agregado, name='editar_agregado'),
     path('deletar_agregado/<int:pk>/', views.deletar_agregado, name='deletar_agregado'),
+    path('deletar_tipo_agregado/<int:pk>/', views.deletar_tipo_agregado, name='deletar_tipo_agregado'),
 ]
