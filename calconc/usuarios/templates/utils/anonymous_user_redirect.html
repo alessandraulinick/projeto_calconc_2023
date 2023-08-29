@@ -1,0 +1,7 @@
+{% if user.is_anonymous %}
+    <div class="container-login100-form-btn">
+        <script>
+            window.location.href = "{% url 'login' %}"
+        </script>
+    </div>
+{% endif %}

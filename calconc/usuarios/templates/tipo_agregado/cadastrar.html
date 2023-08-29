@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% include "utils/anonymous_user_redirect.html" %}
+
 {% block content %}
 <html lang="pt-br">
 <head>
@@ -19,8 +21,8 @@
         {{ form.nome.errors }}
     </div>
     <div class="button-container">
-        <button type="submit" class="save-button">Cadastrar</button>
-        <button type="button" onclick="goBack()" class="exit-button">Sair</button>
+        <button type="submit" class="save-button">Salvar</button>
+        <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>
     </div>
   </form>
 <script>

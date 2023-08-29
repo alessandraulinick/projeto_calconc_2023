@@ -26,7 +26,7 @@ class CustomUsuarioChangeForm(UserChangeForm):
         fields = ('first_name', 'last_name', 'fone')
 
 
-class FornecedorForm(forms.ModelForm):
+class FornecedorForms(forms.ModelForm):
     class Meta:
         model = Fornecedor
         fields = ['nome', 'cidade', 'id', 'bairro', 'logradouro', 'CEP', 'complemento', 'cpf_cnpj', 'fone_1', 'ie', 'observacao']

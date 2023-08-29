@@ -75,11 +75,11 @@ class Fornecedor(models.Model):
 class TipoAgregado(models.Model):
     nome = models.CharField(max_length=40, unique=True, null=False)
 
-    def __str__(self):
-        return self.nome
-
     class Meta:
         db_table = "tipo_agregado"
+
+    def __str__(self):
+        return self.nome
 
 
 def positive_float_field():

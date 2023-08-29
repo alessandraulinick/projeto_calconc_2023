@@ -1,0 +1,135 @@
+{% extends 'base.html' %}  <!-- Ou o nome do template base que você está usando -->
+{% load static %}
+
+{% include "utils/anonymous_user_redirect.html" %}
+
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/cadastros.css' %}">
+    <title>ConCalc</title>
+</head>
+<h1>Editar Agregado: {{ agregado.nome }}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="form-columns">
+    <div class="form-column">
+        <div class="field">
+            <label for="{{ form.nome.id_for_label }}">Nome<span class="required-label">*</span></label>
+            {{ form.nome }}
+            <ul class="error-message">{{ form.nome.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.fk_tipo_agregado_id.id_for_label }}">Tipo Agregado<span class="required-label">*</span></label>
+            {{ form.fk_tipo_agregado_id }}
+            <ul class="error-message">{{ form.fk_tipo_agregado_id.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.umidade.id_for_label }}">Umidade<span class="required-label">*</span></label>
+            {{ form.umidade }}
+            <ul class="error-message">{{ form.umidade.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.massa_especifica.id_for_label }}">Massa Específica<span class="required-label">*</span></label>
+            {{ form.massa_especifica }}
+            <ul class="error-message">{{ form.massa_especifica.errors }}</ul>
+        </div>
+
+        <div class="field">
+           <label for="{{ form.fk_fornecedor_id.id_for_label }}">Fornecedor<span class="required-label">*</span></label>
+            {{ form.fk_fornecedor_id }}
+            <ul class="error-message">{{ form.fk_fornecedor_id.errors }}</ul>
+        </div>
+
+        <h1>Granulometria</h1>
+
+        <div class="field">
+            <label for="{{ form.pen_6_30_mm.id_for_label }}">Pen 6.30 mm<span class="required-label">*</span></label>
+            {{ form.pen_6_30_mm }}
+            <ul class="error-message">{{ form.pen_6_30_mm.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.pen_4_80_mm.id_for_label }}">Pen 4.80 mm<span class="required-label">*</span></label>
+            {{ form.pen_4_80_mm }}
+            <ul class="error-message">{{ form.pen_4_80_mm.errors }}</ul>
+        </div>
+    </div>
+    <div class="form-column">
+        <div class="field">
+            <label for="{{ form.pen_2_40_mm.id_for_label }}">Pen 2.40 mm<span class="required-label">*</span></label>
+            {{ form.pen_2_40_mm }}
+            <ul class="error-message">{{ form.pen_2_40_mm.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.pen_1_20_mm.id_for_label }}">Pen 1.20 mm<span class="required-label">*</span></label>
+            {{ form.pen_1_20_mm }}
+            <ul class="error-message">{{ form.pen_1_20_mm.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.pen_600_um.id_for_label }}">Pen 600 um<span class="required-label">*</span></label>
+            {{ form.pen_600_um }}
+            <ul class="error-message">{{ form.pen_600_um.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.pen_300_um.id_for_label }}">Pen 300 um<span class="required-label">*</span></label>
+            {{ form.pen_300_um }}
+            <ul class="error-message">{{ form.pen_300_um.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.pen_150_um.id_for_label }}">Pen 150 um<span class="required-label">*</span></label>
+            {{ form.pen_150_um }}
+            <ul class="error-message">{{ form.pen_150_um.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.pen_75_um.id_for_label }}">Pen 75 um<span class="required-label">*</span></label>
+            {{ form.pen_75_um }}
+            <ul class="error-message">{{ form.pen_75_um.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.fundo.id_for_label }}">Fundo<span class="required-label">*</span></label>
+            {{ form.fundo }}
+            <ul class="error-message">{{ form.fundo.errors }}</ul>
+        </div>
+        {% if form.errors %}
+        <div class="error-message">
+            <strong>Erro no formulário:</strong>
+            <ul>
+                {% for field in form %}
+                {% if field.errors %}
+                <li>{{ field.label }}: {{ field.errors|join:", " }}</li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        </div>
+    </div>
+    <div class="button-container">
+        <button type="submit" class="save-button">Salvar</button>
+        <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>
+    </div>
+    </form>
+    <div id="mensagemSucesso" style="display: none;">Agregado cadastrado com sucesso!</div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function exibirMensagemConfirmacao() {
+            alert("Agregado cadastrado com sucesso!");
+        }
+    </script>
+</form>
+{% endblock %}

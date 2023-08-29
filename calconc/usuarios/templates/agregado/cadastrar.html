@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% include "utils/anonymous_user_redirect.html" %}
+
 {% block content %}
 <html lang="pt-br">
 <head>
@@ -9,13 +11,7 @@
     <title>ConCalc</title>
 </head>
 <body>
-    {% if user.is_anonymous %}
-        <div class="container-login100-form-btn">
-            <script>
-                window.location.href = "{% url 'login' %}"
-            </script>
-        </div>
-    {% else %}
+
     <div class="header">
         <div class="texto-header">
             <div class="logo">
@@ -133,21 +129,20 @@
             </div>
         </div>
         <div class="button-container">
-            <button type="submit" class="save-button">Cadastrar</button>
-            <button type="button" onclick="goBack()" class="exit-button">Sair</button>
+            <button type="submit" class="save-button">Salvar</button>
+            <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>
         </div>
-        </form>
-        <div id="mensagemSucesso" style="display: none;">Agregado cadastrado com sucesso!</div>
-        <script>
-            function goBack() {
-                window.history.back();
-            }
+    </form>
+    <div id="mensagemSucesso" style="display: none;">Agregado cadastrado com sucesso!</div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
 
-            function exibirMensagemConfirmacao() {
-                alert("Agregado cadastrado com sucesso!");
-            }
-        </script>
-    {% endif %}
+        function exibirMensagemConfirmacao() {
+            alert("Agregado cadastrado com sucesso!");
+        }
+    </script>
 </body>
 {% endblock %}
 </html>

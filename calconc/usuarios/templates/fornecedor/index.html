@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% include "utils/anonymous_user_redirect.html" %}
+
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/fornecedor.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>ConCalc</title>
+</head>
+<body>
+     {% include "utils/header.html" %}
+
+    <div class="container">
+         {% include "utils/sidebar.html" %}
+
+        <div class="content">
+            <div class="cadastrar_fornecedor_btn">
+                <a class="nome-pagina">Tipo de Agregado</a>
+                <a href="{% url 'cadastrar_fornecedor' %}" class="btn_cadastrar_fornecedor">Cadastrar Fornecedor</a>
+            </div>
+
+            <div class = 'all-content'>
+                <div class = 'filtros'>
+                    Filtros
+                </div>
+                <div class="lista-fornecedor">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for fornecedor in fornecedores %}
+<!--                                <tr>-->
+<!--                                    <td>{{ fornecedor.nome }}</td>-->
+<!--                                    <td class="align-right">-->
+<!--                                        <a href="{% url 'editar_fornecedor' fornecedor.id %}" class="btn-action"><i class="fa fa-edit"></i></a>-->
+<!--&lt;!&ndash;  Desativado pois na documentaçao não foi mapeado a possibilidade de excluir tipo de agregado &ndash;&gt;-->
+<!--&lt;!&ndash;                                        <button class="btn-action btn-deletar" data-id="{{ tipo_agregado.id }}" data-url="{% url 'deletar_tipo_agregado' tipo_agregado.id %}"><i class="fa fa-trash"></i></button>&ndash;&gt;-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

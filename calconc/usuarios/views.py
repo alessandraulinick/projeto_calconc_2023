@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
-from .forms import FornecedorForm, TipoAgregadoForms, AgregadoForms
+from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms
 from .models import Fornecedor, TipoAgregado, Agregado, Historico, Traco, Usuarios
 from django.utils import timezone
 from django.db.models import F
@@ -19,23 +19,12 @@ class CalculatorView(TemplateView):
         return self.render_to_response(self.get_context_data(result=result))
 
 
-@login_required
-def listar_fornecedores(request):
-    fornecedores = Fornecedor.objects.all()
-    return render(request, 'listar_fornecedores.html', {'fornecedores': fornecedores})
 
-
-@login_required
-def listar_tipo_agregado(request):
-    tipos_agregados = TipoAgregado.objects.all()  # Renomeei a variável para ficar mais claro
-    return render(request, 'tipo_agregado.html', {'tipos_agregados': tipos_agregados})
-
-
-@login_required
-def listar_agregados(request):  # Renomeei a função para ser mais descritiva
-    agregados = Agregado.objects.all()
-    return render(request, 'agregados.html', {'agregados': agregados})
-
+def deletar_tipo_agregado(request, pk):
+    tipo_agregado = get_object_or_404(TipoAgregado, pk=pk)
+    if request.method == 'POST':
+        tipo_agregado.delete()
+    return redirect('tipo_agregado')
 
 @login_required
 def listar_historico(request):  # Renomeei a função para ser mais descritiva
@@ -55,18 +44,11 @@ def listar_usuarios(request):  # Renomeei a função para ser mais descritiva
     return render(request, 'usuarios.html', {'usuarios': usuarios})
 
 
-# Cadastros
+# Tipo Agregado
 @login_required
-def cadastrar_fornecedor(request):
-    if request.method == 'POST':
-        form = FornecedorForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('listar_fornecedores')
-    else:
-        form = FornecedorForm()
-    return render(request, 'cadastrar_fornecedor.html', {'form': form})
-
+def listar_tipo_agregado(request):
+    tipos_agregados = TipoAgregado.objects.all()  # Renomeei a variável para ficar mais claro
+    return render(request, 'tipo_agregado/index.html', {'tipos_agregados': tipos_agregados})
 
 @login_required
 def cadastrar_tipo_agregado(request):
@@ -77,7 +59,32 @@ def cadastrar_tipo_agregado(request):
             return redirect('tipo_agregado')
     else:
         form = TipoAgregadoForms()
-    return render(request, 'cadastrar_tipo_agregado.html', {'form': form})
+    return render(request, 'tipo_agregado/cadastrar.html', {'form': form})
+
+
+def editar_tipo_agregado(request, pk):
+    tipo_agregado = get_object_or_404(TipoAgregado, id=pk)
+
+    if request.method == 'POST':
+        form = TipoAgregadoForms(request.POST, instance=tipo_agregado)
+        if form.is_valid():
+            form.save()
+            return redirect('tipo_agregado')  # Redireciona para a página de listagem de agregados
+    else:
+        form = TipoAgregadoForms(instance=tipo_agregado)
+
+    context = {
+        'form': form,
+        'tipo_agregado': tipo_agregado
+    }
+    return render(request, 'tipo_agregado/editar.html', context)
+##########
+
+# Agregado
+@login_required
+def listar_agregados(request):  # Renomeei a função para ser mais descritiva
+    agregados = Agregado.objects.all()
+    return render(request, 'agregado/index.html', {'agregados': agregados})
 
 
 @login_required
@@ -91,7 +98,7 @@ def cadastrar_agregado(request):
 
             Agregado.objects.filter(pk=agregado.pk).update(num_modificacao=F('num_modificacao') + 1)
 
-            return redirect('cadastrar_agregado')
+            return redirect('agregados')
     else:
         form = AgregadoForms()
 
@@ -107,13 +114,13 @@ def cadastrar_agregado(request):
     if fornecedor_id:
         form.fields['fk_fornecedor_id'].initial = fornecedor_id
 
-    return render(request, 'cadastrar_agregado.html', {'form': form})
+    return render(request, 'agregado/cadastrar.html', {'form': form})
 
 
 @login_required
-def visualizar_agregado(request, pk):
-    agregado = get_object_or_404(Agregado, pk=pk)  # Alterei para Agregado
-    return render(request, 'visualizar_agregado.html', {'agregado': agregado})
+def inspecionar_agregado(request, pk):
+    agregado = get_object_or_404(Agregado, pk=pk)
+    return render(request, 'agregado/inspecionar.html', {'agregado': agregado})
 
 
 def editar_agregado(request, pk):
@@ -121,6 +128,8 @@ def editar_agregado(request, pk):
 
     if request.method == 'POST':
         form = AgregadoForms(request.POST, instance=agregado)
+
+        # TODO adicnioar logica com numero de modificação Agregado.objects.filter(pk=agregado.pk).update(num_modificacao=F('num_modificacao') + 1)
         if form.is_valid():
             form.save()
             return redirect('agregados')  # Redireciona para a página de listagem de agregados
@@ -131,7 +140,7 @@ def editar_agregado(request, pk):
         'form': form,
         'agregado': agregado,
     }
-    return render(request, 'editar_agregado.html', context)
+    return render(request, 'agregado/editar.html', context)
 
 
 def deletar_agregado(request, pk):
@@ -139,10 +148,41 @@ def deletar_agregado(request, pk):
     if request.method == 'POST':
         agregado.delete()
     return redirect('agregados')
+############
+
+# Fornecedor
+@login_required
+def listar_fornecedor(request):
+    fornecedores = Fornecedor.objects.all()
+    return render(request, 'fornecedor/index.html', {'fornecedores': fornecedores})
 
 
-def deletar_tipo_agregado(request, pk):
-    tipo_agregado = get_object_or_404(TipoAgregado, pk=pk)
+@login_required
+def cadastrar_fornecedor(request):
     if request.method == 'POST':
-        tipo_agregado.delete()
-    return redirect('tipo_agregado')
+        form = FornecedorForms(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('fornecedor')
+    else:
+        form = FornecedorForms()
+    return render(request, 'fornecedor/cadastrar.html', {'form': form})
+
+
+def editar_fornecedor(request, pk):
+    fornecedor = get_object_or_404(Fornecedor, id=pk)
+
+    if request.method == 'POST':
+        form = FornecedorForms(request.POST, instance=fornecedor)
+        if form.is_valid():
+            form.save()
+            return redirect('fornecedor')  # Redireciona para a página de fornecedor
+    else:
+        form = FornecedorForms(instance=fornecedor)
+
+    context = {
+        'form': form,
+        'fornecedor': fornecedor
+    }
+    return render(request, 'fornecedor/editar.html', context)
+##########

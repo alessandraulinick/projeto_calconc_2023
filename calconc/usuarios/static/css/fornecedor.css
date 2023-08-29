@@ -11,9 +11,10 @@ body {
   min-height: 100vh;
 }
 
+
 .header {
   background: #171717;
-  height: 50px;
+  height: 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -21,7 +22,7 @@ body {
 }
 
 .logo {
-  width: 50px;
+  width: 36px;
 }
 
 .logo img {
@@ -125,4 +126,17 @@ body {
 
 .lista-fornecedores ul li {
   margin-bottom: 10px;
+}
+
+
+.cadastrar_fornecedor_btn {
+  text-align: right;
+  margin-top: 10px;
+}
+.btn_cadastrar_fornecedor {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
 }

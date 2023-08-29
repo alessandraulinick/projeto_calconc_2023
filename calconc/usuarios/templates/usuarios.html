@@ -47,8 +47,8 @@
                     <a href="{% url 'traco' %}">Traço</a>
                 </li>
 
-                <li class="{% if request.resolver_match.view_name == 'listar_fornecedores' %}active{% endif %}">
-                    <a href="{% url 'listar_fornecedores' %}">Fornecedor</a>
+                <li class="{% if request.resolver_match.view_name == 'fornecedor' %}active{% endif %}">
+                    <a href="{% url 'fornecedor' %}">Fornecedor</a>
                 </li>
 
                 <li class="{% if request.resolver_match.view_name == 'usuarios' %}active{% endif %}">

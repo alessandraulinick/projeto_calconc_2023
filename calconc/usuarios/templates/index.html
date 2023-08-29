@@ -1,5 +1,7 @@
 {% load static %}
 
+{% include "utils/anonymous_user_redirect.html" %}
+
 {% block content %}
 <html lang="pt-br">
 <head>
@@ -8,14 +10,6 @@
     <title>ConCalc</title>
 </head>
 <body>
-    {% if user.is_anonymous %}
-        <div class="container-login100-form-btn">
-            <script>
-                window.location.href = "{% url 'login' %}"
-            </script>
-        </div>
-
-    {% else %}
     <div class="header">
         <div class="texto-header">
             <div class="logo">
@@ -28,6 +22,7 @@
         <p> Menu Principal </p>
     </div>
     <div class="container">
+
      <div class="box-row">
         <a href="{% url 'agregados' %}" class="box">
           <span class="box-title">Agregado</span>
@@ -47,7 +42,7 @@
         </a>
       </div>
       <div class="box-row-2">
-        <a href="{% url 'listar_fornecedores' %}" class="box-2">
+        <a href="{% url 'fornecedor' %}" class="box-2">
           <span class="box-title">Fornecedor</span>
           <span class="box-description">Gerenciamento de fornecedores</span>
         </a>
@@ -61,7 +56,5 @@
         </a>
       </div>
     </div>
-
-    {% endif %}
 </body>
 {% endblock %}
