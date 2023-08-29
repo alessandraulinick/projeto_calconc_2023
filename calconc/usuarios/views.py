@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
-from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms
+from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms
 from .models import Fornecedor, TipoAgregado, Agregado, Historico, Traco, Usuarios
 from django.utils import timezone
 from django.db.models import F
@@ -35,7 +35,7 @@ def listar_historico(request):  # Renomeei a função para ser mais descritiva
 @login_required
 def listar_traco(request):  # Renomeei a função para ser mais descritiva
     traco = Traco.objects.all()
-    return render(request, 'traco.html', {'traco': traco})
+    return render(request, 'traco/traco.html', {'traco': traco})
 
 
 @login_required
@@ -94,6 +94,7 @@ def cadastrar_agregado(request):
         if form.is_valid():
             agregado = form.save(commit=False)
             agregado.fk_usuario_id = request.user.id
+            print(request.user.id)
             agregado.save()
 
             Agregado.objects.filter(pk=agregado.pk).update(num_modificacao=F('num_modificacao') + 1)
@@ -185,3 +186,19 @@ def editar_fornecedor(request, pk):
         'fornecedor': fornecedor
     }
     return render(request, 'fornecedor/editar.html', context)
+
+@login_required
+def listar_agregado(request):
+    agregados = Agregado.objects.all()
+    return render(request, 'agregados', {'agregados': agregados})
+
+@login_required
+def cadastrar_traco(request):
+    if request.method == 'POST':
+        form = TracoForms(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('traco')
+    else:
+        form = TracoForms()
+    return render(request, 'traco/cadastrar.html', {'form': form})

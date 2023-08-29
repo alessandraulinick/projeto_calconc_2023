@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CustomUsuario
 from django import forms
 from .models import Fornecedor
-from .models import TipoAgregado, Agregado
+from .models import TipoAgregado, Agregado, Traco
 
 
 class CustomUsuarioCreateForm(UserCreationForm):
@@ -31,6 +31,10 @@ class FornecedorForms(forms.ModelForm):
         model = Fornecedor
         fields = ['nome', 'cidade', 'id', 'bairro', 'logradouro', 'CEP', 'complemento', 'cpf_cnpj', 'fone_1', 'ie', 'observacao']
 
+class TracoForms(forms.ModelForm):
+    class Meta:
+        model = Traco
+        fields = ['nome', 'descricao', 'porcentagem_agua']
 
 class TipoAgregadoForms(forms.ModelForm):
     class Meta:

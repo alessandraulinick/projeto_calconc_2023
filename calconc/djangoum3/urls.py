@@ -16,6 +16,7 @@ urlpatterns = [
     path('editar_tipo_agregado/<int:pk>/', views.editar_tipo_agregado, name='editar_tipo_agregado'),
     path('historico/', views.listar_historico, name='historico'),
     path('traco/', views.listar_traco, name='traco'),
+    path('cadastrar_traco/', views.cadastrar_traco, name='cadastrar_traco'),
     path('usuarios/', views.listar_usuarios, name='usuarios'),
     path('agregados/', views.listar_agregados, name='agregados'),
     path('cadastrar_agregado/', views.cadastrar_agregado, name='cadastrar_agregado'),

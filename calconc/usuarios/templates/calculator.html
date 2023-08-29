@@ -24,15 +24,26 @@
         </ul>
     </div>
 
-    <div class="container">
-        {% include "utils/sidebar.html" %}
-        <div class="content">
-            <div class = 'all-content'>
-                <div class = 'filtros'>
-                    Filtros
+        <div class="container">
+            {% include "utils/sidebar.html" %}
+            <div class="content">
+                <div class = 'all-content'>
+                    <div class = 'filtros'>
+                        Filtros
+                    </div>
+                    <h1>Calculadora de Agregado</h1>
+                    <form method="post">
+                        {% csrf_token %}
+                        <label for="valor1">Valor 1:</label>
+                        <input type="number" name="valor1" required><br>
+
+                        <label for="valor2">Valor 2:</label>
+                        <input type="number" name="valor2" required><br>
+
+                        <button type="submit">Calcular</button>
+                    </form>
                 </div>
             </div>
-        </div>
         </div>
     </div>
     {% endif %}

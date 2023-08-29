@@ -100,7 +100,7 @@ class Agregado(models.Model):
     umidade = models.FloatField()
     massa_especifica = models.FloatField()
     is_deleted = models.BooleanField(default=False)
-    fk_usuario_id = models.IntegerField()  # TODO Você pode querer usar ForeignKey em vez de IntegerField
+    fk_usuario_id = models.IntegerField(null=False)  # TODO Você pode querer usar ForeignKey em vez de IntegerField
     num_modificacao = models.IntegerField(default=0)
     data_cadastro = models.DateTimeField(default=timezone.now)
     fk_fornecedor_id = models.ForeignKey(Fornecedor, on_delete=models.CASCADE)
@@ -122,7 +122,8 @@ class Historico(models.Model):
 
 class Traco(models.Model):
     nome = models.CharField(max_length=20, unique=True)
-
+    descricao = models.CharField(max_length=250)
+    porcentagem_agua = models.FloatField()
 
     class Meta:
         db_table = "traco"
