@@ -64,6 +64,7 @@ class Fornecedor(models.Model):
     fone_2 = models.CharField(max_length=11, null=True)
     ie = models.CharField(max_length=9)
     observacao = models.CharField(max_length=200)
+    data_cadastro = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = "fornecedor"
@@ -74,6 +75,7 @@ class Fornecedor(models.Model):
 
 class TipoAgregado(models.Model):
     nome = models.CharField(max_length=40, unique=True, null=False)
+    data_cadastro = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = "tipo_agregado"
@@ -124,6 +126,7 @@ class Traco(models.Model):
     nome = models.CharField(max_length=20, unique=True)
     descricao = models.CharField(max_length=250)
     porcentagem_agua = models.FloatField()
+    data_cadastro = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = "traco"
@@ -134,6 +137,7 @@ class Traco(models.Model):
 
 class Usuarios(models.Model):
     nome = models.CharField(max_length=20, unique=True)
+    data_cadastro = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = "usuarios"

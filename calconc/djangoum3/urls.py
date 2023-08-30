@@ -11,18 +11,33 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
     path('calculator/', views.CalculatorView.as_view(), name='calculator'),
+
+    #### tipo agregado
     path('tipo_agregado/', views.listar_tipo_agregado, name='tipo_agregado'),
     path('cadastrar_tipo_agregado/', views.cadastrar_tipo_agregado, name='cadastrar_tipo_agregado'),
     path('editar_tipo_agregado/<int:pk>/', views.editar_tipo_agregado, name='editar_tipo_agregado'),
+
+    ### Historico
     path('historico/', views.listar_historico, name='historico'),
+
+    ### Traço
+    path('filtrar_tracos/', views.filtrar_tracos, name='filtrar_tracos'),
     path('traco/', views.listar_traco, name='traco'),
     path('cadastrar_traco/', views.cadastrar_traco, name='cadastrar_traco'),
+    path('deletar_traco/<int:pk>/', views.deletar_traco, name='deletar_traco'),
+    path('editar_traco/<int:pk>/', views.editar_traco, name='editar_traco'),
+
+    ### Usuarios
     path('usuarios/', views.listar_usuarios, name='usuarios'),
+
+    ### Agregados
     path('agregados/', views.listar_agregados, name='agregados'),
     path('cadastrar_agregado/', views.cadastrar_agregado, name='cadastrar_agregado'),
     path('inspecionar_agregado/<int:pk>/', views.inspecionar_agregado, name='inspecionar_agregado'),
     path('editar_agregado/<int:pk>/', views.editar_agregado, name='editar_agregado'),
     path('deletar_agregado/<int:pk>/', views.deletar_agregado, name='deletar_agregado'),
+
+    ### Fornecedor
     path('fornecedor/', views.listar_fornecedor, name='fornecedor'),
     path('cadastrar_fornecedor/', views.cadastrar_fornecedor, name='cadastrar_fornecedor'),
     path('editar_fornecedor/<int:pk>', views.editar_fornecedor, name='editar_fornecedor'),

@@ -134,15 +134,30 @@ body {
     border: 1px solid #ccc;
 }
 
-.lista th.align-right,
-.lista td.align-right {
-    text-align: right;
-    font-size: 15px;
+.btn-action-container {
+  display: flex;
+  justify-content: flex-end; /* Alinhar os botões à direita */
+  gap: 10px; /* Espaçamento entre os botões */
+}
+
+.btn-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #333;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+
+.btn-action:hover {
+  color: #007bff; /* Cor ao passar o mouse */
 }
 
 .lista td {
     font-size: 12px;
-    width: 25%;
+    white-space: pre-line;
+    width: 20%;
 }
 
 .lista th, .lista td {
@@ -152,3 +167,58 @@ body {
     width: 18%;
 }
 
+.filtros label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.filtros form {
+    display: flex; /* Usar flexbox para alinhar os itens na mesma linha */
+    flex-wrap: wrap; /* Permitir que os itens quebrem para a próxima linha quando o espaço é limitado */
+}
+
+.filtros input[type="date"],
+.filtros input[type="text"] {
+    flex: 1;
+    margin-top: 20px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 5px;
+    max-width: calc(50% - 5px);
+    height: 40px; /* Define a mesma altura dos botões */
+}
+
+.filtros button[type="submit"],
+.filtros .limpar-filtros {
+    height: 40px;
+    line-height: 40px;
+    width: calc(10% - 5px); /* Largura igual para ambos os botões */
+    padding: 0px 15px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-right: 5px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filtros button[type="submit"]:hover,
+.filtros .limpar-filtros:hover {
+    background-color: #2980b9;
+}
+
+/* Estilo para o botão de limpar filtros */
+.filtros .limpar-filtros {
+    background-color: #e74c3c;
+}
+
+.filtros .limpar-filtros:hover {
+    background-color: #c0392b;
+}

@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'css/listar_tipo_agregado.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>ConCalc</title>
 </head>
 <body>
@@ -35,13 +36,52 @@
             </div>
 
             <div class = 'all-content'>
-                <div class = 'filtros'>
-                    Filtros
+                <div class="filtros">
+                    <form method="get" action="{% url 'filtrar_tracos' %}">
+                        <input type="text" id="filtro_nome" name="nome">
+
+                        <input type="date" id="filtro_data" name="data">
+
+                        <button type="submit">Filtrar</button>
+                        <a href="{% url 'filtrar_tracos' %}" class="limpar-filtros">Limpar Filtros</a>
+                    </form>
+                </div>
+
+                <div class="lista">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data de Cadastro</th>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Porcentagem Água</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tipo in traco %}
+                                <tr>
+                                    <td>{{ tipo.data_cadastro }}</td>
+                                    <td>{{ tipo.nome }}</td>
+                                    <td>{{ tipo.descricao }}</td>
+                                    <td>{{ tipo.porcentagem_agua }}</td>
+                                    <td class="align-right">
+                                      <div class="btn-action-container">
+                                        <a href="{% url 'editar_traco' tipo.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
+                                        <button class="btn-action btn-deletar" data-id="{{ tipo.id }}" data-url="{% url 'deletar_traco' tipo.id %}"><i class="fa fa-trash"></i></button>
+                                      </div>
+                                    </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
         </div>
         </div>
     </div>
+    <script src="{% static 'js/deletar.js' %}"></script>
     {% endif %}
 </body>
 {% endblock %}
