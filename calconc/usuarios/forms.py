@@ -27,9 +27,17 @@ class CustomUsuarioChangeForm(UserChangeForm):
 
 
 class FornecedorForms(forms.ModelForm):
+    cidade = forms.CharField(required=False)
+    bairro = forms.CharField(required=False)
+    logradouro = forms.CharField(required=False)
+    complemento = forms.CharField(required=False)
+    fone_2 = forms.CharField(required=False)
+    ie = forms.CharField(required=False)
+    observacao = forms.CharField(required=False)
     class Meta:
         model = Fornecedor
-        fields = ['nome', 'cidade', 'id', 'bairro', 'logradouro', 'CEP', 'complemento', 'cpf_cnpj', 'fone_1', 'ie', 'observacao']
+        fields = ['nome', 'cidade', 'id', 'bairro', 'logradouro', 'CEP', 'complemento',
+                  'cpf_cnpj', 'fone_1', 'fone_2', 'ie', 'observacao']
 
 class TracoForms(forms.ModelForm):
     class Meta:

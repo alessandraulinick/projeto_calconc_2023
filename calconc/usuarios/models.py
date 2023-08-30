@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 # from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser, BaseUserManager
@@ -51,19 +53,20 @@ class CustomUsuario(AbstractUser):
     objects = UsuarioManager()
 
 
+# TODO verificar camo limitar valor mínimo
 class Fornecedor(models.Model):
     nome = models.CharField(max_length=50)
-    cidade = models.CharField(max_length=50)
+    cidade = models.CharField(max_length=50, null=True)
     # id = models.CharField(max_length=18, primary_key=True)
-    bairro = models.CharField(max_length=50)
-    logradouro = models.CharField(max_length=50)
+    bairro = models.CharField(max_length=50, null=True)
+    logradouro = models.CharField(max_length=50, null=True)
     CEP = models.CharField(max_length=8)
-    complemento = models.CharField(max_length=150)
+    complemento = models.CharField(max_length=150, null=True)
     cpf_cnpj = models.CharField(max_length=14)
     fone_1 = models.CharField(max_length=11)
     fone_2 = models.CharField(max_length=11, null=True)
-    ie = models.CharField(max_length=9)
-    observacao = models.CharField(max_length=200)
+    ie = models.CharField(max_length=9, null=True)
+    observacao = models.CharField(max_length=200, null=True)
     data_cadastro = models.DateTimeField(default=timezone.now)
 
     class Meta:

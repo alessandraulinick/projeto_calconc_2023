@@ -7,7 +7,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/listar_tipo_agregado.css' %}">
+    <link rel="stylesheet" href="{% static 'css/listar.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>ConCalc</title>
 </head>
@@ -24,9 +24,6 @@
             </div>
 
             <div class = 'all-content'>
-                <div class = 'filtros'>
-                    Filtros
-                </div>
                 <div class="lista">
                     <table>
                         <thead>
@@ -38,7 +35,14 @@
                         <tbody>
                             {% for fornecedor in fornecedores %}
                                 <tr>
+<!--                                    <td>{{ fornecedor.data_cadastro }}</td>-->
                                     <td>{{ fornecedor.nome }}</td>
+                                    <td class="align-right">
+                                        <div class="btn-action-container">
+                                            <a href="{% url 'inspecionar_fornecedor' fornecedor.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
+                                            <a href="{% url 'editar_fornecedor' fornecedor.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
+                                        </div>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>

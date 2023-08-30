@@ -1,0 +1,26 @@
+{% load static %}
+
+{% include "utils/anonymous_user_redirect.html" %}
+
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/inspecionar.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>ConCalc</title>
+</head>
+<body>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    EU NNÃO SEI OQ É ISSO, NÃO FUNCIONA
+    <div class="form-columns">
+        <div class="form-column">
+            <label for="{{ form.nome.id_for_label }}">Nome</label>
+            <input type="text" id="country" name="country" value="{{ form.nome }}" readonly><br><br>
+
+        </div>
+    </div>
+
+</body>
+{% endblock %}

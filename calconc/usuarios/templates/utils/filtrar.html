@@ -1,0 +1,11 @@
+TODO replace dinamico
+<div class="filtros">
+    <form method="get" action="{% url 'filtrar_tracos' %}">
+        <input type="text" id="filtro_nome" name="nome">
+
+        <input type="date" id="filtro_data" name="data">
+
+        <button type="submit">Filtrar</button>
+        <a href="{% url 'filtrar_tracos' %}" class="limpar-filtros">Limpar Filtros</a>
+    </form>
+</div>

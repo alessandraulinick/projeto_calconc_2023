@@ -4,7 +4,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/listar_tipo_agregado.css' %}">
+    <link rel="stylesheet" href="{% static 'css/listar.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>ConCalc</title>
 </head>
@@ -36,16 +36,7 @@
             </div>
 
             <div class = 'all-content'>
-                <div class="filtros">
-                    <form method="get" action="{% url 'filtrar_tracos' %}">
-                        <input type="text" id="filtro_nome" name="nome">
-
-                        <input type="date" id="filtro_data" name="data">
-
-                        <button type="submit">Filtrar</button>
-                        <a href="{% url 'filtrar_tracos' %}" class="limpar-filtros">Limpar Filtros</a>
-                    </form>
-                </div>
+                {% include "utils/filtrar.html" %}
 
                 <div class="lista">
                     <table>

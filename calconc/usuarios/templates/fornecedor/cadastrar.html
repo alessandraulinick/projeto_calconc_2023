@@ -15,11 +15,75 @@
   <form method="post">
     {% csrf_token %}
     {{ form.non_field_errors }}
-    <div class="field">
-        {{ form.nome.label_tag }}
-        {{ form.nome }}
-        {{ form.nome.errors }}
+
+    <div class="form-column">
+        <div class="field">
+            <label for="{{ form.nome.id_for_label }}">Nome<span class="required-label">*</span></label>
+            {{ form.nome }}
+            <ul class="error-message">{{ form.nome.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.cidade.id_for_label }}">Cidade</label>
+            {{ form.cidade }}
+            <ul class="error-message">{{ form.cidade.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.bairro.id_for_label }}">Bairro</label>
+            {{ form.bairro }}
+            <ul class="error-message">{{ form.bairro.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.logradouro.id_for_label }}">Logradouro</label>
+            {{ form.logradouro }}
+            <ul class="error-message">{{ form.logradouro.errors }}</ul>
+        </div>
+
+        <div class="field">
+           <label for="{{ form.CEP.id_for_label }}">CEP<span class="required-label">*</span></label>
+            {{ form.CEP }}
+            <ul class="error-message">{{ form.CEP.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.complemento.id_for_label }}">Complemento</label>
+            {{ form.complemento }}
+            <ul class="error-message">{{ form.complemento.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.cpf_cnpj.id_for_label }}">CPF ou CNPJ<span class="required-label">*</span></label>
+            {{ form.cpf_cnpj }}
+            <ul class="error-message">{{ form.cpf_cnpj.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.fone_1.id_for_label }}">Telefone 1<span class="required-label">*</span></label>
+            {{ form.fone_1 }}
+            <ul class="error-message">{{ form.fone_1.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.fone_2.id_for_label }}">Telefone 2</label>
+            {{ form.fone_2 }}
+            <ul class="error-message">{{ form.fone_2.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.ie.id_for_label }}">Inscrição Estadual (IE)</label>
+            {{ form.ie }}
+            <ul class="error-message">{{ form.ie.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.observacao.id_for_label }}">Observação</label>
+            {{ form.observacao }}
+            <ul class="error-message">{{ form.observacao.errors }}</ul>
+        </div>
     </div>
+
     <div class="button-container">
         <button type="submit" class="save-button">Salvar</button>
         <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>

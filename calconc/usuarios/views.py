@@ -8,6 +8,7 @@ from django.db.models import F
 from datetime import datetime
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
+from django.contrib import messages
 
 
 @method_decorator(login_required, name='dispatch')
@@ -20,10 +21,12 @@ class CalculatorView(TemplateView):
         result = num1 + num2
         return self.render_to_response(self.get_context_data(result=result))
 
+
 @login_required
 def listar_historico(request):  # Renomeei a função para ser mais descritiva
     historico = Historico.objects.all()
     return render(request, 'historico.html', {'historico': historico})
+
 
 @login_required
 def listar_usuarios(request):  # Renomeei a função para ser mais descritiva
@@ -37,6 +40,7 @@ def listar_tipo_agregado(request):
     tipos_agregados = TipoAgregado.objects.all()  # Renomeei a variável para ficar mais claro
     return render(request, 'tipo_agregado/index.html', {'tipos_agregados': tipos_agregados})
 
+
 @login_required
 def cadastrar_tipo_agregado(request):
     if request.method == 'POST':
@@ -47,6 +51,7 @@ def cadastrar_tipo_agregado(request):
     else:
         form = TipoAgregadoForms()
     return render(request, 'tipo_agregado/cadastrar.html', {'form': form})
+
 
 def editar_tipo_agregado(request, pk):
     tipo_agregado = get_object_or_404(TipoAgregado, id=pk)
@@ -65,17 +70,20 @@ def editar_tipo_agregado(request, pk):
     }
     return render(request, 'tipo_agregado/editar.html', context)
 
+
 def deletar_tipo_agregado(request, pk):
     tipo_agregado = get_object_or_404(TipoAgregado, pk=pk)
     if request.method == 'POST':
         tipo_agregado.delete()
     return redirect('tipo_agregado')
 
+
 ########## Agregado
 @login_required
 def listar_agregados(request):  # Renomeei a função para ser mais descritiva
     agregados = Agregado.objects.all()
     return render(request, 'agregado/index.html', {'agregados': agregados})
+
 
 @login_required
 def cadastrar_agregado(request):
@@ -107,10 +115,12 @@ def cadastrar_agregado(request):
 
     return render(request, 'agregado/cadastrar.html', {'form': form})
 
+
 @login_required
 def inspecionar_agregado(request, pk):
     agregado = get_object_or_404(Agregado, pk=pk)
     return render(request, 'agregado/inspecionar.html', {'agregado': agregado})
+
 
 def editar_agregado(request, pk):
     agregado = get_object_or_404(Agregado, id=pk)
@@ -131,24 +141,32 @@ def editar_agregado(request, pk):
     }
     return render(request, 'agregado/editar.html', context)
 
+
 def deletar_agregado(request, pk):
     agregado = get_object_or_404(Agregado, pk=pk)
     if request.method == 'POST':
         agregado.delete()
     return redirect('agregados')
 
+
 @login_required
 def listar_agregado(request):
     agregados = Agregado.objects.all()
     return render(request, 'agregados', {'agregados': agregados})
+############
 
-
-############ Fornecedor
 # Fornecedor
 @login_required
 def listar_fornecedor(request):
     fornecedores = Fornecedor.objects.all()
     return render(request, 'fornecedor/index.html', {'fornecedores': fornecedores})
+
+
+@login_required
+def inspecionar_fornecedor(request, pk):
+    fornecedor = get_object_or_404(Fornecedor, pk=pk)
+    return render(request, 'fornecedor/inspecionar.html', {'fornecedor': fornecedor})
+
 
 @login_required
 def cadastrar_fornecedor(request):
@@ -157,9 +175,13 @@ def cadastrar_fornecedor(request):
         if form.is_valid():
             form.save()
             return redirect('fornecedor')
+        else:
+            print("Erro cadastrar_fornecedor")
+
     else:
         form = FornecedorForms()
     return render(request, 'fornecedor/cadastrar.html', {'form': form})
+
 
 def editar_fornecedor(request, pk):
     fornecedor = get_object_or_404(Fornecedor, id=pk)
@@ -177,12 +199,14 @@ def editar_fornecedor(request, pk):
         'fornecedor': fornecedor
     }
     return render(request, 'fornecedor/editar.html', context)
+#############
 
-############## Traço
+# Traço
 @login_required
 def listar_traco(request):  # Renomeei a função para ser mais descritiva
     traco = Traco.objects.all()
-    return render(request, 'traco/traco.html', {'traco': traco})
+    return render(request, 'traco/index.html', {'traco': traco})
+
 
 @login_required
 def cadastrar_traco(request):
@@ -195,11 +219,13 @@ def cadastrar_traco(request):
         form = TracoForms()
     return render(request, 'traco/cadastrar.html', {'form': form})
 
+
 def deletar_traco(request, pk):
     traco = get_object_or_404(Traco, pk=pk)
     if request.method == 'POST':
         traco.delete()
     return redirect('traco')
+
 
 def editar_traco(request, pk):
     traco = get_object_or_404(Traco, id=pk)
@@ -241,4 +267,4 @@ def filtrar_tracos(request):
             'traco': tracos_filtrados,
         }
 
-        return render(request, 'traco/traco.html', context)
+        return render(request, 'traco/index.html', context)

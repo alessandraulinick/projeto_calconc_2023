@@ -14,11 +14,13 @@
 <form method="post">
     {% csrf_token %}
     {{ form.non_field_errors }}
+
     <div class="field">
-        {{ form.nome.label_tag }}
+        <label for="{{ form.nome.id_for_label }}">Nome<span class="required-label">*</span></label>
         {{ form.nome }}
-        {{ form.nome.errors }}
+        <ul class="error-message">{{ form.nome.errors }}</ul>
     </div>
+
     <div class="button-container">
         <button type="submit" class="save-button">Salvar</button>
         <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>

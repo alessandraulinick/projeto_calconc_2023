@@ -39,6 +39,7 @@ urlpatterns = [
 
     ### Fornecedor
     path('fornecedor/', views.listar_fornecedor, name='fornecedor'),
+    path('inspecionar_fornecedor/<int:pk>/', views.inspecionar_fornecedor, name='inspecionar_fornecedor'),
     path('cadastrar_fornecedor/', views.cadastrar_fornecedor, name='cadastrar_fornecedor'),
     path('editar_fornecedor/<int:pk>', views.editar_fornecedor, name='editar_fornecedor'),
 ]
