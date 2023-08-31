@@ -39,10 +39,12 @@ class FornecedorForms(forms.ModelForm):
         fields = ['nome', 'cidade', 'id', 'bairro', 'logradouro', 'CEP', 'complemento',
                   'cpf_cnpj', 'fone_1', 'fone_2', 'ie', 'observacao']
 
+
 class TracoForms(forms.ModelForm):
     class Meta:
         model = Traco
-        fields = ['nome', 'descricao', 'porcentagem_agua']
+        fields = ['nome', 'descricao', 'porcentagem_agua', 'agregados']
+
 
 class TipoAgregadoForms(forms.ModelForm):
     class Meta:

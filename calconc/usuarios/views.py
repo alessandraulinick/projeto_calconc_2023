@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
 from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms
-from .models import Fornecedor, TipoAgregado, Agregado, Historico, Traco, Usuarios
+from .models import Fornecedor, TipoAgregado, Agregado, Historico, Traco, Usuarios, TracoAgregado
 from django.utils import timezone
 from django.db.models import F
 from datetime import datetime
@@ -208,26 +208,49 @@ def listar_traco(request):  # Renomeei a função para ser mais descritiva
     return render(request, 'traco/index.html', {'traco': traco})
 
 
-@login_required
 def cadastrar_traco(request):
+    tipos_agregado = TipoAgregado.objects.all()
+
     if request.method == 'POST':
-        traco_form = TracoForms(request.POST)
-        if traco_form.is_valid():
-            traco_form.save()
-            return redirect('traco')
+        form = TracoForms(request.POST)
+        if form.is_valid():
+            traco = form.save()
+
+            # Processar e salvar as porcentagens dos agregados
+            for tipo_agregado in tipos_agregado:
+                for agregado in tipo_agregado.agregados.all():
+                    porcentagem_key = f'agregado_{tipo_agregado.id}_{agregado.id}'
+                    porcentagem = float(request.POST.get(porcentagem_key, 0))
+
+                    if porcentagem > 0:
+                        traco_agregado = TracoAgregado(traco=traco, agregado=agregado, porcentagem=porcentagem)
+                        traco_agregado.save()
+
+            return redirect('traco')  # Redirecionar para a página de sucesso após o cadastro
     else:
-        traco_form = TracoForms()
+        form = TracoForms()
+    return render(request, 'traco/cadastrar.html', {'form': form, 'tipos_agregado': tipos_agregado})
 
-        tipos_agregados = TipoAgregado.objects.all()
-        agregados = Agregado.objects.all()
-
-        return render(request,
-                      'traco/cadastrar.html',
-                      {
-                          'traco_form': traco_form,
-                          'tipos_agregados': tipos_agregados,
-                          'agregados': agregados,
-                      })
+# @login_required
+# def cadastrar_traco(request):
+#     if request.method == 'POST':
+#         traco_form = TracoForms(request.POST)
+#         if traco_form.is_valid():
+#             traco_form.save()
+#             return redirect('traco')
+#     else:
+#         traco_form = TracoForms()
+#
+#         tipos_agregados = TipoAgregado.objects.all()
+#         agregados = Agregado.objects.all()
+#
+#         return render(request,
+#                       'traco/cadastrar.html',
+#                       {
+#                           'traco_form': traco_form,
+#                           'tipos_agregados': tipos_agregados,
+#                           'agregados': agregados,
+#                       })
 
 
 def deletar_traco(request, pk):

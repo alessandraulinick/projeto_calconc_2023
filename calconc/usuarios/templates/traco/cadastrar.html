@@ -4,58 +4,38 @@
 {% include "utils/anonymous_user_redirect.html" %}
 
 {% block content %}
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/cadastros.css' %}">
-    <title>ConCalc</title>
-</head>
-<body>
-  <h1>Cadastrar Traços</h1>
+  <h2>Cadastrar Traço</h2>
   <form method="post">
     {% csrf_token %}
-    {{ traco_form.non_field_errors }}
+    {{ form.as_p }}
 
-        <div class="form-columns">
-            <div class="form-column">
-                <div class="field">
-                    <label for="{{ traco_form.nome.id_for_label }}">Nome<span class="required-label">*</span></label>
-                    {{ traco_form.nome }}
-                    <ul class="error-message">{{ traco_form.nome.errors }}</ul>
-                </div>
 
-                <div class="tipos_agregado">
-                    {% for tipo_agregado in tipos_agregados %}
-                    <tr>
-                        <td>{{ tipo_agregado }}</td>
-                        <br>
-                    </tr>
-                    {% endfor %}
-                </div>
-                <br>
 
-                <div class="agregados">
-                    {% for agregados in agregados %}
-                    <tr>
-                        <td>{{ agregados }}</td>
-                        <td>{{ agregados }}</td>
-                        <br>
-                    </tr>
-                    {% endfor %}
-                </div>
 
-            </div>
-        </div>
-    <div class="button-container">
-        <button type="submit" class="save-button">Salvar</button>
-        <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>
-    </div>
+
+    <h3>Agregados:</h3>
+    {% for tipo_agregado in tipos_agregado %}
+      <h4>{{ tipo_agregado.nome }}</h4>
+      <ul>
+
+        <label for="language">Agregado:</label>
+        <select name="language" id="language">
+          <option value="">Nenhum</option>
+        {% for agregado in tipo_agregado.agregados_relacionados %}
+          <option value="{{ agregado.id }}">{{ agregado }}</option>
+        {% endfor %}
+        </select>
+        <br>
+<!--          <div class="field">-->
+<!--            {{ form.agregados }}-->
+<!--          </div>-->
+<!--          <li>-->
+<!--            <label for="id_agregado_{{ tipo_agregado.id }}_{{ agregado.id }}">{{ agregado.nome }}</label>-->
+<!--            <input type="number" step="0.01" min="0" max="100" name="agregado_{{ tipo_agregado.id }}_{{ agregado.id }}">-->
+<!--          </li>-->
+      </ul>
+    {% endfor %}
+
+    <button type="submit">Cadastrar</button>
   </form>
-<script>
-    function goBack() {
-        window.history.back();
-    }
-</script>
-</body>
-</html>
 {% endblock %}

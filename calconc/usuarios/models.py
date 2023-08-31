@@ -79,15 +79,14 @@ class TipoAgregado(models.Model):
     nome = models.CharField(max_length=40, unique=True, null=False)
     data_cadastro = models.DateTimeField(default=timezone.now)
 
+    def agregados_relacionados(self):
+        return Agregado.objects.filter(fk_tipo_agregado_id=self.id)
+
     class Meta:
         db_table = "tipo_agregado"
 
     def __str__(self):
         return self.nome
-
-
-def positive_float_field():
-    return models.FloatField(null=False, unique=False, validators=[MinValueValidator(0.00001)])
 
 
 class Agregado(models.Model):
@@ -104,21 +103,14 @@ class Agregado(models.Model):
     umidade = models.FloatField()
     massa_especifica = models.FloatField()
     is_deleted = models.BooleanField(default=False)
-    fk_usuario_id = models.IntegerField(null=False)  # TODO Você pode querer usar ForeignKey em vez de IntegerField
     num_modificacao = models.IntegerField(default=0)
     data_cadastro = models.DateTimeField(default=timezone.now)
+    fk_usuario_id = models.IntegerField(null=False)
     fk_fornecedor_id = models.ForeignKey(Fornecedor, on_delete=models.CASCADE)
     fk_tipo_agregado_id = models.ForeignKey(TipoAgregado, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "agregado"
-
-    def __str__(self):
-        return self.nome
-
-
-class Historico(models.Model):
-    nome = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return self.nome
@@ -157,6 +149,13 @@ class Usuarios(models.Model):
 
     class Meta:
         db_table = "usuarios"
+
+    def __str__(self):
+        return self.nome
+
+
+class Historico(models.Model):
+    nome = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return self.nome
