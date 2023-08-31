@@ -9,7 +9,6 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 
 class UsuarioManager(BaseUserManager):
-
     use_in_migrations = True
 
     def _create_user(self, email, password, **extra_fields):
@@ -129,6 +128,7 @@ class Traco(models.Model):
     nome = models.CharField(max_length=20, unique=True)
     descricao = models.CharField(max_length=250)
     porcentagem_agua = models.FloatField()
+    agregados = models.ManyToManyField(Agregado, through='TracoAgregado')
     data_cadastro = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -136,6 +136,19 @@ class Traco(models.Model):
 
     def __str__(self):
         return self.nome
+
+
+class TracoAgregado(models.Model):
+    traco = models.ForeignKey(Traco, on_delete=models.CASCADE)
+    agregado = models.ForeignKey(Agregado, on_delete=models.CASCADE)
+
+    porcentagem = models.FloatField()
+
+    class Meta:
+        db_table = "traco_agregado"
+
+    # def __str__(self):
+    #     return self.nome
 
 
 class Usuarios(models.Model):

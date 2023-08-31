@@ -211,13 +211,23 @@ def listar_traco(request):  # Renomeei a função para ser mais descritiva
 @login_required
 def cadastrar_traco(request):
     if request.method == 'POST':
-        form = TracoForms(request.POST)
-        if form.is_valid():
-            form.save()
+        traco_form = TracoForms(request.POST)
+        if traco_form.is_valid():
+            traco_form.save()
             return redirect('traco')
     else:
-        form = TracoForms()
-    return render(request, 'traco/cadastrar.html', {'form': form})
+        traco_form = TracoForms()
+
+        tipos_agregados = TipoAgregado.objects.all()
+        agregados = Agregado.objects.all()
+
+        return render(request,
+                      'traco/cadastrar.html',
+                      {
+                          'traco_form': traco_form,
+                          'tipos_agregados': tipos_agregados,
+                          'agregados': agregados,
+                      })
 
 
 def deletar_traco(request, pk):

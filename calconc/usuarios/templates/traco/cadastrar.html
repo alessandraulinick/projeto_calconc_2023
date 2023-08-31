@@ -14,22 +14,38 @@
   <h1>Cadastrar Traços</h1>
   <form method="post">
     {% csrf_token %}
-    {{ form.non_field_errors }}
-    <div class="field">
-        {{ form.nome.label_tag }}
-        {{ form.nome }}
-        {{ form.nome.errors }}
-    </div>
-      <div class="field">
-        {{ form.descricao.label_tag }}
-        {{ form.descricao }}
-        {{ form.descricao.errors }}
-    </div>
-      <div class="field">
-        {{ form.porcentagem_agua.label_tag }}
-        {{ form.porcentagem_agua }}
-        {{ form.porcentagem_agua.errors }}
-    </div>
+    {{ traco_form.non_field_errors }}
+
+        <div class="form-columns">
+            <div class="form-column">
+                <div class="field">
+                    <label for="{{ traco_form.nome.id_for_label }}">Nome<span class="required-label">*</span></label>
+                    {{ traco_form.nome }}
+                    <ul class="error-message">{{ traco_form.nome.errors }}</ul>
+                </div>
+
+                <div class="tipos_agregado">
+                    {% for tipo_agregado in tipos_agregados %}
+                    <tr>
+                        <td>{{ tipo_agregado }}</td>
+                        <br>
+                    </tr>
+                    {% endfor %}
+                </div>
+                <br>
+
+                <div class="agregados">
+                    {% for agregados in agregados %}
+                    <tr>
+                        <td>{{ agregados }}</td>
+                        <td>{{ agregados }}</td>
+                        <br>
+                    </tr>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
     <div class="button-container">
         <button type="submit" class="save-button">Salvar</button>
         <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>
