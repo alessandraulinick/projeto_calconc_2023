@@ -213,8 +213,8 @@ def cadastrar_traco(request):
 
     if request.method == 'POST':
         form = TracoForms(request.POST)
+        print(form.errors)
         if form.is_valid():
-            traco = form.save()
 
             # Processar e salvar as porcentagens dos agregados
             for tipo_agregado in tipos_agregado:
@@ -226,6 +226,7 @@ def cadastrar_traco(request):
                         traco_agregado = TracoAgregado(traco=traco, agregado=agregado, porcentagem=porcentagem)
                         traco_agregado.save()
 
+            traco = form.save()
             return redirect('traco')  # Redirecionar para a página de sucesso após o cadastro
     else:
         form = TracoForms()

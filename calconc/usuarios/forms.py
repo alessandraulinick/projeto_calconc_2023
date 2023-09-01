@@ -3,6 +3,7 @@ from .models import CustomUsuario
 from django import forms
 from .models import Fornecedor
 from .models import TipoAgregado, Agregado, Traco
+from django.db import models
 
 
 class CustomUsuarioCreateForm(UserCreationForm):
@@ -41,9 +42,11 @@ class FornecedorForms(forms.ModelForm):
 
 
 class TracoForms(forms.ModelForm):
+
+    # agregados = models.ManyToManyField(Agregado, through='TracoAgregado', required=False)
     class Meta:
         model = Traco
-        fields = ['nome', 'descricao', 'porcentagem_agua', 'agregados']
+        fields = ['nome', 'descricao', 'porcentagem_agua']
 
 
 class TipoAgregadoForms(forms.ModelForm):

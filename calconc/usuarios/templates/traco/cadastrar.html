@@ -4,38 +4,45 @@
 {% include "utils/anonymous_user_redirect.html" %}
 
 {% block content %}
-  <h2>Cadastrar Traço</h2>
-  <form method="post">
+<h2>Cadastrar Traço</h2>
+<form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
 
-
-
-
+    <div class="form-columns">
+        <div class="form-column">
+            <div class="field">
+                <label for="{{ form.nome.id_for_label }}">Nome<span class="required-label">*</span></label>
+                {{ form.nome }}
+                <ul class="error-message">{{ form.nome.errors }}</ul>
+            </div>
+            <div class="field">
+                <label for="{{ form.descricao.id_for_label }}">Descrição<span class="required-label">*</span></label>
+                {{ form.descricao }}
+                <ul class="error-message">{{ form.descricao.errors }}</ul>
+            </div>
+            <div class="field">
+                <label for="{{ form.porcentagem_agua.id_for_label }}">Porcentagem de agua<span class="required-label">*</span></label>
+                {{ form.porcentagem_agua }}
+                <ul class="error-message">{{ form.porcentagem_agua.errors }}</ul>
+            </div>
+        </div>
+    </div>
 
     <h3>Agregados:</h3>
     {% for tipo_agregado in tipos_agregado %}
-      <h4>{{ tipo_agregado.nome }}</h4>
-      <ul>
-
+    <h4>{{ tipo_agregado.nome }}</h4>
+    <ul>
         <label for="language">Agregado:</label>
         <select name="language" id="language">
-          <option value="">Nenhum</option>
+            <option value="">Nenhum</option>
         {% for agregado in tipo_agregado.agregados_relacionados %}
-          <option value="{{ agregado.id }}">{{ agregado }}</option>
+            <option value="{{ agregado.id }}">{{ agregado }}</option>
         {% endfor %}
         </select>
         <br>
-<!--          <div class="field">-->
-<!--            {{ form.agregados }}-->
-<!--          </div>-->
-<!--          <li>-->
-<!--            <label for="id_agregado_{{ tipo_agregado.id }}_{{ agregado.id }}">{{ agregado.nome }}</label>-->
-<!--            <input type="number" step="0.01" min="0" max="100" name="agregado_{{ tipo_agregado.id }}_{{ agregado.id }}">-->
-<!--          </li>-->
-      </ul>
+    </ul>
     {% endfor %}
 
     <button type="submit">Cadastrar</button>
-  </form>
+</form>
 {% endblock %}
