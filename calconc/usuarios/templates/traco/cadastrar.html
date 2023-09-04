@@ -5,7 +5,7 @@
 
 {% block content %}
 <h2>Cadastrar Traço</h2>
-<form method="post">
+<form method="post" >
     {% csrf_token %}
 
     <div class="form-columns">
@@ -28,17 +28,26 @@
         </div>
     </div>
 
+
+
     <h3>Agregados:</h3>
     {% for tipo_agregado in tipos_agregado %}
     <h4>{{ tipo_agregado.nome }}</h4>
     <ul>
-        <label for="language">Agregado:</label>
-        <select name="language" id="language">
+        <!-- Cria lista com todos os agregados para esse tipo de agregado -->
+        <label for="agregados">Agregado:</label>
+        <select name="agregados" id="agregados">
             <option value="">Nenhum</option>
         {% for agregado in tipo_agregado.agregados_relacionados %}
             <option value="{{ agregado.id }}">{{ agregado }}</option>
         {% endfor %}
         </select>
+
+        <br>
+
+        <label for="porcentagem_agregados">Porcentagem Agregado:</label>
+        <input type="text" name="porcentagem_agregados" class="form-control" placeholder="" />
+
         <br>
     </ul>
     {% endfor %}

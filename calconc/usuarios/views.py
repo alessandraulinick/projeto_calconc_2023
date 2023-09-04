@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
-from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms
+from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms, TracoAgregadoForms
 from .models import Fornecedor, TipoAgregado, Agregado, Historico, Traco, Usuarios, TracoAgregado
 from django.utils import timezone
 from django.db.models import F
@@ -213,24 +213,39 @@ def cadastrar_traco(request):
 
     if request.method == 'POST':
         form = TracoForms(request.POST)
+        agregados = request.POST.getlist('agregados')
+        porcentagem_agregados = request.POST.getlist('porcentagem_agregados')
         print(form.errors)
-        if form.is_valid():
+        if form.is_valid() and (agregados is not None) and (porcentagem_agregados is not None):
 
-            # Processar e salvar as porcentagens dos agregados
-            for tipo_agregado in tipos_agregado:
-                for agregado in tipo_agregado.agregados.all():
-                    porcentagem_key = f'agregado_{tipo_agregado.id}_{agregado.id}'
-                    porcentagem = float(request.POST.get(porcentagem_key, 0))
+            porcentagem_total = form.cleaned_data['porcentagem_agua']
+            for index, agregado_id in enumerate(agregados):
+                if agregado_id != '' and porcentagem_agregados[index] != '':
+                    porcentagem_total = porcentagem_total + float(porcentagem)
 
-                    if porcentagem > 0:
-                        traco_agregado = TracoAgregado(traco=traco, agregado=agregado, porcentagem=porcentagem)
-                        traco_agregado.save()
+            if porcentagem_total != 100:
+                # TODO dar erro
+                return None
 
             traco = form.save()
+
+            # Processar e salvar as porcentagens dos agregados
+            for index, agregado_id in enumerate(agregados):
+                if agregado_id != '':
+                    agregado = Agregado.objects.get(id=agregado_id)
+
+                    TracoAgregado.objects.create(traco=traco, agregado=agregado, porcentagem=porcentagem_agregados[index])
+
             return redirect('traco')  # Redirecionar para a página de sucesso após o cadastro
+
+        else:
+            # TODO deu ruim
+            return None
     else:
         form = TracoForms()
-    return render(request, 'traco/cadastrar.html', {'form': form, 'tipos_agregado': tipos_agregado})
+        form2 = TracoAgregadoForms()
+
+        return render(request, 'traco/cadastrar.html', {'form': form, 'form2': form2, 'tipos_agregado': tipos_agregado})
 
 # @login_required
 # def cadastrar_traco(request):

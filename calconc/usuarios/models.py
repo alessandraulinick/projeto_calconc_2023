@@ -120,8 +120,10 @@ class Traco(models.Model):
     nome = models.CharField(max_length=20, unique=True)
     descricao = models.CharField(max_length=250)
     porcentagem_agua = models.FloatField()
-    agregados = models.ManyToManyField(Agregado, through='TracoAgregado')
+    agregados = models.ManyToManyField(Agregado, through='TracoAgregado', blank=True)
     data_cadastro = models.DateTimeField(default=timezone.now)
+
+    # porcentagem_agregados = models.FloatField()
 
     class Meta:
         db_table = "traco"
@@ -131,8 +133,8 @@ class Traco(models.Model):
 
 
 class TracoAgregado(models.Model):
-    traco = models.ForeignKey(Traco, on_delete=models.CASCADE)
-    agregado = models.ForeignKey(Agregado, on_delete=models.CASCADE)
+    traco = models.ForeignKey(Traco, on_delete=models.CASCADE, blank=True)
+    agregado = models.ForeignKey(Agregado, on_delete=models.CASCADE, blank=True)
 
     porcentagem = models.FloatField()
 
