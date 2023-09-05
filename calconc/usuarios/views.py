@@ -183,6 +183,7 @@ def cadastrar_fornecedor(request):
     return render(request, 'fornecedor/cadastrar.html', {'form': form})
 
 
+@login_required
 def editar_fornecedor(request, pk):
     fornecedor = get_object_or_404(Fornecedor, id=pk)
 
@@ -208,9 +209,8 @@ def listar_traco(request):  # Renomeei a função para ser mais descritiva
     return render(request, 'traco/index.html', {'traco': traco})
 
 
+@login_required
 def cadastrar_traco(request):
-    tipos_agregado = TipoAgregado.objects.all()
-
     if request.method == 'POST':
         form = TracoForms(request.POST)
         agregados = request.POST.getlist('agregados')
@@ -221,7 +221,7 @@ def cadastrar_traco(request):
             porcentagem_total = form.cleaned_data['porcentagem_agua']
             for index, agregado_id in enumerate(agregados):
                 if agregado_id != '' and porcentagem_agregados[index] != '':
-                    porcentagem_total = porcentagem_total + float(porcentagem)
+                    porcentagem_total = porcentagem_total + float(porcentagem_agregados[index])
 
             if porcentagem_total != 100:
                 # TODO dar erro
@@ -242,33 +242,13 @@ def cadastrar_traco(request):
             # TODO deu ruim
             return None
     else:
+        tipos_agregado = TipoAgregado.objects.all()
         form = TracoForms()
-        form2 = TracoAgregadoForms()
 
-        return render(request, 'traco/cadastrar.html', {'form': form, 'form2': form2, 'tipos_agregado': tipos_agregado})
-
-# @login_required
-# def cadastrar_traco(request):
-#     if request.method == 'POST':
-#         traco_form = TracoForms(request.POST)
-#         if traco_form.is_valid():
-#             traco_form.save()
-#             return redirect('traco')
-#     else:
-#         traco_form = TracoForms()
-#
-#         tipos_agregados = TipoAgregado.objects.all()
-#         agregados = Agregado.objects.all()
-#
-#         return render(request,
-#                       'traco/cadastrar.html',
-#                       {
-#                           'traco_form': traco_form,
-#                           'tipos_agregados': tipos_agregados,
-#                           'agregados': agregados,
-#                       })
+        return render(request, 'traco/cadastrar.html', {'form': form, 'tipos_agregado': tipos_agregado})
 
 
+@login_required
 def deletar_traco(request, pk):
     traco = get_object_or_404(Traco, pk=pk)
     if request.method == 'POST':
@@ -276,6 +256,7 @@ def deletar_traco(request, pk):
     return redirect('traco')
 
 
+@login_required
 def editar_traco(request, pk):
     traco = get_object_or_404(Traco, id=pk)
 
@@ -286,14 +267,33 @@ def editar_traco(request, pk):
             return redirect('traco')  # Redireciona para a página de fornecedor
     else:
         form = TracoForms(instance=traco)
+        agregados_traco = TracoAgregado.objects.filter(traco=traco)
+        tipos_agregado = TipoAgregado.objects.all()
 
-    context = {
-        'form': form,
-        'traco': traco
-    }
-    return render(request, 'traco/editar.html', context)
+        porcentagem_agregados = []
+        for tipo_agregado in tipos_agregado:
+            for agregado_traco in agregados_traco:
+                if agregado_traco.agregado.fk_tipo_agregado_id == tipo_agregado:
+                    value = agregado_traco.porcentagem
+                    break
+                else:
+                    value = ''
+            porcentagem_agregados.append(value)
 
 
+
+        context = {
+            'form': form,
+            'traco': traco,
+            'tipos_agregado': tipos_agregado,
+            'agregados_traco': agregados_traco,
+            'porcentagem_agregados': porcentagem_agregados
+        }
+
+        return render(request, 'traco/editar.html', context)
+
+
+@login_required
 def filtrar_tracos(request):
     if request.method == 'GET':
         filtro_data = request.GET.get('data')

@@ -1,10 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% include "utils/anonymous_user_redirect.html" %}
+
+{% block content %}
+<h1>Editar Traço: {{ traco.nome }}</h1>
+<form method="post" >
+    {% csrf_token %}
+
+    <div class="form-columns">
+        <div class="form-column">
+            <div class="field">
+                <label for="{{ form.nome.id_for_label }}">Nome<span class="required-label">*</span></label>
+                {{ form.nome }}
+                <ul class="error-message">{{ form.nome.errors }}</ul>
+            </div>
+            <div class="field">
+                <label for="{{ form.descricao.id_for_label }}">Descrição<span class="required-label">*</span></label>
+                {{ form.descricao }}
+                <ul class="error-message">{{ form.descricao.errors }}</ul>
+            </div>
+            <div class="field">
+                <label for="{{ form.porcentagem_agua.id_for_label }}">Porcentagem de agua<span class="required-label">*</span></label>
+                {{ form.porcentagem_agua }}
+                <ul class="error-message">{{ form.porcentagem_agua.errors }}</ul>
+            </div>
+        </div>
+    </div>
+
+
+
+    <h2> {{ agregados }}</h2>
+    <h3>Agregados:</h3>
+    {% for tipo_agregado in tipos_agregado %}
+    <h4>{{ tipo_agregado.nome }}</h4>
+    <ul>
+        <!-- Cria lista com todos os agregados para esse tipo de agregado -->
+        <label for="agregados">Agregado:</label>
+        <select name="agregados" id="agregados">
+            <option value="">Nenhum</option>
+        {% for agregado_traco in agregados_traco %}
+            {% if tipo_agregado.id == agregado_traco.agregado.fk_tipo_agregado_id.id %}
+                {% for agregado in tipo_agregado.agregados_relacionados %}
+                    {% if agregado_traco.agregado.fk_tipo_agregado_id.id == agregado.id %}
+
+                        <option selected="selected" value="{{ agregado.id }}" >{{ agregado }}</option>
+                    {% else %}
+                        <option value="{{ agregado.id }}">{{ agregado }}</option>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </select>
+
+        <br>
+
+            <h2> {{ forloop.counter }} </h2>
+            <h2> {{ forloop.counter }} </h2>
+            <h3> {{ porcentagem_agregados|get:forloop.counter }}</h3>
+<!--        {% for porcentagem_agregado in porcentagem_agregados%}-->
+            <label for="porcentagem_agregados">Porcentagem Agregado:</label>
+            <input type="text" name="porcentagem_agregados" class="form-control" placeholder="" />
+<!--        {% endfor %}-->
+
+        <br>
+    </ul>
+    {% endfor %}
+
+    <button type="submit">Cadastrar</button>
+</form>
+{% endblock %}
