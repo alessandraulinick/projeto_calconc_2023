@@ -1,11 +1,18 @@
-{% extends 'base.html' %}
+{% load static %}
 {% load static %}
 
 {% include "utils/anonymous_user_redirect.html" %}
 
 {% block content %}
-<h2>Cadastrar Traço</h2>
-<form method="post" >
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/cadastros.css' %}">
+    <title>ConCalc</title>
+</head>
+<body>
+<h1>Cadastrar Traço</h1>
+<form method="post" class="form-container">
     {% csrf_token %}
 
     <div class="form-columns">
@@ -21,37 +28,44 @@
                 <ul class="error-message">{{ form.descricao.errors }}</ul>
             </div>
             <div class="field">
-                <label for="{{ form.porcentagem_agua.id_for_label }}">Porcentagem de agua<span class="required-label">*</span></label>
+                <label for="{{ form.porcentagem_agua.id_for_label }}">Porcentagem de água<span class="required-label">*</span></label>
                 {{ form.porcentagem_agua }}
                 <ul class="error-message">{{ form.porcentagem_agua.errors }}</ul>
             </div>
         </div>
     </div>
 
-
-
-    <h3>Agregados:</h3>
+    <h1>Agregados:</h1>
     {% for tipo_agregado in tipos_agregado %}
-    <h4>{{ tipo_agregado.nome }}</h4>
-    <ul>
-        <!-- Cria lista com todos os agregados para esse tipo de agregado -->
-        <label for="agregados">Agregado:</label>
-        <select name="agregados" id="agregados">
-            <option value="">Nenhum</option>
-        {% for agregado in tipo_agregado.agregados_relacionados %}
-            <option value="{{ agregado.id }}">{{ agregado }}</option>
-        {% endfor %}
-        </select>
+    <div class="agregado-container">
+        <h2>{{ tipo_agregado.nome }}</h2>
+        <div class="field">
+            <label for="agregados">Agregado:</label>
+            <select name="agregados" id="agregados">
+                <option value="">Nenhum</option>
+                {% for agregado in tipo_agregado.agregados_relacionados %}
+                    <option value="{{ agregado.id }}">{{ agregado }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <br>
-
-        <label for="porcentagem_agregados">Porcentagem Agregado:</label>
-        <input type="text" name="porcentagem_agregados" class="form-control" placeholder="" />
-
-        <br>
-    </ul>
+        <div class="field">
+            <label for="porcentagem_agregados">Porcentagem Agregado:</label>
+            <input type="text" name="porcentagem_agregados" class="form-control" placeholder="" />
+        </div>
+    </div>
     {% endfor %}
 
-    <button type="submit">Cadastrar</button>
+    <div class="button-container">
+        <button type="submit" class="save-button">Salvar</button>
+        <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>
+    </div>
 </form>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+</body>
+</html>
 {% endblock %}
