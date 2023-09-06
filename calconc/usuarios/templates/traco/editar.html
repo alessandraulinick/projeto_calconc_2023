@@ -29,42 +29,26 @@
     </div>
 
 
-
     <h2> {{ agregados }}</h2>
     <h3>Agregados:</h3>
-    {% for tipo_agregado in tipos_agregado %}
-    <h4>{{ tipo_agregado.nome }}</h4>
-    <ul>
-        <!-- Cria lista com todos os agregados para esse tipo de agregado -->
-        <label for="agregados">Agregado:</label>
-        <select name="agregados" id="agregados">
-            <option value="">Nenhum</option>
-        {% for agregado_traco in agregados_traco %}
-            {% if tipo_agregado.id == agregado_traco.agregado.fk_tipo_agregado_id.id %}
-                {% for agregado in tipo_agregado.agregados_relacionados %}
-                    {% if agregado_traco.agregado.fk_tipo_agregado_id.id == agregado.id %}
+    {% for i in informacoes_agregados %}
+        <div class="agregado-container">
+        <h2>{{ i.tipo_agregado }}</h2>
+            <div class="field">
+                <label for="agregados">Agregado:</label>
+                <select name="agregados" id="agregados">
+                    <option selected value="">Nenhum</option>
+                    {% for agregado in i.agregados %}
+                        <option {{ agregado.selected }} value="{{ agregado.id }}">{{ agregado.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-                        <option selected="selected" value="{{ agregado.id }}" >{{ agregado }}</option>
-                    {% else %}
-                        <option value="{{ agregado.id }}">{{ agregado }}</option>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-        </select>
-
-        <br>
-
-            <h2> {{ forloop.counter }} </h2>
-            <h2> {{ forloop.counter }} </h2>
-            <h3> {{ porcentagem_agregados|get:forloop.counter }}</h3>
-<!--        {% for porcentagem_agregado in porcentagem_agregados%}-->
-            <label for="porcentagem_agregados">Porcentagem Agregado:</label>
-            <input type="text" name="porcentagem_agregados" class="form-control" placeholder="" />
-<!--        {% endfor %}-->
-
-        <br>
-    </ul>
+            <div class="field">
+                <label for="porcentagem_agregados">Porcentagem Agregado:</label>
+                <input type="text" name="porcentagem_agregados" class="form-control" value="{{ i.porcentagem }}" />
+            </div>
+        </div>
     {% endfor %}
 
     <button type="submit">Cadastrar</button>

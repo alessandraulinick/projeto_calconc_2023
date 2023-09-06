@@ -139,6 +139,7 @@ class TracoAgregado(models.Model):
     porcentagem = models.FloatField()
 
     class Meta:
+        unique_together = (('traco', 'agregado'),)
         db_table = "traco_agregado"
 
     # def __str__(self):

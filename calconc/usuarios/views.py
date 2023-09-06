@@ -9,6 +9,7 @@ from datetime import datetime
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+from .scripts import GetInformacoesAgregados
 
 
 @method_decorator(login_required, name='dispatch')
@@ -262,32 +263,45 @@ def editar_traco(request, pk):
 
     if request.method == 'POST':
         form = TracoForms(request.POST, instance=traco)
-        if form.is_valid():
-            form.save()
-            return redirect('traco')  # Redireciona para a página de fornecedor
+        agregados = request.POST.getlist('agregados')
+        porcentagem_agregados = request.POST.getlist('porcentagem_agregados')
+        print(form.errors)
+        if form.is_valid() and (agregados is not None) and (porcentagem_agregados is not None):
+
+            porcentagem_total = form.cleaned_data['porcentagem_agua']
+            for index, agregado_id in enumerate(agregados):
+                if agregado_id != '' and porcentagem_agregados[index] != '':
+                    porcentagem_total = porcentagem_total + float(porcentagem_agregados[index])
+
+            if porcentagem_total != 100:
+                # TODO dar erro
+                return None
+
+            traco = form.save()
+
+            TracoAgregado.objects.filter(traco=traco).delete()
+            # Processar e salvar as porcentagens dos agregados
+            for index, agregado_id in enumerate(agregados):
+                if agregado_id != '':
+                    agregado = Agregado.objects.get(id=agregado_id)
+
+                    TracoAgregado.objects.create(traco=traco, agregado=agregado,
+                                                 porcentagem=porcentagem_agregados[index])
+
+            return redirect('traco')  # Redirecionar para a página de sucesso após o cadastro
+
+        else:
+            # TODO deu ruim
+            return None
     else:
         form = TracoForms(instance=traco)
         agregados_traco = TracoAgregado.objects.filter(traco=traco)
         tipos_agregado = TipoAgregado.objects.all()
 
-        porcentagem_agregados = []
-        for tipo_agregado in tipos_agregado:
-            for agregado_traco in agregados_traco:
-                if agregado_traco.agregado.fk_tipo_agregado_id == tipo_agregado:
-                    value = agregado_traco.porcentagem
-                    break
-                else:
-                    value = ''
-            porcentagem_agregados.append(value)
-
-
-
         context = {
             'form': form,
             'traco': traco,
-            'tipos_agregado': tipos_agregado,
-            'agregados_traco': agregados_traco,
-            'porcentagem_agregados': porcentagem_agregados
+            'informacoes_agregados': GetInformacoesAgregados(agregados_traco, tipos_agregado)
         }
 
         return render(request, 'traco/editar.html', context)
