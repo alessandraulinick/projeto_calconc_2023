@@ -1,0 +1,55 @@
+{% load static %}
+
+{% include "utils/anonymous_user_redirect.html" %}
+
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+<!--    <link rel="stylesheet" href="{% static 'css/listar.css' %}">-->
+    <title>ConCalc</title>
+</head>
+<body>
+    <form method="post">
+    {% csrf_token %}
+    {% include "utils/header.html" %}
+
+    <div class="container">
+
+         {% include "utils/sidebar.html" %}
+
+        <div class="content">
+            <label for="traco_id">Traço:</label>
+            <select name="traco_id" id="traco_id">
+                <option value="">--Selecione um traço--</option>
+                {% for traco in tracos %}
+                    <option value="{{ traco.id }}">{{ traco }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <div class="field">
+            <label for="volume_traco">Volume do Traço:</label>
+            <input type="text" name="volume_traco" class="form-control" placeholder="" />
+        </div>
+        <br>
+
+        <div class="content">
+            <label for="tracos">Unidade de Medida:</label>
+            <select name="unidade_medida" id="unidade_medida">
+                <option value="L">Litros (L)</option>
+                <option value="m3">Metros cúbicos (m^3)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button type="submit" class="save-button">Salvar</button>
+    </div>
+
+    <h2> {{ calculo_object }}</h2>
+
+  </form>
+</body>
+</html>
+{% endblock %}
