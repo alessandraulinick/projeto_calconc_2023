@@ -13,6 +13,7 @@ urlpatterns = [
 
     #### Calculadora
     path('calculadora/', views.calculadora, name='calculadora'),
+    path('download-pdf/', views.download_pdf, name='download_pdf'),
 
     #### tipo agregado
     path('tipo_agregado/', views.listar_tipo_agregado, name='tipo_agregado'),

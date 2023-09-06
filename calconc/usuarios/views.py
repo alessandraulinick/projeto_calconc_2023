@@ -6,10 +6,12 @@ from .models import Fornecedor, TipoAgregado, Agregado, Historico, Traco, Usuari
 from django.utils import timezone
 from django.db.models import F
 from datetime import datetime
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from .scripts import GetInformacoesAgregados, InsertTraco
+from reportlab.pdfgen import canvas
+from reportlab.lib.styles import getSampleStyleSheet
 
 
 
@@ -23,7 +25,6 @@ def listar_historico(request):  # Renomeei a função para ser mais descritiva
 def listar_usuarios(request):  # Renomeei a função para ser mais descritiva
     usuarios = Usuarios.objects.all()
     return render(request, 'usuarios.html', {'usuarios': usuarios})
-
 
 
 # Calculadora
@@ -66,18 +67,24 @@ def calculadora(request):
                 'unidade_medida': 'Kg'
             })
 
-        calculo_object = {
-            'traco': {
-                'nome': traco.nome,
-                'id': traco.id
-            },
-            'volume_traco': volume_traco,
-            'unidade_medida': unidade_medida,
-            'peso_final': peso_final,
-            'agregados': agregados_info
-        }
+            # Armazene os valores calculados na sessão
+            request.session['traco'] = traco.nome
+            request.session['volume_traco'] = volume_traco
+            request.session['unidade_medida'] = unidade_medida
+            request.session['peso_final'] = peso_final
 
-        # TODO salvar em banco
+            calculo_object = {
+                'traco': {
+                    'nome': traco.nome,
+                    'id': traco.id
+                },
+                'volume_traco': volume_traco,
+                'unidade_medida': unidade_medida,
+                'peso_final': peso_final,
+                'agregados': agregados_info
+            }
+
+            # TODO salvar em banco, se necessário
         return render(request, 'calculadora/index.html',  {'tracos': tracos, 'calculo_object': calculo_object})
     else:
         return render(request, 'calculadora/index.html',  {'tracos': tracos})
@@ -345,3 +352,42 @@ def filtrar_tracos(request):
         }
 
         return render(request, 'traco/index.html', context)
+
+@login_required
+def download_pdf(request):
+    traco = request.session.get('traco', 'Valor padrão para o traço')
+    volume_traco = request.session.get('volume_traco', 'Valor padrão para o volume do traço')
+    unidade_medida = request.session.get('unidade_medida', 'Unidade de medida padrão')
+    peso_final = request.session.get('peso_final', 0)  # 0 ou outro valor padrão
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="documento.pdf"'
+
+    p = canvas.Canvas(response)
+    p.drawString(100, 730, f"Traço: {traco}")
+    p.drawString(100, 710, f"Volume do Traço: {volume_traco} kg")
+    p.drawString(100, 690, f"Peso Final: {peso_final}")
+
+    # Adicione os agregados ao PDF
+    # Certifique-se de que os valores necessários da sessão estejam disponíveis aqui
+    agregados_info = request.session.get('agregados', [])
+    y = 670
+    for agregado in agregados_info:
+        p.drawString(100, y, f"{agregado['nome']}: {agregado['quantidade']} {agregado['unidade_medida']}")
+        y -= 20
+
+    p.showPage()
+    p.save()
+
+    return response
+
+def signup(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')  # Redireciona para a página inicial após o cadastro
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'registration/signup.html', {'form': form})

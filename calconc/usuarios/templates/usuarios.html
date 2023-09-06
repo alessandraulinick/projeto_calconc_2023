@@ -8,73 +8,56 @@
     <title>ConCalc</title>
 </head>
 <body>
-    {% if user.is_anonymous %}
-        <div class="container-login100-form-btn">
-            <script>
-                window.location.href = "{% url 'login' %}"
-            </script>
-        </div>
-    {% else %}
-    <div class="header">
-        <div class="logo">
-            <img src="{% static 'images/img-01.png' %}" alt="IMG">
-        </div>
-        <ul class="menu">
-            <li><a class="btn-logout" href="{% url 'logout' %}">Logout</a></li>
-        </ul>
-    </div>
+     {% include "utils/header.html" %}
 
     <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <!-- Conteúdo do menu lateral -->
-            <ul>
-                <li><a href="{% url 'index' %}">Menu Inicial</a></li>
 
-                <li class="{% if request.resolver_match.view_name == 'agregados' %}active{% endif %}">
-                    <a href="{% url 'agregados' %}">Agregado</a>
-                </li>
+         {% include "utils/sidebar.html" %}
 
-                <li class="{% if request.resolver_match.view_name == 'tipo_agregado' %}active{% endif %}">
-                    <a href="{% url 'tipo_agregado' %}">Tipo de Agregado</a>
-                </li>
-
-                <li class="{% if request.resolver_match.view_name == 'calculadora' %}active{% endif %}">
-                    <a href="{% url 'calculadora' %}">Calculadora</a>
-                </li>
-
-                <li class="{% if request.resolver_match.view_name == 'traco' %}active{% endif %}">
-                    <a href="{% url 'traco' %}">Traço</a>
-                </li>
-
-                <li class="{% if request.resolver_match.view_name == 'fornecedor' %}active{% endif %}">
-                    <a href="{% url 'fornecedor' %}">Fornecedor</a>
-                </li>
-
-                <li class="{% if request.resolver_match.view_name == 'usuarios' %}active{% endif %}">
-                    <a href="{% url 'usuarios' %}">Usuários</a>
-                </li>
-
-                <li class="{% if request.resolver_match.view_name == 'historico' %}active{% endif %}">
-                    <a href="{% url 'historico' %}">Histórico</a>
-                </li>
-            </ul>
-        </div>
         <div class="content">
             <div class="cadastrar_btn">
-                <a class="nome-pagina">Usuário</a>
-                <a href="{% url 'cadastrar_agregado' %}" class="btn_cadastrar">Cadastrar Usuário</a>
+                <a class="nome-pagina">Usuários</a>
+                <a href="{% url 'cadastrar_traco' %}" class="btn_cadastrar">Cadastrar Usuario</a>
             </div>
 
             <div class = 'all-content'>
-                <div class = 'filtros'>
-                    Filtros
+                {% include "utils/filtrar.html" %}
+
+                <div class="lista">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data de Cadastro</th>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Porcentagem Água</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for elemento in traco %}
+                                <tr>
+                                    <td>{{ elemento.data_cadastro }}</td>
+                                    <td>{{ elemento.nome }}</td>
+                                    <td>{{ elemento.descricao }}</td>
+                                    <td>{{ elemento.porcentagem_agua }}</td>
+                                    <td class="align-right">
+                                      <div class="btn-action-container">
+                                        <a href="{% url 'inspecionar_traco' elemento.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
+                                        <a href="{% url 'editar_traco' elemento.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
+                                        <button class="btn-action btn-deletar" data-id="{{ elemento.id }}" data-url="{% url 'deletar_traco' elemento.id %}"><i class="fa fa-trash"></i></button>
+                                      </div>
+                                    </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
         </div>
         </div>
-
     </div>
-    {% endif %}
+    <script src="{% static 'js/deletar.js' %}"></script>
 </body>
 {% endblock %}

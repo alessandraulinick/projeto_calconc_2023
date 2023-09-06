@@ -6,50 +6,70 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-<!--    <link rel="stylesheet" href="{% static 'css/listar.css' %}">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/calculadora.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>ConCalc</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <form method="post">
-    {% csrf_token %}
     {% include "utils/header.html" %}
 
     <div class="container">
 
-         {% include "utils/sidebar.html" %}
-
+        {% include "utils/sidebar.html" %}
         <div class="content">
-            <label for="traco_id">Traço:</label>
-            <select name="traco_id" id="traco_id">
-                <option value="">--Selecione um traço--</option>
-                {% for traco in tracos %}
-                    <option value="{{ traco.id }}">{{ traco }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <br>
-        <div class="field">
-            <label for="volume_traco">Volume do Traço:</label>
-            <input type="text" name="volume_traco" class="form-control" placeholder="" />
-        </div>
-        <br>
+                <div class="all-content">
 
-        <div class="content">
-            <label for="tracos">Unidade de Medida:</label>
-            <select name="unidade_medida" id="unidade_medida">
-                <option value="L">Litros (L)</option>
-                <option value="m3">Metros cúbicos (m^3)</option>
-            </select>
+                    <div class="form-container">
+                        <h2>Calculadora:</h2>
+                        <form method="post" action="{% url 'calculadora' %}">
+                              {% csrf_token %}
+                            <div class="form-group">
+                              <label for="traco_id">Traço:</label>
+                              <select id="traco_id" name="traco_id">
+                                {% for traco in tracos %}
+                                  <option value="{{ traco.id }}">{{ traco.nome }}</option>
+                                {% endfor %}
+                              </select><br>
+                            </div>
+                            <div class="form-group">
+                              <label for="volume_traco">Volume do Traço:</label>
+                              <input type="text" id="volume_traco" name="volume_traco"><br>
+                            </div>
+                            <div class="form-group">
+                              <label for="unidade_medida">Unidade de Medida:</label>
+                              <select id="unidade_medida" name="unidade_medida">
+                                <option value="m3">m³</option>
+                                <option value="L">Litros</option>
+                              </select><br>
+                            </div>
+                            <div class="button-container">
+                              <input type="submit" class="save-button" value="Calcular">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="resultado">
+                        <h2>Resultado do Cálculo:</h2>
+                        <ul>
+                            <li><strong>Traço:</strong> {{ calculo_object.traco.nome }}</li>
+                            <li><strong>Volume do Traço:</strong> {{ calculo_object.volume_traco }} {{ calculo_object.unidade_medida }}</li>
+                            <li><strong>Peso Final:</strong> {{ calculo_object.peso_final }}</li>
+                        </ul>
+                        <h3>Agregados:</h3>
+                        <ul>
+                            {% for agregado in calculo_object.agregados %}
+                                <li><strong>{{ agregado.nome }}:</strong> {{ agregado.quantidade }} {{ agregado.unidade_medida }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% if calculo_object %}
+                          <a href="{% url 'download_pdf' %}">Baixar PDF</a>
+                        {% endif %}
+
+                    </div>
+                </div>
         </div>
     </div>
-
-    <div class="button-container">
-        <button type="submit" class="save-button">Salvar</button>
-    </div>
-
-    <h2> {{ calculo_object }}</h2>
-
-  </form>
 </body>
 </html>
 {% endblock %}
