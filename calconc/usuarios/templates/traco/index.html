@@ -1,5 +1,7 @@
 {% load static %}
 
+{% include "utils/anonymous_user_redirect.html" %}
+
 {% block content %}
 <html lang="pt-br">
 <head>
@@ -9,21 +11,7 @@
     <title>ConCalc</title>
 </head>
 <body>
-    {% if user.is_anonymous %}
-        <div class="container-login100-form-btn">
-            <script>
-                window.location.href = "{% url 'login' %}"
-            </script>
-        </div>
-    {% else %}
-    <div class="header">
-        <div class="logo">
-            <img src="{% static 'images/img-01.png' %}" alt="IMG">
-        </div>
-        <ul class="menu">
-            <li><a class="btn-logout" href="{% url 'logout' %}">Logout</a></li>
-        </ul>
-    </div>
+     {% include "utils/header.html" %}
 
     <div class="container">
 
@@ -50,16 +38,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for tipo in traco %}
+                            {% for elemento in traco %}
                                 <tr>
-                                    <td>{{ tipo.data_cadastro }}</td>
-                                    <td>{{ tipo.nome }}</td>
-                                    <td>{{ tipo.descricao }}</td>
-                                    <td>{{ tipo.porcentagem_agua }}</td>
+                                    <td>{{ elemento.data_cadastro }}</td>
+                                    <td>{{ elemento.nome }}</td>
+                                    <td>{{ elemento.descricao }}</td>
+                                    <td>{{ elemento.porcentagem_agua }}</td>
                                     <td class="align-right">
                                       <div class="btn-action-container">
-                                        <a href="{% url 'editar_traco' tipo.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
-                                        <button class="btn-action btn-deletar" data-id="{{ tipo.id }}" data-url="{% url 'deletar_traco' tipo.id %}"><i class="fa fa-trash"></i></button>
+                                        <a href="{% url 'inspecionar_traco' elemento.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
+                                        <a href="{% url 'editar_traco' elemento.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
+                                        <button class="btn-action btn-deletar" data-id="{{ elemento.id }}" data-url="{% url 'deletar_traco' elemento.id %}"><i class="fa fa-trash"></i></button>
                                       </div>
                                     </td>
                             </tr>
@@ -73,6 +62,5 @@
         </div>
     </div>
     <script src="{% static 'js/deletar.js' %}"></script>
-    {% endif %}
 </body>
 {% endblock %}

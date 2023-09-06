@@ -9,18 +9,8 @@ from datetime import datetime
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .scripts import GetInformacoesAgregados
+from .scripts import GetInformacoesAgregados, InsertTraco
 
-
-@method_decorator(login_required, name='dispatch')
-class CalculatorView(TemplateView):
-    template_name = 'calculator.html'
-
-    def post(self, request, *args, **kwargs):
-        num1 = float(request.POST['num1'])
-        num2 = float(request.POST['num2'])
-        result = num1 + num2
-        return self.render_to_response(self.get_context_data(result=result))
 
 
 @login_required
@@ -35,7 +25,65 @@ def listar_usuarios(request):  # Renomeei a função para ser mais descritiva
     return render(request, 'usuarios.html', {'usuarios': usuarios})
 
 
-############# Tipo Agregado
+
+# Calculadora
+@login_required
+def calculadora(request):
+    tracos = Traco.objects.all()
+    if request.method == 'POST':
+        traco_id = request.POST.get('traco_id')
+        volume_traco = request.POST.get('volume_traco')
+        unidade_medida = request.POST.get('unidade_medida')
+
+        traco = Traco.objects.get(id=traco_id)
+        agregados_traco = TracoAgregado.objects.filter(traco=traco)
+        if unidade_medida == 'm3':
+            multiplicador = 1000
+        elif unidade_medida == 'L':
+            multiplicador = 1
+        else:
+            # TODO Erro
+            return None
+
+
+        peso_final = 1*multiplicador*(traco.porcentagem_agua/100)
+        agregados_info = [{
+            'nome': 'Água',
+            'id': '0',
+            'quantidade': 1*multiplicador*(traco.porcentagem_agua/100),
+            'unidade_medida': 'Litros'
+        }]
+
+        for agregado_traco in agregados_traco:
+            massa_especifica = agregado_traco.agregado.massa_especifica
+            porcentagem = agregado_traco.porcentagem
+
+            peso_final = peso_final + massa_especifica*multiplicador*(porcentagem/100)
+            agregados_info.append({
+                'nome': agregado_traco.agregado.nome,
+                'id': agregado_traco.agregado.id,
+                'quantidade': massa_especifica*multiplicador*(porcentagem/100),
+                'unidade_medida': 'Kg'
+            })
+
+        calculo_object = {
+            'traco': {
+                'nome': traco.nome,
+                'id': traco.id
+            },
+            'volume_traco': volume_traco,
+            'unidade_medida': unidade_medida,
+            'peso_final': peso_final,
+            'agregados': agregados_info
+        }
+
+        # TODO salvar em banco
+        return render(request, 'calculadora/index.html',  {'tracos': tracos, 'calculo_object': calculo_object})
+    else:
+        return render(request, 'calculadora/index.html',  {'tracos': tracos})
+#############
+
+# Tipo Agregado
 @login_required
 def listar_tipo_agregado(request):
     tipos_agregados = TipoAgregado.objects.all()  # Renomeei a variável para ficar mais claro
@@ -51,7 +99,8 @@ def cadastrar_tipo_agregado(request):
             return redirect('tipo_agregado')
     else:
         form = TipoAgregadoForms()
-    return render(request, 'tipo_agregado/cadastrar.html', {'form': form})
+
+        return render(request, 'tipo_agregado/cadastrar.html', {'form': form})
 
 
 def editar_tipo_agregado(request, pk):
@@ -211,6 +260,12 @@ def listar_traco(request):  # Renomeei a função para ser mais descritiva
 
 
 @login_required
+def inspecionar_traco(request, pk):
+    traco = get_object_or_404(Traco, id=pk)
+    return render(request, 'traco/inspecionar.html', {'traco': traco})
+
+
+@login_required
 def cadastrar_traco(request):
     if request.method == 'POST':
         form = TracoForms(request.POST)
@@ -218,27 +273,7 @@ def cadastrar_traco(request):
         porcentagem_agregados = request.POST.getlist('porcentagem_agregados')
         print(form.errors)
         if form.is_valid() and (agregados is not None) and (porcentagem_agregados is not None):
-
-            porcentagem_total = form.cleaned_data['porcentagem_agua']
-            for index, agregado_id in enumerate(agregados):
-                if agregado_id != '' and porcentagem_agregados[index] != '':
-                    porcentagem_total = porcentagem_total + float(porcentagem_agregados[index])
-
-            if porcentagem_total != 100:
-                # TODO dar erro
-                return None
-
-            traco = form.save()
-
-            # Processar e salvar as porcentagens dos agregados
-            for index, agregado_id in enumerate(agregados):
-                if agregado_id != '':
-                    agregado = Agregado.objects.get(id=agregado_id)
-
-                    TracoAgregado.objects.create(traco=traco, agregado=agregado, porcentagem=porcentagem_agregados[index])
-
-            return redirect('traco')  # Redirecionar para a página de sucesso após o cadastro
-
+            return InsertTraco(form, agregados, porcentagem_agregados)
         else:
             # TODO deu ruim
             return None
@@ -253,6 +288,7 @@ def cadastrar_traco(request):
 def deletar_traco(request, pk):
     traco = get_object_or_404(Traco, pk=pk)
     if request.method == 'POST':
+        TracoAgregado.objects.filter(traco=traco).delete()
         traco.delete()
     return redirect('traco')
 
@@ -265,31 +301,9 @@ def editar_traco(request, pk):
         form = TracoForms(request.POST, instance=traco)
         agregados = request.POST.getlist('agregados')
         porcentagem_agregados = request.POST.getlist('porcentagem_agregados')
-        print(form.errors)
+
         if form.is_valid() and (agregados is not None) and (porcentagem_agregados is not None):
-
-            porcentagem_total = form.cleaned_data['porcentagem_agua']
-            for index, agregado_id in enumerate(agregados):
-                if agregado_id != '' and porcentagem_agregados[index] != '':
-                    porcentagem_total = porcentagem_total + float(porcentagem_agregados[index])
-
-            if porcentagem_total != 100:
-                # TODO dar erro
-                return None
-
-            traco = form.save()
-
-            TracoAgregado.objects.filter(traco=traco).delete()
-            # Processar e salvar as porcentagens dos agregados
-            for index, agregado_id in enumerate(agregados):
-                if agregado_id != '':
-                    agregado = Agregado.objects.get(id=agregado_id)
-
-                    TracoAgregado.objects.create(traco=traco, agregado=agregado,
-                                                 porcentagem=porcentagem_agregados[index])
-
-            return redirect('traco')  # Redirecionar para a página de sucesso após o cadastro
-
+            return InsertTraco(form, agregados, porcentagem_agregados)
         else:
             # TODO deu ruim
             return None

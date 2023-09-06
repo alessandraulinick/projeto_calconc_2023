@@ -10,7 +10,9 @@ urlpatterns = [
     path('contas/', include('django.contrib.auth.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
-    path('calculator/', views.CalculatorView.as_view(), name='calculator'),
+
+    #### Calculadora
+    path('calculadora/', views.calculadora, name='calculadora'),
 
     #### tipo agregado
     path('tipo_agregado/', views.listar_tipo_agregado, name='tipo_agregado'),
@@ -24,6 +26,7 @@ urlpatterns = [
     path('filtrar_tracos/', views.filtrar_tracos, name='filtrar_tracos'),
     path('traco/', views.listar_traco, name='traco'),
     path('cadastrar_traco/', views.cadastrar_traco, name='cadastrar_traco'),
+    path('inspecionar_traco/<int:pk>/', views.inspecionar_traco, name='inspecionar_traco'),
     path('deletar_traco/<int:pk>/', views.deletar_traco, name='deletar_traco'),
     path('editar_traco/<int:pk>/', views.editar_traco, name='editar_traco'),
 
