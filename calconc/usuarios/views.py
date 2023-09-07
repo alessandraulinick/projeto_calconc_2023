@@ -9,7 +9,7 @@ from datetime import datetime
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .scripts import GetInformacoesAgregados, InsertTraco
+from .scripts import GetInformacoesAgregados, InsertTraco, CalcularTraco
 from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
 
@@ -33,11 +33,11 @@ def calculadora(request):
     tracos = Traco.objects.all()
     if request.method == 'POST':
         traco_id = request.POST.get('traco_id')
-        volume_traco = request.POST.get('volume_traco')
+        volume_traco = float(request.POST.get('volume_traco'))
         unidade_medida = request.POST.get('unidade_medida')
 
         traco = Traco.objects.get(id=traco_id)
-        agregados_traco = TracoAgregado.objects.filter(traco=traco)
+
         if unidade_medida == 'm3':
             multiplicador = 1000
         elif unidade_medida == 'L':
@@ -46,45 +46,15 @@ def calculadora(request):
             # TODO Erro
             return None
 
+        calculo_object = CalcularTraco(volume_traco, traco, multiplicador, unidade_medida)
 
-        peso_final = 1*multiplicador*(traco.porcentagem_agua/100)
-        agregados_info = [{
-            'nome': 'Água',
-            'id': '0',
-            'quantidade': 1*multiplicador*(traco.porcentagem_agua/100),
-            'unidade_medida': 'Litros'
-        }]
+        # Armazena os valores calculados na sessão
+        request.session['traco'] = traco.nome
+        request.session['volume_traco'] = volume_traco
+        request.session['unidade_medida'] = unidade_medida
+        request.session['peso_final'] = calculo_object['peso_final']
 
-        for agregado_traco in agregados_traco:
-            massa_especifica = agregado_traco.agregado.massa_especifica
-            porcentagem = agregado_traco.porcentagem
-
-            peso_final = peso_final + massa_especifica*multiplicador*(porcentagem/100)
-            agregados_info.append({
-                'nome': agregado_traco.agregado.nome,
-                'id': agregado_traco.agregado.id,
-                'quantidade': massa_especifica*multiplicador*(porcentagem/100),
-                'unidade_medida': 'Kg'
-            })
-
-            # Armazene os valores calculados na sessão
-            request.session['traco'] = traco.nome
-            request.session['volume_traco'] = volume_traco
-            request.session['unidade_medida'] = unidade_medida
-            request.session['peso_final'] = peso_final
-
-            calculo_object = {
-                'traco': {
-                    'nome': traco.nome,
-                    'id': traco.id
-                },
-                'volume_traco': volume_traco,
-                'unidade_medida': unidade_medida,
-                'peso_final': peso_final,
-                'agregados': agregados_info
-            }
-
-            # TODO salvar em banco, se necessário
+            # TODO salvar em banco
         return render(request, 'calculadora/index.html',  {'tracos': tracos, 'calculo_object': calculo_object})
     else:
         return render(request, 'calculadora/index.html',  {'tracos': tracos})

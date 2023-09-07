@@ -9,6 +9,8 @@ from datetime import datetime
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+import math
+
 
 def GetInformacoesAgregados(agregados_traco, tipos_agregado):
     porcentagem_agregados = []
@@ -53,7 +55,7 @@ def InsertTraco(form, agregados, porcentagem_agregados):
         if agregado_id != '' and porcentagem_agregados[index] != '':
             porcentagem_total = porcentagem_total + float(porcentagem_agregados[index])
 
-    if porcentagem_total != 100:
+    if math.ceil(porcentagem_total) != 100:
         # TODO dar erro
         return 'ERROR'
 
@@ -68,3 +70,51 @@ def InsertTraco(form, agregados, porcentagem_agregados):
             TracoAgregado.objects.create(traco=traco, agregado=agregado,
                                          porcentagem=porcentagem_agregados[index])
     return redirect('traco')
+
+
+def CalcularTraco(volume_traco, traco, multiplicador, unidade_medida):
+    agregados_traco = TracoAgregado.objects.filter(traco=traco)
+
+    quantidade_agua_total = round(volume_traco*multiplicador*(traco.porcentagem_agua/100), 2)
+    quantidade_agua_necessaria = quantidade_agua_total
+
+    peso_final = 0
+    agregados_info = []
+
+    for agregado_traco in agregados_traco:
+        massa_especifica = agregado_traco.agregado.massa_especifica
+        porcentagem = agregado_traco.porcentagem
+
+        peso_sem_umidade = volume_traco*massa_especifica*multiplicador*(porcentagem/100)
+        peso_com_umidade = (100*peso_sem_umidade)/(100-agregado_traco.agregado.umidade)
+
+        quantidade_agua_necessaria = quantidade_agua_necessaria - peso_com_umidade*agregado_traco.agregado.umidade/100
+        peso_final = peso_final + peso_com_umidade
+
+        agregados_info.append({
+            'nome': agregado_traco.agregado.nome,
+            'id': agregado_traco.agregado.id,
+            'quantidade': round(peso_com_umidade, 2),
+            'unidade_medida': 'Kg'
+        })
+
+    peso_final = peso_final + quantidade_agua_necessaria
+    agregados_info.append({
+        'nome': 'Água',
+        'id': '0',
+        'quantidade': round(quantidade_agua_necessaria, 2),
+        'unidade_medida': 'Litros'
+    })
+
+    calculo_object = {
+        'traco': {
+            'nome': traco.nome,
+            'id': traco.id
+        },
+        'volume_traco': volume_traco,
+        'unidade_medida': unidade_medida,
+        "peso_final": round(peso_final, 2),
+        'agregados': agregados_info
+    }
+
+    return calculo_object
