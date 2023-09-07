@@ -1,9 +1,5 @@
 asgiref==3.6.0
-distlib==0.3.6
 Django==4.2.5
 filelock==3.12.0
-platformdirs==3.5.0
 sqlparse==0.4.4
 tzdata==2023.3
-virtualenv==20.23.0
-virtualenvwrapper-win==1.2.7
