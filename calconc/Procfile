@@ -1,0 +1,1 @@
+web: gunicorn djangoum3.wsgi --log-file -

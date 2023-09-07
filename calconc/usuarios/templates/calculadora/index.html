@@ -1,73 +1,83 @@
-{% load static %}
+{% load static %} <!-- Carrega arquivos estáticos -->
 
-{% include "utils/anonymous_user_redirect.html" %}
+{% include "utils/anonymous_user_redirect.html" %} <!-- Inclui o template "anonymous_user_redirect.html" -->
 
-{% block content %}
+{% block content %} <!-- Define um bloco chamado "content" -->
+
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/calculadora.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/calculadora.css' %}"> <!-- Inclui um arquivo CSS estático -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Inclui um arquivo CSS externo da biblioteca Font Awesome -->
     <title>ConCalc</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script> <!-- Inclui a biblioteca jsPDF para geração de PDF -->
 </head>
 <body>
-    {% include "utils/header.html" %}
+    {% include "utils/header.html" %} <!-- Inclui o template "header.html" -->
 
     <div class="container">
-
-        {% include "utils/sidebar.html" %}
+        {% include "utils/sidebar.html" %} <!-- Inclui o template "sidebar.html" -->
         <div class="content">
-                <div class="all-content">
-
-                    <div class="form-container">
-                        <h2>Calculadora:</h2>
-                        <form method="post" action="{% url 'calculadora' %}">
-                              {% csrf_token %}
-                            <div class="form-group">
-                              <label for="traco_id">Traço:</label>
-                              <select id="traco_id" name="traco_id">
+            <div class="all-content">
+                <div class="form-container">
+                    <h2>Calculadora</h2>
+                    <form method="post" action="{% url 'calculadora' %}"> <!-- Cria um formulário com método POST e ação para a URL 'calculadora' -->
+                        {% csrf_token %} <!-- Adiciona um token CSRF para proteção contra falsificação de solicitação entre sites -->
+                        <div class="form-group">
+                            <label for="traco_id">Traço:</label>
+                            <select id="traco_id" name="traco_id"> <!-- Cria um menu suspenso para seleção de traço -->
                                 {% for traco in tracos %}
-                                  <option value="{{ traco.id }}">{{ traco.nome }}</option>
+                                    <option value="{{ traco.id }}">{{ traco.nome }}</option> <!-- Popula as opções com os traços disponíveis -->
                                 {% endfor %}
-                              </select><br>
-                            </div>
-                            <div class="form-group">
-                              <label for="volume_traco">Volume do Traço:</label>
-                              <input type="text" id="volume_traco" name="volume_traco"><br>
-                            </div>
-                            <div class="form-group">
-                              <label for="unidade_medida">Unidade de Medida:</label>
-                              <select id="unidade_medida" name="unidade_medida">
+                            </select><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="volume_traco">Volume do Traço:</label>
+                            <input type="text" id="volume_traco" name="volume_traco"><br> <!-- Cria um campo de entrada para o volume do traço -->
+                        </div>
+                        <div class="form-group">
+                            <label for="unidade_medida">Unidade de Medida:</label>
+                            <select id="unidade_medida" name="unidade_medida"> <!-- Cria um menu suspenso para seleção da unidade de medida -->
                                 <option value="m3">m³</option>
                                 <option value="L">Litros</option>
-                              </select><br>
-                            </div>
-                            <div class="button-container">
-                              <input type="submit" class="save-button" value="Calcular">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="resultado">
-                        <h2>Resultado do Cálculo:</h2>
-                        <ul>
-                            <li><strong>Traço:</strong> {{ calculo_object.traco.nome }}</li>
-                            <li><strong>Volume do Traço:</strong> {{ calculo_object.volume_traco }} {{ calculo_object.unidade_medida }}</li>
-                            <li><strong>Peso Final:</strong> {{ calculo_object.peso_final }}</li>
-                        </ul>
-                        <h3>Agregados:</h3>
-                        <ul>
-                            {% for agregado in calculo_object.agregados %}
-                                <li><strong>{{ agregado.nome }}:</strong> {{ agregado.quantidade }} {{ agregado.unidade_medida }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% if calculo_object %}
-                          <a href="{% url 'download_pdf' %}">Baixar PDF</a>
-                        {% endif %}
-
-                    </div>
+                            </select><br>
+                        </div>
+                        <div class="button-container">
+                            <input type="submit" class="save-button" value="Calcular"> <!-- Cria um botão de envio do formulário -->
+                        </div>
+                    </form>
                 </div>
+                <div class="resultado">
+                    <h2>Resultado do Cálculo</h2>
+                    <table class="resultado-table">
+                        <tr>
+                            <td>Traço:</td>
+                            <td>{{ calculo_object.traco.nome }}</td>
+                        </tr>
+                        <tr>
+                            <td>Volume do Traço:</td>
+                            <td>{{ calculo_object.volume_traco }} {{ calculo_object.unidade_medida }}</td>
+                        </tr>
+                        <tr>
+                            <td>Peso Final:</td>
+                            <td>{{ calculo_object.peso_final }}</td>
+                        </tr>
+                    </table>
+                    <h2>Agregados</h2>
+                    <table class="resultado-table">
+                        {% for agregado in calculo_object.agregados %}
+                            <tr>
+                                <td>{{ agregado.nome }}:</td>
+                                <td>{{ agregado.quantidade }} {{ agregado.unidade_medida }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    {% if calculo_object %}
+                        <a href="{% url 'download_pdf' %}" class="download-button">Baixar PDF</a> <!-- Cria um link para baixar um PDF -->
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 </body>
