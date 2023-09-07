@@ -33,6 +33,7 @@ urlpatterns = [
 
     ### Usuarios
     path('usuarios/', views.listar_usuarios, name='usuarios'),
+    path('cadastrar_usuario', views.cadastrar_usuarios, name='cadastrar_usuario'),
 
     ### Agregados
     path('agregados/', views.listar_agregados, name='agregados'),

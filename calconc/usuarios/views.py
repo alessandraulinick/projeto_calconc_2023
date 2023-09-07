@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
-from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms, TracoAgregadoForms
+from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms, TracoAgregadoForms, CustomUsuarioCreateForm
 from .models import Fornecedor, TipoAgregado, Agregado, Historico, Traco, Usuarios, TracoAgregado
 from django.utils import timezone
 from django.db.models import F
@@ -381,13 +381,13 @@ def download_pdf(request):
 
     return response
 
-def signup(request):
+def cadastrar_usuarios(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = CustomUsuarioCreateForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('home')  # Redireciona para a página inicial após o cadastro
+            return redirect('usuarios')  # Redireciona para a página inicial após o cadastro
     else:
-        form = CustomUserCreationForm()
-    return render(request, 'registration/signup.html', {'form': form})
+        form = CustomUsuarioCreateForm()
+    return render(request, 'registration/cadastrar_usuario.html', {'form': form})

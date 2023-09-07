@@ -9,8 +9,7 @@ from django.db import models
 class CustomUsuarioCreateForm(UserCreationForm):
     class Meta:
         model = CustomUsuario
-        fields = ('first_name', 'last_name', 'fone')
-        labels = {'username': 'Username/E-mail'}
+        fields = ['nome', 'login', 'email', 'permissao', 'password']
 
     def save(self, commit=True):
         user = super().save(commit=False)

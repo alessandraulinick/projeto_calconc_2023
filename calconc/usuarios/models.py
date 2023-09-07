@@ -41,10 +41,13 @@ class UsuarioManager(BaseUserManager):
 class CustomUsuario(AbstractUser):
     email = models.EmailField('E-mail', unique=True)
     fone = models.CharField('Telefone', max_length=15)
+    nome = models.CharField('Nome', max_length=255)
+    login = models.CharField('Login', max_length=50, unique=False)
+    permissao = models.CharField('Permissão', max_length=100)
     is_staff = models.BooleanField('Membro da equipe', default=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'fone']
+    REQUIRED_FIELDS = ['nome', 'login', 'permissao', 'password']
 
     def _str_(self):
         return self.email

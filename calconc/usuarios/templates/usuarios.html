@@ -17,7 +17,7 @@
         <div class="content">
             <div class="cadastrar_btn">
                 <a class="nome-pagina">Usuários</a>
-                <a href="{% url 'cadastrar_traco' %}" class="btn_cadastrar">Cadastrar Usuario</a>
+                <a href="{% url 'cadastrar_usuario' %}" class="btn_cadastrar">Cadastrar Usuario</a>
             </div>
 
             <div class = 'all-content'>
@@ -27,27 +27,13 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Data de Cadastro</th>
                                 <th>Nome</th>
-                                <th>Descrição</th>
-                                <th>Porcentagem Água</th>
-                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for elemento in traco %}
+                            {% for i in usuario %}
                                 <tr>
-                                    <td>{{ elemento.data_cadastro }}</td>
-                                    <td>{{ elemento.nome }}</td>
-                                    <td>{{ elemento.descricao }}</td>
-                                    <td>{{ elemento.porcentagem_agua }}</td>
-                                    <td class="align-right">
-                                      <div class="btn-action-container">
-                                        <a href="{% url 'inspecionar_traco' elemento.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
-                                        <a href="{% url 'editar_traco' elemento.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
-                                        <button class="btn-action btn-deletar" data-id="{{ elemento.id }}" data-url="{% url 'deletar_traco' elemento.id %}"><i class="fa fa-trash"></i></button>
-                                      </div>
-                                    </td>
+                                    <td>{{ i.nome }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
