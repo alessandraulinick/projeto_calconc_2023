@@ -4,6 +4,12 @@
 {% include "utils/anonymous_user_redirect.html" %}
 
 {% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/cadastros.css' %}">
+    <title>ConCalc</title>
+</head>
 <h1>Editar Traço: {{ traco.nome }}</h1>
 <form method="post" >
     {% csrf_token %}
@@ -30,7 +36,7 @@
 
 
     <h2> {{ agregados }}</h2>
-    <h3>Agregados:</h3>
+    <h1>Agregados:</h1>
     {% for i in informacoes_agregados %}
         <div class="agregado-container">
         <h2>{{ i.tipo_agregado }}</h2>
@@ -51,6 +57,20 @@
         </div>
     {% endfor %}
 
-    <button type="submit">Editar</button>
+    <div class="button-container">
+        <button type="submit" class="save-button">Salvar</button>
+        <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>
+    </div>
+    </form>
+    <div id="mensagemSucesso" style="display: none;">Agregado cadastrado com sucesso!</div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function exibirMensagemConfirmacao() {
+            alert("Agregado cadastrado com sucesso!");
+        }
+    </script>
 </form>
 {% endblock %}
