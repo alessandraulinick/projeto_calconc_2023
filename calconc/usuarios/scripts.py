@@ -49,17 +49,20 @@ def GetInformacoesAgregados(agregados_traco, tipos_agregado):
     return informacoes_agregados
 
 
-def InsertTraco(form, agregados, porcentagem_agregados):
-    porcentagem_total = form.cleaned_data['porcentagem_agua']
+def InsertTraco(request, context, agregados, porcentagem_agregados, render_file):
+    porcentagem_total = context['form'].cleaned_data['porcentagem_agua']
     for index, agregado_id in enumerate(agregados):
         if agregado_id != '' and porcentagem_agregados[index] != '':
             porcentagem_total = porcentagem_total + float(porcentagem_agregados[index])
 
-    if math.ceil(porcentagem_total) != 100:
-        # TODO dar erro
-        return 'ERROR'
+    if round(porcentagem_total) != 100:
+        context['errors'] = {
+                'code': 1,
+                'message': f"A soma das porcentagens é diferênte de 100%: {porcentagem_total}"
+            }
+        return render(request, render_file, context)
 
-    traco = form.save()
+    traco = context['form'].save()
 
     TracoAgregado.objects.filter(traco=traco).delete()
     # Processar e salvar as porcentagens dos agregados

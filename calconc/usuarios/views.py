@@ -12,19 +12,20 @@ from django.contrib import messages
 from .scripts import GetInformacoesAgregados, InsertTraco, CalcularTraco
 from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
+from django import forms
 
 
 
 @login_required
-def listar_historico(request):  # Renomeei a função para ser mais descritiva
+def listar_historico(request):
     historico = Historico.objects.all()
     return render(request, 'historico.html', {'historico': historico})
 
 
 @login_required
-def listar_usuarios(request):  # Renomeei a função para ser mais descritiva
+def listar_usuarios(request):
     usuarios = Usuarios.objects.all()
-    return render(request, 'usuarios.html', {'usuarios': usuarios})
+    return render(request, 'registration/index_usuario.html', {'usuarios': usuarios})
 
 
 # Calculadora
@@ -40,13 +41,15 @@ def calculadora(request):
 
         if unidade_medida == 'm3':
             multiplicador = 1000
-        elif unidade_medida == 'L':
+            unidade_medida_display = 'Metro(s) cúbico(s) (m³)'
+        elif unidade_medida == 'l':
             multiplicador = 1
+            unidade_medida_display = 'Litro(s) (l)'
         else:
             # TODO Erro
             return None
 
-        calculo_object = CalcularTraco(volume_traco, traco, multiplicador, unidade_medida)
+        calculo_object = CalcularTraco(volume_traco, traco, multiplicador, unidade_medida_display)
 
         # Armazena os valores calculados na sessão
         request.session['traco'] = traco.nome
@@ -242,21 +245,34 @@ def inspecionar_traco(request, pk):
 
 @login_required
 def cadastrar_traco(request):
+    tipos_agregado = TipoAgregado.objects.all()
     if request.method == 'POST':
         form = TracoForms(request.POST)
         agregados = request.POST.getlist('agregados')
         porcentagem_agregados = request.POST.getlist('porcentagem_agregados')
-        print(form.errors)
+
+        context = {
+            'form': form,
+            'tipos_agregado': tipos_agregado
+        }
+
         if form.is_valid() and (agregados is not None) and (porcentagem_agregados is not None):
-            return InsertTraco(form, agregados, porcentagem_agregados)
+            return InsertTraco(request, context, agregados, porcentagem_agregados, render_file='traco/cadastrar.html')
         else:
-            # TODO deu ruim
-            return None
+            context['errors'] = {
+                    'code': 2,
+                    'message': f"O formulário enviado não é válido: {form.errors}"
+                }
+            return render(request, 'traco/cadastrar.html', context)
     else:
-        tipos_agregado = TipoAgregado.objects.all()
         form = TracoForms()
 
-        return render(request, 'traco/cadastrar.html', {'form': form, 'tipos_agregado': tipos_agregado})
+        context = {
+            'form': form,
+            'tipos_agregado': tipos_agregado
+        }
+
+        return render(request, 'traco/cadastrar.html', context)
 
 
 @login_required
@@ -271,21 +287,30 @@ def deletar_traco(request, pk):
 @login_required
 def editar_traco(request, pk):
     traco = get_object_or_404(Traco, id=pk)
+    agregados_traco = TracoAgregado.objects.filter(traco=traco)
+    tipos_agregado = TipoAgregado.objects.all()
 
     if request.method == 'POST':
         form = TracoForms(request.POST, instance=traco)
         agregados = request.POST.getlist('agregados')
         porcentagem_agregados = request.POST.getlist('porcentagem_agregados')
 
+        context = {
+            'form': form,
+            'traco': traco,
+            'informacoes_agregados': GetInformacoesAgregados(agregados_traco, tipos_agregado)
+        }
+
         if form.is_valid() and (agregados is not None) and (porcentagem_agregados is not None):
-            return InsertTraco(form, agregados, porcentagem_agregados)
+            return InsertTraco(request, context, agregados, porcentagem_agregados, render_file='traco/editar.html')
         else:
-            # TODO deu ruim
-            return None
+            context['errors'] = {
+                    'code': 2,
+                    'message': f"O formulário enviado não é válido: {form.errors}"
+                }
+            return render(request, 'traco/editar.html', context)
     else:
         form = TracoForms(instance=traco)
-        agregados_traco = TracoAgregado.objects.filter(traco=traco)
-        tipos_agregado = TipoAgregado.objects.all()
 
         context = {
             'form': form,

@@ -14,6 +14,7 @@
 <form method="post" >
     {% csrf_token %}
 
+    {% include "utils/error_message.html" %}
     <div class="form-columns">
         <div class="form-column">
             <div class="field">
@@ -35,7 +36,6 @@
     </div>
 
 
-    <h2> {{ agregados }}</h2>
     <h1>Agregados:</h1>
     {% for i in informacoes_agregados %}
         <div class="agregado-container">
@@ -52,7 +52,7 @@
 
             <div class="field">
                 <label for="porcentagem_agregados">Porcentagem Agregado:</label>
-                <input type="text" name="porcentagem_agregados" class="form-control" value="{{ i.porcentagem }}" />
+                <input type="number" name="porcentagem_agregados" class="form-control" value="{{ i.porcentagem }}" />
             </div>
         </div>
     {% endfor %}
@@ -73,4 +73,5 @@
         }
     </script>
 </form>
+</html>
 {% endblock %}
