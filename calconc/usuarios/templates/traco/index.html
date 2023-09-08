@@ -24,7 +24,9 @@
             </div>
 
             <div class = 'all-content'>
-                {% include "utils/filtrar.html" %}
+                {% with filtro_url='filtrar_tracos' %}
+                    {% include "utils/filtrar.html" %}
+                {% endwith %}
 
                 <div class="lista">
                     <table>

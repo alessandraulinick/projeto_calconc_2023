@@ -63,8 +63,9 @@ def calculadora(request):
 # Tipo Agregado
 @login_required
 def listar_tipo_agregado(request):
-    tipos_agregados = TipoAgregado.objects.all()  # Renomeei a variável para ficar mais claro
-    return render(request, 'tipo_agregado/index.html', {'tipos_agregados': tipos_agregados})
+    tipos_agregados = TipoAgregado.objects.all()
+    exibir_data = True
+    return render(request, 'tipo_agregado/index.html', {'tipos_agregados': tipos_agregados, 'exibir_data': exibir_data})
 
 
 @login_required
@@ -109,7 +110,8 @@ def deletar_tipo_agregado(request, pk):
 @login_required
 def listar_agregados(request):  # Renomeei a função para ser mais descritiva
     agregados = Agregado.objects.all()
-    return render(request, 'agregado/index.html', {'agregados': agregados})
+    exibir_data = True
+    return render(request, 'agregado/index.html', {'agregados': agregados, 'exibir_data': exibir_data})
 
 
 @login_required
@@ -175,19 +177,14 @@ def deletar_agregado(request, pk):
         agregado.delete()
     return redirect('agregados')
 
-
-@login_required
-def listar_agregado(request):
-    agregados = Agregado.objects.all()
-    return render(request, 'agregados', {'agregados': agregados})
 ############
 
 # Fornecedor
 @login_required
 def listar_fornecedor(request):
     fornecedores = Fornecedor.objects.all()
-    return render(request, 'fornecedor/index.html', {'fornecedores': fornecedores})
-
+    exibir_data = False
+    return render(request, 'fornecedor/index.html', {'fornecedores': fornecedores, 'exibir_data': exibir_data})
 
 @login_required
 def inspecionar_fornecedor(request, pk):
@@ -233,7 +230,8 @@ def editar_fornecedor(request, pk):
 @login_required
 def listar_traco(request):  # Renomeei a função para ser mais descritiva
     traco = Traco.objects.all()
-    return render(request, 'traco/index.html', {'traco': traco})
+    exibir_data = True
+    return render(request, 'traco/index.html', {'traco': traco, 'exibir_data': exibir_data})
 
 
 @login_required
@@ -321,7 +319,75 @@ def filtrar_tracos(request):
             'traco': tracos_filtrados,
         }
 
+
         return render(request, 'traco/index.html', context)
+
+@login_required
+def filtrar_agregados(request):
+    if request.method == 'GET':
+        filtro_data = request.GET.get('data')
+        filtro_nome = request.GET.get('nome')
+
+        agregados_filtrados = Agregado.objects.all()
+
+        if filtro_data:
+            data_selecionada = timezone.make_aware(datetime.strptime(filtro_data, '%Y-%m-%d'))
+            data_selecionada_date = data_selecionada.date()
+            agregados_filtrados = agregados_filtrados.filter(data_cadastro__date=data_selecionada_date)
+        if filtro_nome:
+            agregados_filtrados = agregados_filtrados.filter(nome__icontains=filtro_nome)
+        if 'limpar' in request.GET:
+            return HttpResponseRedirect(request.path_info)
+
+        exibir_data = True
+        context = {
+            'agregados': agregados_filtrados, 'exibir_data': exibir_data
+        }
+
+        return render(request, 'agregado/index.html', context)
+
+
+@login_required
+def filtrar_tipo_agregados(request):
+    if request.method == 'GET':
+        filtro_data = request.GET.get('data')
+        filtro_nome = request.GET.get('nome')
+
+        tipo_agregados_filtrados = TipoAgregado.objects.all()
+
+        if filtro_data:
+            data_selecionada = timezone.make_aware(datetime.strptime(filtro_data, '%Y-%m-%d'))
+            data_selecionada_date = data_selecionada.date()
+            tipo_agregados_filtrados = tipo_agregados_filtrados.filter(data_cadastro__date=data_selecionada_date)
+        if filtro_nome:
+            tipo_agregados_filtrados = tipo_agregados_filtrados.filter(nome__icontains=filtro_nome)
+        if 'limpar' in request.GET:
+            return HttpResponseRedirect(request.path_info)
+        exibir_data = True
+        context = {
+            'tipos_agregados': tipo_agregados_filtrados, 'exibir_data': exibir_data
+        }
+
+        return render(request, 'tipo_agregado/index.html', context)
+
+@login_required
+def filtrar_fornecedor(request):
+    if request.method == 'GET':
+        filtro_nome = request.GET.get('nome')
+
+        fornecedores_filtrados = Fornecedor.objects.all()
+
+        if filtro_nome:
+            fornecedores_filtrados = fornecedores_filtrados.filter(nome__icontains=filtro_nome)
+        if 'limpar' in request.GET:
+            return HttpResponseRedirect(request.path_info)
+
+        context = {
+            'fornecedores': fornecedores_filtrados,
+        }
+
+        return render(request, 'fornecedor/index.html', context)
+
 
 @login_required
 def download_pdf(request):
