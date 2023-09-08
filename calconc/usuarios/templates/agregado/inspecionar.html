@@ -4,4 +4,94 @@
 {% include "utils/anonymous_user_redirect.html" %}
 
 {% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/inspectionar.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>ConCalc</title>
+</head>
+<body>
+     {% include "utils/header.html" %}
+
+    <div class="container">
+        {% include "utils/sidebar.html" %}
+
+        <!-- Conteúdo principal -->
+        <div class="content">
+        <div class="cadastrar_btn">
+            <a class="nome-pagina">Visualizar Agregado</a>
+        </div>
+            <div class = 'all-content'>
+                <div class="lista">
+                    <table class="resultado-table">
+                        <tbody>
+                            <tr class="header-row">
+                                <td class="header-cell">Nome:</td>
+                                <td>{{ agregado.nome }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Pen 6-30 mm:</td>
+                                <td>{{ agregado.pen_6_30_mm }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Pen 4.80 mm:</td>
+                                <td>{{ agregado.pen_4_80_mm }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Pen 2.40 mm:</td>
+                                <td>{{ agregado.pen_2_40_mm }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Pen 1.20 mm:</td>
+                                <td>{{ agregado.pen_1_20_mm }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Pen 600 um:</td>
+                                <td>{{ agregado.pen_600_um }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Pen 300 um:</td>
+                                <td>{{ agregado.pen_300_um }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Pen 150 um:</td>
+                                <td>{{ agregado.pen_150_um }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Pen 75 um:</td>
+                                <td>{{ agregado.pen_75_um }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Fundo:</td>
+                                <td>{{ agregado.fundo }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Umidade:</td>
+                                <td>{{ agregado.umidade }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Massa Específica:</td>
+                                <td>{{ agregado.massa_especifica }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Data de Cadastro:</td>
+                                <td>{{ agregado.data_cadastro }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Fornecedor:</td>
+                                <td>{{ agregado.fk_fornecedor_id }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Tipo de Agregado:</td>
+                                <td>{{ agregado.fk_tipo_agregado_id }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+        </div>
+    </div>
+    <script src="{% static 'js/deletar.js' %}"></script>
+</body>
 {% endblock %}

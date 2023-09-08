@@ -1,0 +1,157 @@
+* {
+  margin: 0;
+  padding: 0;
+  color: inherit;
+}
+
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  background: #F5F5F5;
+  min-height: 100vh;
+}
+
+.header {
+  background: #171717;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px; /* Adiciona um espaçamento interno para os elementos dentro do cabeçalho */
+}
+
+.logo {
+  width: 36px;
+}
+
+.logo img {
+  max-width: 100%;
+}
+
+.btn-logout {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    border: 2px solid #333;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+.menu {
+  list-style: none;
+}
+
+.menu li {
+  display: inline-block; /* Para que os itens do menu fiquem na mesma linha */
+  margin-right: 10px; /* Adiciona um espaçamento entre os itens do menu */
+}
+
+.container {
+  display: flex;
+  min-height: calc(100vh - 50px);
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #C0C0C0;
+}
+
+.sidebar ul {
+  list-style: none;
+  margin: none;
+}
+
+.sidebar ul li {
+    width: 100%;
+    height: calc(9%);
+    display: flex;
+    align-items: center;
+}
+
+.sidebar ul li.active {
+        background-color: white;
+}
+
+.sidebar ul li a {
+    text-decoration:none;
+    color: black;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.sidebar ul li:hover{
+    background-color: white;
+}
+
+.content {
+  flex: 1;
+  margin: 15px;
+}
+
+.nome-pagina{
+    text-align: left;
+    font-size: 24px;
+    padding: 5px;
+}
+
+.all-content {
+    margin-top: 25px;
+    width: 100%;
+    height:98%;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.lista {
+    padding-top: 30px; /* Adicione a quantidade de espaçamento desejada aqui */
+}
+
+
+.agregados-list li {
+  list-style: none; /* Remove o estilo de lista */
+  position: relative; /* Permite posicionar o elemento filho (a linha) */
+  padding-bottom: 5px; /* Espaçamento inferior para a linha */
+  padding-top: 5px;
+}
+
+.agregados-list li:after {
+    margin-top; 10px;
+  content: ''; /* Adiciona um conteúdo vazio para criar a linha */
+  position: absolute; /* Posição absoluta em relação ao elemento pai (li) */
+  left: 0; /* Alinha a linha à esquerda */
+  bottom: 0; /* Posiciona a linha na parte inferior */
+  width: 100%; /* Largura total da linha */
+  height: 1.3px; /* Espessura da linha */
+  background-color: #d3d3d3; /* Cor da linha */
+}
+
+.header-row .header-cell {
+    font-weight: bold;
+    color: #3498db; /* Cor desejada para o texto */
+}
+
+/* Estilos para a seção de resultados */
+.resultado {
+  text-align: center;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-top:40px;
+}
+
+/* Estilos para a tabela de resultados */
+.resultado-table {
+  width: 90%;
+  border-collapse: collapse;
+  margin-left: 40px;
+}
+
+.resultado-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.resultado-table tr:last-child td {
+  border-bottom: none;
+}

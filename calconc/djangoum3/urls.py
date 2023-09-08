@@ -19,6 +19,7 @@ urlpatterns = [
     path('tipo_agregado/', views.listar_tipo_agregado, name='tipo_agregado'),
     path('cadastrar_tipo_agregado/', views.cadastrar_tipo_agregado, name='cadastrar_tipo_agregado'),
     path('editar_tipo_agregado/<int:pk>/', views.editar_tipo_agregado, name='editar_tipo_agregado'),
+    path('filtrar_tipo_agregados/', views.filtrar_tipo_agregados, name='filtrar_tipo_agregados'),
 
     ### Historico
     path('historico/', views.listar_historico, name='historico'),
@@ -41,10 +42,12 @@ urlpatterns = [
     path('inspecionar_agregado/<int:pk>/', views.inspecionar_agregado, name='inspecionar_agregado'),
     path('editar_agregado/<int:pk>/', views.editar_agregado, name='editar_agregado'),
     path('deletar_agregado/<int:pk>/', views.deletar_agregado, name='deletar_agregado'),
+    path('filtrar_agregados/', views.filtrar_agregados, name='filtrar_agregados'),
 
     ### Fornecedor
     path('fornecedor/', views.listar_fornecedor, name='fornecedor'),
     path('inspecionar_fornecedor/<int:pk>/', views.inspecionar_fornecedor, name='inspecionar_fornecedor'),
     path('cadastrar_fornecedor/', views.cadastrar_fornecedor, name='cadastrar_fornecedor'),
     path('editar_fornecedor/<int:pk>', views.editar_fornecedor, name='editar_fornecedor'),
+    path('filtrar_fornecedores/', views.filtrar_fornecedor, name='filtrar_fornecedores'),
 ]

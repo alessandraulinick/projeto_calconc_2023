@@ -97,16 +97,24 @@ body {
 }
 
 .btn_cadastrar {
-  text-align: right;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  text-decoration: none;
-  border-radius: 5px;
+    height: 40px;
+    line-height: 40px;
+    width: calc(10% - 5px); /* Largura igual para ambos os botões */
+    padding: 0px 15px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .all-content {
-    margin-top: 25px;
+    margin-top: 20px;
     width: 100%;
     height:92%;
     background-color: white;

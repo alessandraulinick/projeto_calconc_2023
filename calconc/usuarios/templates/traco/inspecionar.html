@@ -1,10 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
+
+{% include "utils/anonymous_user_redirect.html" %}
+
+{% block content %}
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'css/inspectionar.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>ConCalc</title>
 </head>
 <body>
+     {% include "utils/header.html" %}
 
+    <div class="container">
+        {% include "utils/sidebar.html" %}
+
+        <!-- Conteúdo principal -->
+        <div class="content">
+        <div class="cadastrar_btn">
+            <a class="nome-pagina">Visualizar Traço</a>
+        </div>
+            <div class = 'all-content'>
+                <div class="lista">
+                    <table class="resultado-table">
+                        <tbody>
+                            <tr class="header-row">
+                                <td class="header-cell">Nome:</td>
+                                <td>{{ traco.nome }}</td>
+                            </tr>
+                            <tr  class="header-row">
+                                <td class="header-cell">Descrição:</td>
+                                <td>{{ traco.descricao }}</td>
+                            </tr>
+                            <tr  class="header-row">
+                                <td class="header-cell">Porcentagem de Água:</td>
+                                <td>{{ traco.porcentagem_agua }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Agregados:</td>
+                                <td>
+                                    <ul class="agregados-list">
+                                        {% for agregado in traco.agregados.all %}
+                                            <li>{{ agregado.nome }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr  class="header-row">
+                                <td class="header-cell">Data de Cadastro:</td>
+                                <td>{{ traco.data_cadastro }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+        </div>
+    </div>
+    <script src="{% static 'js/deletar.js' %}"></script>
 </body>
-</html>
+{% endblock %}

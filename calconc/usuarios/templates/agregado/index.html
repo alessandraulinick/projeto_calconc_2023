@@ -25,6 +25,9 @@
             </div>
 
             <div class = 'all-content'>
+                {% with filtro_url='filtrar_agregados' %}
+                    {% include "utils/filtrar.html" %}
+                {% endwith %}
                 <div class="lista">
                     <table>
                         <thead>
