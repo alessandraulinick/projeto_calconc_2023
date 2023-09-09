@@ -9,7 +9,7 @@ from datetime import datetime
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .scripts import GetInformacoesAgregados, InsertTraco, CalcularTraco
+from .scripts import GetInformacoesAgregados, InsertTraco, CalcularTraco, get_last_agregado
 from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
 from django import forms
@@ -61,7 +61,7 @@ def calculadora(request):
         return render(request, 'calculadora/index.html',  {'tracos': tracos, 'calculo_object': calculo_object})
     else:
         return render(request, 'calculadora/index.html',  {'tracos': tracos})
-#############
+
 
 # Tipo Agregado
 @login_required
@@ -107,9 +107,10 @@ def deletar_tipo_agregado(request, pk):
     if request.method == 'POST':
         tipo_agregado.delete()
     return redirect('tipo_agregado')
+#############
 
 
-########## Agregado
+# Agregado
 @login_required
 def listar_agregados(request):  # Renomeei a função para ser mais descritiva
     agregados = Agregado.objects.all()
@@ -124,10 +125,7 @@ def cadastrar_agregado(request):
         if form.is_valid():
             agregado = form.save(commit=False)
             agregado.fk_usuario_id = request.user.id
-            print(request.user.id)
             agregado.save()
-
-            Agregado.objects.filter(pk=agregado.pk).update(num_modificacao=F('num_modificacao') + 1)
 
             return redirect('agregados')
     else:
@@ -162,8 +160,13 @@ def editar_agregado(request, pk):
 
         # TODO adicnioar logica com numero de modificação Agregado.objects.filter(pk=agregado.pk).update(num_modificacao=F('num_modificacao') + 1)
         if form.is_valid():
-            form.save()
-            return redirect('agregados')  # Redireciona para a página de listagem de agregados
+            agregado = form.save(commit=False)
+            agregado.fk_usuario_id = request.user.id
+            # get_last_agregado(agregado.id)
+            # agregado.num_modificacao = ''
+            agregado.save()
+
+            return redirect('agregados')
     else:
         form = AgregadoForms(instance=agregado)
 

@@ -97,6 +97,7 @@ def CalcularTraco(volume_traco, traco, multiplicador, unidade_medida):
         agregados_info.append({
             'nome': agregado_traco.agregado.nome,
             'id': agregado_traco.agregado.id,
+            'tipo_agregado': agregado_traco.agregado.fk_tipo_agregado_id,
             'quantidade': round(peso_com_umidade, 2),
             'unidade_medida': 'Kg'
         })
@@ -105,6 +106,7 @@ def CalcularTraco(volume_traco, traco, multiplicador, unidade_medida):
     agregados_info.append({
         'nome': 'Água',
         'id': '0',
+        'tipo_agregado': 'Água',
         'quantidade': round(quantidade_agua_necessaria, 2),
         'unidade_medida': 'Litros'
     })
@@ -112,7 +114,8 @@ def CalcularTraco(volume_traco, traco, multiplicador, unidade_medida):
     calculo_object = {
         'traco': {
             'nome': traco.nome,
-            'id': traco.id
+            'id': traco.id,
+            'descricao': traco.descricao
         },
         'volume_traco': volume_traco,
         'unidade_medida': unidade_medida,
@@ -121,3 +124,8 @@ def CalcularTraco(volume_traco, traco, multiplicador, unidade_medida):
     }
 
     return calculo_object
+
+
+def get_last_agregado(agregado_id):
+    agregados = Agregado.objects.filter(id=agregado_id)
+    return ''

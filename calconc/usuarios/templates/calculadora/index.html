@@ -56,6 +56,10 @@
                             <td>{{ calculo_object.traco.nome }}</td>
                         </tr>
                         <tr>
+                            <td>Descrição do Traço:</td>
+                            <td>{{ calculo_object.traco.descricao }}</td>
+                        </tr>
+                        <tr>
                             <td>Volume do Traço:</td>
                             <td>{{ calculo_object.volume_traco }} {{ calculo_object.unidade_medida }}</td>
                         </tr>
@@ -66,9 +70,16 @@
                     </table>
                     <h2>Agregados</h2>
                     <table class="resultado-table">
+                        <!-- TODO, ajustar CSS pois aqui está sendo usado th ao invez de td-->
+                        <tr>
+                            <th>Tipo de agreado</th>
+                            <th>Nome agregado</th>
+                            <th>Quantidade</th>
+                        </tr>
                         {% for agregado in calculo_object.agregados %}
                             <tr>
-                                <td>{{ agregado.nome }}:</td>
+                                <td>{{ agregado.tipo_agregado }}</td>
+                                <td>{{ agregado.nome }}</td>
                                 <td>{{ agregado.quantidade }} {{ agregado.unidade_medida }}</td>
                             </tr>
                         {% endfor %}
