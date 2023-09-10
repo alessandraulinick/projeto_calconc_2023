@@ -149,19 +149,41 @@ class TracoAgregado(models.Model):
     #     return self.nome
 
 
+class CalculoTraco(models.Model):
+    volume = models.FloatField()
+    unidade_medida = models.CharField(max_length=10)
+    peso_final = models.FloatField()
+    data_hora = models.DateTimeField(default=timezone.now)
+    fk_usuario = models.ForeignKey(CustomUsuario, on_delete=models.CASCADE)
+    fk_traco = models.ForeignKey(Traco, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "calculo_traco"
+
+    def __str__(self):
+        return self.nome
+
+
+class AgregadosCalculo(models.Model):
+    nome = models.CharField(max_length=40)
+    tipo_agregado = models.CharField(max_length=50)
+    quantidade = models.FloatField()
+    unidade_medida = models.CharField(max_length=15)
+    fk_calculo_traco = models.ForeignKey(CalculoTraco, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "agregados_calculo"
+
+    def __str__(self):
+        return self.nome
+
+
 class Usuarios(models.Model):
     nome = models.CharField(max_length=20, unique=True)
     data_cadastro = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = "usuarios"
-
-    def __str__(self):
-        return self.nome
-
-
-class Historico(models.Model):
-    nome = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return self.nome

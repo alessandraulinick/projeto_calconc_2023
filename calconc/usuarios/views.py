@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
 from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms, TracoAgregadoForms, CustomUsuarioCreateForm
-from .models import Fornecedor, TipoAgregado, Agregado, Historico, Traco, Usuarios, TracoAgregado
+from .models import Fornecedor, TipoAgregado, Agregado, Traco, Usuarios, TracoAgregado, CalculoTraco, CustomUsuario, AgregadosCalculo
 from django.utils import timezone
 from django.db.models import F
 from datetime import datetime
@@ -18,8 +18,21 @@ from django import forms
 
 @login_required
 def listar_historico(request):
-    historico = Historico.objects.all()
-    return render(request, 'historico.html', {'historico': historico})
+    historico = CalculoTraco.objects.all()
+
+    if request.method == 'POST':
+        calculo_id = request.POST.get('calculo_id')
+        calculo_traco = CalculoTraco.objects.get(id=calculo_id)
+        agregados_calculo = AgregadosCalculo.objects.filter(fk_calculo_traco=calculo_traco)
+
+        return render(request, 'historico/index.html', {
+            'historico': historico,
+            'calculo_traco': calculo_traco,
+            'agregados_calculo': agregados_calculo
+        })
+
+    else:
+        return render(request, 'historico/index.html', {'historico': historico})
 
 
 @login_required
@@ -39,6 +52,7 @@ def calculadora(request):
 
         traco = Traco.objects.get(id=traco_id)
 
+
         if unidade_medida == 'm3':
             multiplicador = 1000
             unidade_medida_display = 'Metro(s) cúbico(s) (m³)'
@@ -57,7 +71,25 @@ def calculadora(request):
         request.session['unidade_medida'] = unidade_medida
         request.session['peso_final'] = calculo_object['peso_final']
 
-            # TODO salvar em banco
+        calculo_traco = CalculoTraco(
+            volume=volume_traco,
+            unidade_medida=unidade_medida,
+            peso_final=calculo_object['peso_final'],
+            fk_usuario=CustomUsuario.objects.get(id=request.user.id),
+            fk_traco=traco
+        )
+        calculo_traco.save()
+
+        for agregado in calculo_object['agregados']:
+            agregados_calculo = AgregadosCalculo(
+                nome=agregado['nome'],
+                tipo_agregado=agregado['tipo_agregado'],
+                quantidade=agregado['quantidade'],
+                unidade_medida=agregado['unidade_medida'],
+                fk_calculo_traco=calculo_traco
+            )
+            agregados_calculo.save()
+
         return render(request, 'calculadora/index.html',  {'tracos': tracos, 'calculo_object': calculo_object})
     else:
         return render(request, 'calculadora/index.html',  {'tracos': tracos})

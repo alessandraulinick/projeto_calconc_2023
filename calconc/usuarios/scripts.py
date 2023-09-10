@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
 from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms, TracoAgregadoForms
-from .models import Fornecedor, TipoAgregado, Agregado, Historico, Traco, Usuarios, TracoAgregado
+from .models import Fornecedor, TipoAgregado, Agregado, Traco, Usuarios, TracoAgregado
 from django.utils import timezone
 from django.db.models import F
 from datetime import datetime
@@ -97,7 +97,7 @@ def CalcularTraco(volume_traco, traco, multiplicador, unidade_medida):
         agregados_info.append({
             'nome': agregado_traco.agregado.nome,
             'id': agregado_traco.agregado.id,
-            'tipo_agregado': agregado_traco.agregado.fk_tipo_agregado_id,
+            'tipo_agregado': agregado_traco.agregado.fk_tipo_agregado_id.nome,
             'quantidade': round(peso_com_umidade, 2),
             'unidade_medida': 'Kg'
         })
