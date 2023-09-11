@@ -129,3 +129,17 @@ def CalcularTraco(volume_traco, traco, multiplicador, unidade_medida):
 def get_last_agregado(agregado_id):
     agregados = Agregado.objects.filter(id=agregado_id)
     return ''
+
+
+def resolve_unidade_medida(unidade_medida):
+    if unidade_medida == 'm3':
+        multiplicador = 1000
+        unidade_medida_display = 'Metro(s) cúbico(s) (m³)'
+    elif unidade_medida == 'l':
+        multiplicador = 1
+        unidade_medida_display = 'Litro(s) (l)'
+    else:
+        multiplicador = 'ERRO AO RESOLVER resolve_unidade_medida()'
+        unidade_medida_display = 'ERRO AO RESOLVER resolve_unidade_medida()'
+
+    return multiplicador, unidade_medida_display

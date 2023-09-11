@@ -1,38 +1,40 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
-from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms, TracoAgregadoForms, CustomUsuarioCreateForm
-from .models import Fornecedor, TipoAgregado, Agregado, Traco, Usuarios, TracoAgregado, CalculoTraco, CustomUsuario, AgregadosCalculo
+from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms, TracoAgregadoForms, \
+    CustomUsuarioCreateForm
+from .models import Fornecedor, TipoAgregado, Agregado, Traco, Usuarios, TracoAgregado, CalculoTraco, CustomUsuario, \
+    AgregadosCalculo
 from django.utils import timezone
 from django.db.models import F
 from datetime import datetime
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .scripts import GetInformacoesAgregados, InsertTraco, CalcularTraco, get_last_agregado
+from .scripts import GetInformacoesAgregados, InsertTraco, CalcularTraco, get_last_agregado, resolve_unidade_medida
 from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
 from django import forms
-
-
-
+from textwrap import wrap
 @login_required
 def listar_historico(request):
     historico = CalculoTraco.objects.all()
 
-    if request.method == 'POST':
-        calculo_id = request.POST.get('calculo_id')
-        calculo_traco = CalculoTraco.objects.get(id=calculo_id)
-        agregados_calculo = AgregadosCalculo.objects.filter(fk_calculo_traco=calculo_traco)
+    return render(request, 'historico/index.html', {'historico': historico})
 
-        return render(request, 'historico/index.html', {
-            'historico': historico,
-            'calculo_traco': calculo_traco,
-            'agregados_calculo': agregados_calculo
-        })
 
-    else:
-        return render(request, 'historico/index.html', {'historico': historico})
+@login_required
+def inspectionar_historico(request, calculo_id):
+    historico = CalculoTraco.objects.all()
+
+    calculo_traco = CalculoTraco.objects.get(id=calculo_id)
+    agregados_calculo = AgregadosCalculo.objects.filter(fk_calculo_traco=calculo_traco)
+
+    return render(request, 'historico/index.html', {
+        'historico': historico,
+        'calculo_traco': calculo_traco,
+        'agregados_calculo': agregados_calculo
+    })
 
 
 @login_required
@@ -52,16 +54,7 @@ def calculadora(request):
 
         traco = Traco.objects.get(id=traco_id)
 
-
-        if unidade_medida == 'm3':
-            multiplicador = 1000
-            unidade_medida_display = 'Metro(s) cúbico(s) (m³)'
-        elif unidade_medida == 'l':
-            multiplicador = 1
-            unidade_medida_display = 'Litro(s) (l)'
-        else:
-            # TODO Erro
-            return None
+        multiplicador, unidade_medida_display = resolve_unidade_medida(unidade_medida)
 
         calculo_object = CalcularTraco(volume_traco, traco, multiplicador, unidade_medida_display)
 
@@ -90,9 +83,9 @@ def calculadora(request):
             )
             agregados_calculo.save()
 
-        return render(request, 'calculadora/index.html',  {'tracos': tracos, 'calculo_object': calculo_object})
+        return render(request, 'calculadora/index.html', {'tracos': tracos, 'calculo_object': calculo_object, 'calculo_traco_id': calculo_traco.id})
     else:
-        return render(request, 'calculadora/index.html',  {'tracos': tracos})
+        return render(request, 'calculadora/index.html', {'tracos': tracos})
 
 
 # Tipo Agregado
@@ -139,6 +132,8 @@ def deletar_tipo_agregado(request, pk):
     if request.method == 'POST':
         tipo_agregado.delete()
     return redirect('tipo_agregado')
+
+
 #############
 
 
@@ -215,6 +210,7 @@ def deletar_agregado(request, pk):
         agregado.delete()
     return redirect('agregados')
 
+
 ############
 
 # Fornecedor
@@ -223,6 +219,7 @@ def listar_fornecedor(request):
     fornecedores = Fornecedor.objects.all()
     exibir_data = False
     return render(request, 'fornecedor/index.html', {'fornecedores': fornecedores, 'exibir_data': exibir_data})
+
 
 @login_required
 def inspecionar_fornecedor(request, pk):
@@ -262,6 +259,8 @@ def editar_fornecedor(request, pk):
         'fornecedor': fornecedor
     }
     return render(request, 'fornecedor/editar.html', context)
+
+
 #############
 
 # Traço
@@ -295,9 +294,9 @@ def cadastrar_traco(request):
             return InsertTraco(request, context, agregados, porcentagem_agregados, render_file='traco/cadastrar.html')
         else:
             context['errors'] = {
-                    'code': 2,
-                    'message': f"O formulário enviado não é válido: {form.errors}"
-                }
+                'code': 2,
+                'message': f"O formulário enviado não é válido: {form.errors}"
+            }
             return render(request, 'traco/cadastrar.html', context)
     else:
         form = TracoForms()
@@ -340,9 +339,9 @@ def editar_traco(request, pk):
             return InsertTraco(request, context, agregados, porcentagem_agregados, render_file='traco/editar.html')
         else:
             context['errors'] = {
-                    'code': 2,
-                    'message': f"O formulário enviado não é válido: {form.errors}"
-                }
+                'code': 2,
+                'message': f"O formulário enviado não é válido: {form.errors}"
+            }
             return render(request, 'traco/editar.html', context)
     else:
         form = TracoForms(instance=traco)
@@ -379,8 +378,8 @@ def filtrar_tracos(request):
             'traco': tracos_filtrados,
         }
 
-
         return render(request, 'traco/index.html', context)
+
 
 @login_required
 def filtrar_agregados(request):
@@ -430,6 +429,7 @@ def filtrar_tipo_agregados(request):
 
         return render(request, 'tipo_agregado/index.html', context)
 
+
 @login_required
 def filtrar_fornecedor(request):
     if request.method == 'GET':
@@ -449,33 +449,70 @@ def filtrar_fornecedor(request):
         return render(request, 'fornecedor/index.html', context)
 
 
-@login_required
-def download_pdf(request):
-    traco = request.session.get('traco', 'Valor padrão para o traço')
-    volume_traco = request.session.get('volume_traco', 'Valor padrão para o volume do traço')
-    unidade_medida = request.session.get('unidade_medida', 'Unidade de medida padrão')
-    peso_final = request.session.get('peso_final', 0)  # 0 ou outro valor padrão
+def decrease_y(y):
+    y[0] -= 20
+    return y[0]
 
+@login_required
+def download_pdf(request, calculo_traco_id):
+
+    calculo_traco = CalculoTraco.objects.get(id=calculo_traco_id)
+    agregados_calculo = AgregadosCalculo.objects.filter(fk_calculo_traco=calculo_traco)
+
+    _, unidade_medida_display = resolve_unidade_medida(calculo_traco.unidade_medida)
+
+    data_hora = calculo_traco.data_hora
+    data_hora_formatado = f"{data_hora.hour}:{data_hora.minute} - {data_hora.day}/{data_hora.month}/{data_hora.year}"
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="documento.pdf"'
 
     p = canvas.Canvas(response)
-    p.drawString(100, 730, f"Traço: {traco}")
-    p.drawString(100, 710, f"Volume do Traço: {volume_traco} kg")
-    p.drawString(100, 690, f"Peso Final: {peso_final}")
 
-    # Adicione os agregados ao PDF
-    # Certifique-se de que os valores necessários da sessão estejam disponíveis aqui
-    agregados_info = request.session.get('agregados', [])
-    y = 670
-    for agregado in agregados_info:
-        p.drawString(100, y, f"{agregado['nome']}: {agregado['quantidade']} {agregado['unidade_medida']}")
-        y -= 20
+    # Cordenadas iniciais
+    x = [50]
+    y = [800]
+
+    # Nome do arquivo
+    p.setTitle(calculo_traco.fk_traco.nome)
+
+    p.drawString(x[0], decrease_y(y), f"Traço: {calculo_traco.fk_traco.nome}")
+
+    # Print de Descrição - Isso precisa ser feito pois pode haver quebra de linha aqui
+    t = p.beginText()
+    t.setTextOrigin(x[0], decrease_y(y))
+    wraped_text = wrap(f"Descrição do traço: {calculo_traco.fk_traco.descricao}", 100)
+    t.textLines("\n".join(wraped_text))
+    p.drawText(t)
+    for _ in range(len(wraped_text) - 1):
+        decrease_y(y)
+    ###
+
+    p.drawString(x[0], decrease_y(y), f"Volume do Traço: {calculo_traco.volume} {unidade_medida_display}")
+    p.drawString(x[0], decrease_y(y), f"Peso Final: {calculo_traco.peso_final} Kg")
+
+    p.drawString(x[0], decrease_y(y), f"Data e hora: {data_hora_formatado}")
+    p.drawString(x[0], decrease_y(y), f"Usuário: {calculo_traco.fk_usuario.nome}")
+
+    decrease_y(y)
+    # Agregados
+    p.drawString(x[0], decrease_y(y), f"Agregados")
+
+    column_start = [80, 210, 400]
+    p.drawString(column_start[0], decrease_y(y), 'Tipo de Agregado')
+    p.drawString(column_start[1], y[0], 'Agregado')
+    p.drawString(column_start[2], y[0], 'Quantidade')
+
+    for agregado in agregados_calculo:
+        x = [80]
+        p.drawString(column_start[0], decrease_y(y), f"{agregado.tipo_agregado}")
+        p.drawString(column_start[1], y[0], f"{agregado.nome}")
+        p.drawString(column_start[2], y[0], f"{agregado.quantidade} {agregado.unidade_medida}")
 
     p.showPage()
     p.save()
 
     return response
+
 
 def cadastrar_usuarios(request):
     if request.method == 'POST':

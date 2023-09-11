@@ -13,7 +13,7 @@ urlpatterns = [
 
     #### Calculadora
     path('calculadora/', views.calculadora, name='calculadora'),
-    path('download-pdf/', views.download_pdf, name='download_pdf'),
+    path('download-pdf/<int:calculo_traco_id>/', views.download_pdf, name='download_pdf'),
 
     #### tipo agregado
     path('tipo_agregado/', views.listar_tipo_agregado, name='tipo_agregado'),
@@ -23,6 +23,7 @@ urlpatterns = [
 
     ### Historico
     path('historico/', views.listar_historico, name='historico'),
+    path('inspectionar_historico/<int:calculo_id>/', views.inspectionar_historico, name='inspectionar_historico'),
 
     ### Traço
     path('filtrar_tracos/', views.filtrar_tracos, name='filtrar_tracos'),

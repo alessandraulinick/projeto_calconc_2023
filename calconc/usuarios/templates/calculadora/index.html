@@ -85,7 +85,7 @@
                         {% endfor %}
                     </table>
                     {% if calculo_object %}
-                        <a href="{% url 'download_pdf' %}" class="download-button">Baixar PDF</a> <!-- Cria um link para baixar um PDF -->
+                        <a href="{% url 'download_pdf' calculo_traco_id %}" class="download-button">Baixar PDF</a> <!-- Cria um link para baixar um PDF -->
                     {% endif %}
                 </div>
             </div>
