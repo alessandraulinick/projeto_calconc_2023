@@ -1,1 +1,7 @@
 calconc/db.sqlite3
+
+calconc/__pycache__
+*.*-
+*.pyc
+.idea
+calconc/.idea
