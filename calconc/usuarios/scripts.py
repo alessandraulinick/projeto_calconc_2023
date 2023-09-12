@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
 from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms, TracoAgregadoForms
-from .models import Fornecedor, TipoAgregado, Agregado, Traco, Usuarios, TracoAgregado
+from .models import Fornecedor, TipoAgregado, Agregado, Traco, TracoAgregado
 from django.utils import timezone
 from django.db.models import F
 from datetime import datetime

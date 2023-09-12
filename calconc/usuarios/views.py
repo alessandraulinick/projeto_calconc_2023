@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
 from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms, TracoAgregadoForms, \
     CustomUsuarioCreateForm
-from .models import Fornecedor, TipoAgregado, Agregado, Traco, Usuarios, TracoAgregado, CalculoTraco, CustomUsuario, \
+from .models import Fornecedor, TipoAgregado, Agregado, Traco, TracoAgregado, CalculoTraco, CustomUsuario, \
     AgregadosCalculo
 from django.utils import timezone
 from django.db.models import F
@@ -24,7 +24,7 @@ def listar_historico(request):
 
 
 @login_required
-def inspectionar_historico(request, calculo_id):
+def inspecionar_historico(request, calculo_id):
     historico = CalculoTraco.objects.all()
 
     calculo_traco = CalculoTraco.objects.get(id=calculo_id)

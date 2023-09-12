@@ -19,6 +19,10 @@
                     {% csrf_token %}
                     <span class="login100-form-title">Login</span>
 
+                    {% if form.non_field_errors %}
+                        <h3>Usuário ou senha incorretos </h3>
+                    {% endif %}
+
                     <div class="wrap-input100 validate-input" data-validate = "Insira um e-mail válido">
                         <input class="input100" type="email" id="username" name="username" class="form-control" placeholder="Informe seu e-mail">
                         <span class="focus-input100"></span>

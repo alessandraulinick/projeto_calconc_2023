@@ -23,7 +23,7 @@ urlpatterns = [
 
     ### Historico
     path('historico/', views.listar_historico, name='historico'),
-    path('inspectionar_historico/<int:calculo_id>/', views.inspectionar_historico, name='inspectionar_historico'),
+    path('inspecionar_historico/<int:calculo_id>/', views.inspecionar_historico, name='inspecionar_historico'),
 
     ### Traço
     path('filtrar_tracos/', views.filtrar_tracos, name='filtrar_tracos'),

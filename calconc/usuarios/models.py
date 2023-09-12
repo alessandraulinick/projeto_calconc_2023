@@ -52,6 +52,9 @@ class CustomUsuario(AbstractUser):
     def _str_(self):
         return self.email
 
+    class Meta:
+        db_table = "usuarios"
+
     objects = UsuarioManager()
 
 
@@ -59,7 +62,6 @@ class CustomUsuario(AbstractUser):
 class Fornecedor(models.Model):
     nome = models.CharField(max_length=50)
     cidade = models.CharField(max_length=50, null=True)
-    # id = models.CharField(max_length=18, primary_key=True)
     bairro = models.CharField(max_length=50, null=True)
     logradouro = models.CharField(max_length=50, null=True)
     CEP = models.CharField(max_length=8)
@@ -173,17 +175,6 @@ class AgregadosCalculo(models.Model):
 
     class Meta:
         db_table = "agregados_calculo"
-
-    def __str__(self):
-        return self.nome
-
-
-class Usuarios(models.Model):
-    nome = models.CharField(max_length=20, unique=True)
-    data_cadastro = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        db_table = "usuarios"
 
     def __str__(self):
         return self.nome
