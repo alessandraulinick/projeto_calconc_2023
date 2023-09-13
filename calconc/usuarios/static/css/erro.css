@@ -1,0 +1,24 @@
+/* Estilo para o bloco de erro */
+.alert {
+    background-color: #f8d7da; /* Cor de fundo vermelha suave */
+    color: #721c24; /* Cor do texto vermelha mais escura */
+    border: 1px solid #f5c6cb; /* Borda vermelha */
+    margin-left: 2%;
+    width: 95%;
+    height: 65px;
+
+}
+
+/* Estilo para os títulos no bloco de erro */
+.alert h3, .alert h4 {
+    margin: 5px 0; /* Espaçamento entre os títulos */
+    font-size: 20px; /* Tamanho da fonte dos títulos */
+    font-weight: bold; /* Texto em negrito */
+    text-align: center;
+
+}
+
+/* Estilo para a mensagem de erro no bloco de erro */
+.alert h4 {
+    color: #721c24; /* Cor do texto vermelha mais escura */
+}

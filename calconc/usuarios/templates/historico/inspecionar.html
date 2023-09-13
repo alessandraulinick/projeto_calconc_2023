@@ -1,0 +1,88 @@
+{% load static %} <!-- Carrega arquivos estáticos -->
+
+{% include "utils/anonymous_user_redirect.html" %} <!-- Inclui o template "anonymous_user_redirect.html" -->
+
+{% block content %} <!-- Define um bloco chamado "content" -->
+
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/inspectionar.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Inclui um arquivo CSS externo da biblioteca Font Awesome -->
+    <title>ConCalc</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <!-- Inclui a biblioteca jsPDF para geração de PDF -->
+</head>
+<body>
+{% include "utils/header.html" %} <!-- Inclui o template "header.html" -->
+
+<div class="container">
+    {% include "utils/sidebar.html" %} <!-- Inclui o template "sidebar.html" -->
+    <div class="content">
+        <div class="cadastrar_btn">
+            <a class="nome-pagina">Resultado do Cálculo</a>
+        </div>
+        <div class="all-content">
+            {% if calculo_traco %}
+            <div class="lista">
+                <table class="resultado-table">
+                    <tr class="header-row">
+                        <td class="header-cell">Traço:</td>
+                        <td>{{ calculo_traco.fk_traco.nome }}</td>
+                    </tr>
+                    <tr class="header-row">
+                        <td class="header-cell">Descrição do Traço:</td>
+                        <td>{{ calculo_traco.fk_traco.descricao }}</td>
+                    </tr>
+                    <tr class="header-row">
+                        <td class="header-cell">Volume do Traço:</td>
+                        {% if calculo_traco.unidade_medida == 'l' %}
+                        <td>{{ calculo_traco.volume }} Litros (L)</td>
+                        {% else %}
+                        <td>{{ calculo_traco.volume }} Metro(s) Cúbico(s) (m³)</td>
+                        {% endif %}
+                    </tr>
+                    <tr class="header-row">
+                        <td class="header-cell">Peso Final:</td>
+                        <td>{{ calculo_traco.peso_final }} Kg</td>
+                    </tr>
+                    <tr class="header-row">
+                        <td class="header-cell">Data e hora:</td>
+                        <td>{{ calculo_traco.data_hora }}</td>
+                    </tr>
+                    <tr class="header-row">
+                        <td class="header-cell">Usuário:</td>
+                        <td>{{ calculo_traco.fk_usuario.nome }}</td>
+                    </tr>
+                </table>
+                <h2>Agregados</h2>
+                <table class="resultado-table-th">
+                    <!-- TODO, ajustar CSS pois aqui está sendo usado th ao invez de td-->
+                    <tr class="header-row-th">
+                        <th>Tipo de agreado</th>
+                        <th>Nome agregado</th>
+                        <th>Quantidade</th>
+                    </tr>
+                    {% for agregado in agregados_calculo %}
+                    <tr class="header-row-th">
+                        <td>{{ agregado.tipo_agregado }}</td>
+                        <td>{{ agregado.nome }}</td>
+                        <td>{{ agregado.quantidade }} {{ agregado.unidade_medida }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% if calculo_traco %}
+                <a href="{% url 'download_pdf' calculo_traco.id %}" class="download-button">Baixar PDF</a>
+                <!-- Cria um link para baixar um PDF -->
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+</div>
+</body>
+</html>
+{% endblock %}

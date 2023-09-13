@@ -20,7 +20,8 @@ from textwrap import wrap
 def listar_historico(request):
     historico = CalculoTraco.objects.all()
 
-    return render(request, 'historico/index.html', {'historico': historico})
+    exibir_data = True
+    return render(request, 'historico/index.html', {'historico': historico, 'exibir_data': exibir_data})
 
 
 @login_required
@@ -30,7 +31,7 @@ def inspecionar_historico(request, calculo_id):
     calculo_traco = CalculoTraco.objects.get(id=calculo_id)
     agregados_calculo = AgregadosCalculo.objects.filter(fk_calculo_traco=calculo_traco)
 
-    return render(request, 'historico/index.html', {
+    return render(request, 'historico/inspecionar.html', {
         'historico': historico,
         'calculo_traco': calculo_traco,
         'agregados_calculo': agregados_calculo
@@ -380,6 +381,30 @@ def filtrar_tracos(request):
 
         return render(request, 'traco/index.html', context)
 
+
+@login_required
+def filtrar_historico(request):
+    if request.method == 'GET':
+        filtro_data = request.GET.get('data')
+        filtro_nome = request.GET.get('nome')
+
+        historico_filtrado = CalculoTraco.objects.all()
+
+        if filtro_data:
+            data_selecionada = timezone.make_aware(datetime.strptime(filtro_data, '%Y-%m-%d'))
+            data_selecionada_date = data_selecionada.date()
+            historico_filtrado = historico_filtrado.filter(data_hora__date=data_selecionada_date)
+        if filtro_nome:
+            historico_filtrado = historico_filtrado.filter(fk_traco__nome__icontains=filtro_nome)
+        if 'limpar' in request.GET:
+            return HttpResponseRedirect(request.path_info)
+
+        exibir_data = True
+        context = {
+            'historico': historico_filtrado, 'exibir_data': exibir_data
+        }
+
+        return render(request, 'historico/index.html', context)
 
 @login_required
 def filtrar_agregados(request):

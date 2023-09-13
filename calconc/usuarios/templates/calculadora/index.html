@@ -34,7 +34,7 @@
                         </div>
                         <div class="form-group">
                             <label for="volume_traco">Volume do Traço:</label>
-                            <input type="text" id="volume_traco" name="volume_traco"><br> <!-- Cria um campo de entrada para o volume do traço -->
+                            <input type="text" id="volume_traco" name="volume_traco" required><br> <!-- Cria um campo de entrada para o volume do traço -->
                         </div>
                         <div class="form-group">
                             <label for="unidade_medida">Unidade de Medida:</label>
@@ -69,15 +69,15 @@
                         </tr>
                     </table>
                     <h2>Agregados</h2>
-                    <table class="resultado-table">
+                    <table class="resultado-table-th">
                         <!-- TODO, ajustar CSS pois aqui está sendo usado th ao invez de td-->
-                        <tr>
+                        <tr class="header-row-th">
                             <th>Tipo de agreado</th>
                             <th>Nome agregado</th>
                             <th>Quantidade</th>
                         </tr>
                         {% for agregado in calculo_object.agregados %}
-                            <tr>
+                            <tr class="header-row-th">
                                 <td>{{ agregado.tipo_agregado }}</td>
                                 <td>{{ agregado.nome }}</td>
                                 <td>{{ agregado.quantidade }} {{ agregado.unidade_medida }}</td>

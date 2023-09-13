@@ -18,11 +18,6 @@
                 <form class="login100-form validate-form" method="post">
                     {% csrf_token %}
                     <span class="login100-form-title">Login</span>
-
-                    {% if form.non_field_errors %}
-                        <h3>Usuário ou senha incorretos </h3>
-                    {% endif %}
-
                     <div class="wrap-input100 validate-input" data-validate = "Insira um e-mail válido">
                         <input class="input100" type="email" id="username" name="username" class="form-control" placeholder="Informe seu e-mail">
                         <span class="focus-input100"></span>
@@ -32,12 +27,16 @@
 						<input class="input100" type="password" id="password" name="password" class="form-control" placeholder="Informe sua senha" required>
                         <span class="focus-input100"></span>
 					</div>
-
                     <div class="container-login100-form-btn">
 						<button class="login100-form-btn"  type="submit">
 							Acessar
 						</button>
 					</div>
+                    {% if form.non_field_errors %}
+                        <div class="error-message">
+                            <span class="error-icon">&#10060;</span> Usuário ou senha incorretos
+                        </div>
+                    {% endif %}
                 </form>
             </div>
         </div>

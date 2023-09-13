@@ -155,3 +155,46 @@ body {
 .resultado-table tr:last-child td {
   border-bottom: none;
 }
+
+h2{
+    text-align: left;
+    font-size: 24px;
+    padding: 5px;
+    margin-top: 30px;
+    margin-left: 2%;
+}
+
+
+/* Estilo para a tabela */
+.resultado-table-th {
+  background-color: white;
+  border-radius: 10px;
+  margin-left: 2%;
+  margin-top: 5px;
+  width: 91%;
+}
+
+.resultado-table-th th,
+.resultado-table-th td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Estilo para o link de download */
+.download-button {
+  display: inline-block;
+  margin-left: 2%;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.download-button:hover {
+  background-color: #0056b3;
+}
+

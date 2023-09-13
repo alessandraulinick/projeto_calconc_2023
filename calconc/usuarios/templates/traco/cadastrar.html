@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'css/cadastros.css' %}">
+    <link rel="stylesheet" href="{% static 'css/erro.css' %}">
     <title>ConCalc</title>
 </head>
 <body>
@@ -15,7 +16,6 @@
 <form method="post" class="form-container">
     {% csrf_token %}
 
-    {% include "utils/error_message.html" %}
     <div class="form-columns">
         <div class="form-column">
             <div class="field">
@@ -61,6 +61,7 @@
         <button type="submit" class="save-button">Salvar</button>
         <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>
     </div>
+    {% include "utils/error_message.html" %}
 </form>
 <script>
     function goBack() {

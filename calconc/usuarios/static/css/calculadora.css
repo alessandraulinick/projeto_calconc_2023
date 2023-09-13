@@ -23,6 +23,11 @@ body {
   padding: 0 10px; /* Adiciona um espaçamento interno para os elementos dentro do cabeçalho */
 }
 
+.header-row .header-cell {
+    font-weight: bold;
+    color: #3498db; /* Cor desejada para o texto */
+}
+
 /* Estilos para o logotipo no cabeçalho */
 .logo {
   width: 36px;
@@ -199,29 +204,36 @@ select, input[type="text"] {
   border-bottom: none;
 }
 
-/* Estilos para a lista de agregados */
-.agregados-list {
-  list-style-type: none;
-  padding: 0;
+/* Estilo para a tabela */
+.resultado-table-th {
+  background-color: white;
+  border-radius: 10px;
+  margin-left: 2%;
+  margin-top: 5px;
+  width: 91%;
+}
+
+.resultado-table-th th,
+.resultado-table-th td {
+  padding: 10px;
   text-align: left;
+  border-bottom: 1px solid #ccc;
 }
 
-.agregados-list li {
-  margin-bottom: 10px;
-}
-
-/* Estilos para o botão de download PDF */
+/* Estilo para o link de download */
 .download-button {
   display: inline-block;
+  margin-left: 2%;
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #007BFF;
   color: #fff;
   text-decoration: none;
   border-radius: 5px;
   margin-top: 20px;
-  transition: background-color 0.3s ease;
+  font-weight: bold;
 }
 
 .download-button:hover {
   background-color: #0056b3;
 }
+

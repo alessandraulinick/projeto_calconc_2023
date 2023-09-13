@@ -99,7 +99,7 @@ body {
 .btn_cadastrar {
     height: 40px;
     line-height: 40px;
-    width: calc(10% - 5px); /* Largura igual para ambos os botões */
+    width: 200px;
     padding: 0px 15px;
     background-color: #3498db;
     color: #fff;
@@ -202,7 +202,7 @@ body {
 .filtros .limpar-filtros {
     height: 40px;
     line-height: 40px;
-    width: calc(10% - 5px); /* Largura igual para ambos os botões */
+    width: 100px; /* Largura igual para ambos os botões */
     padding: 0px 15px;
     background-color: #3498db;
     color: #fff;
