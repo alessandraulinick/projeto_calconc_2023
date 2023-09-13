@@ -40,7 +40,7 @@ def inspecionar_historico(request, calculo_id):
 
 @login_required
 def listar_usuarios(request):
-    usuarios = Usuarios.objects.all()
+    usuarios = CustomUsuario.objects.all()
     return render(request, 'registration/index_usuario.html', {'usuarios': usuarios})
 
 
