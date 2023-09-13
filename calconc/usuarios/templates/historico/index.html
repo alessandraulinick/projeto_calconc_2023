@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/listar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/listar_historico.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Inclui um arquivo CSS externo da biblioteca Font Awesome -->
     <title>ConCalc</title>
@@ -19,6 +19,9 @@
 <div class="container">
     {% include "utils/sidebar.html" %} <!-- Inclui o template "sidebar.html" -->
     <div class="content">
+        <div class="cadastrar_btn">
+            <a class="nome-pagina">Histórico</a>
+        </div>
         <div class="all-content">
             {% with filtro_url='filtrar_historico' %}
                 {% include "utils/filtrar.html" %}

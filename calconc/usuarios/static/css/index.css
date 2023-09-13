@@ -12,32 +12,21 @@ body {
 
 .header {
   background: #171717;
-  height: 50px;
-}
-
-.logo,
-.texto-header {
+  color: #171717;
+  height: 40px;
   display: flex;
-  align-items: center; /* Centraliza verticalmente */
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px; /* Adiciona um espaçamento interno para os elementos dentro do cabeçalho */
 }
 
 .logo {
-  width: 50px;
-  margin-left: 10px;
+ color:#171717;
+  width: 36px;
 }
 
 .logo img {
-  text-decoration: none;
-  list-style: none;
-  max-width: 80%;
-}
-
-.texto-header {
-    text-decoration: none;
-    display: flex;
-    justify-content: space-between; /* Adicionado para alinhar os elementos nas extremidades */
-    align-items: center; /* Centralizar verticalmente os elementos */
-    margin-right: 10px;
+  max-width: 100%;
 }
 
 .btn-logout {

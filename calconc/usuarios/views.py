@@ -374,9 +374,9 @@ def filtrar_tracos(request):
 
         if 'limpar' in request.GET:
             return HttpResponseRedirect(request.path_info)
-
+        exibir_data = True
         context = {
-            'traco': tracos_filtrados,
+            'traco': tracos_filtrados, 'exibir_data': exibir_data
         }
 
         return render(request, 'traco/index.html', context)

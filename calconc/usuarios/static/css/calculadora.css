@@ -76,7 +76,7 @@ body {
 
 .sidebar ul li {
   width: 100%;
-  height: calc(9%);
+  height: 80px;
   display: flex;
   align-items: center;
 }
