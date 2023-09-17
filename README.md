@@ -50,7 +50,21 @@ pip install -r requirements.txt
     python manage.py migrate
     ```
 
-2. Rodar servidor
+2. Criar Super Usuário
+
+    ```
+    python3 manage.py createsuperuser
+    ```
+
+    Preencher as perguntas da seguinte forma:
+
+    - E-mail: admin@admin.com
+    - Nome: admin
+    - Login: admin
+    - Permissão: admin
+    - Senha: admin
+
+3. Rodar servidor
 
     ```
     python manage.py runserver
