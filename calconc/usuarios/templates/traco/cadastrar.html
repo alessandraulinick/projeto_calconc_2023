@@ -16,6 +16,7 @@
 <form method="post" class="form-container">
     {% csrf_token %}
 
+    {% include "utils/error_message.html" %}
     <div class="form-columns">
         <div class="form-column">
             <div class="field">
@@ -52,7 +53,7 @@
 
         <div class="field">
             <label for="porcentagem_agregados">Porcentagem Agregado:</label>
-            <input type="number" name="porcentagem_agregados" class="form-control" placeholder="" />
+            <input type="text" name="porcentagem_agregados" class="form-control" placeholder="" />
         </div>
     </div>
     {% endfor %}
@@ -61,7 +62,6 @@
         <button type="submit" class="save-button">Salvar</button>
         <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>
     </div>
-    {% include "utils/error_message.html" %}
 </form>
 <script>
     function goBack() {

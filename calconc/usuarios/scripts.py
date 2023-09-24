@@ -58,7 +58,7 @@ def InsertTraco(request, context, agregados, porcentagem_agregados, render_file)
     if round(porcentagem_total) != 100:
         context['errors'] = {
                 'code': 1,
-                'message': f"A soma das porcentagens é diferente de 100%! A sua resposta é = {porcentagem_total}%"
+                'message': f"A soma das porcentagens é diferente de 100%! A soma atual é {porcentagem_total}%"
             }
         return render(request, render_file, context)
 
