@@ -42,8 +42,12 @@
                                 <td class="header-cell">Agregados:</td>
                                 <td>
                                     <ul class="agregados-list">
-                                        {% for agregado in traco.agregados.all %}
-                                            <li>{{ agregado.nome }}</li>
+                                        {% for i in informacoes_agregados %}
+                                            {% for agregado in i.agregados %}
+                                                {% if agregado.selected == 'selected' %}
+                                                    <li>Nome: {{ agregado.nome }} | Porcentagem: {{ i.porcentagem }}%</li>
+                                                {% endif %}
+                                            {% endfor %}
                                         {% endfor %}
                                     </ul>
                                 </td>
