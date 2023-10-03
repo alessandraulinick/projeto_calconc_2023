@@ -32,20 +32,20 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Data de Cadastro</th>
                                 <th>Nome</th>
                                 <th>Descrição</th>
                                 <th>Porcentagem Água</th>
+                                <th>Data de Cadastro</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for elemento in traco %}
                                 <tr>
-                                    <td>{{ elemento.data_cadastro }}</td>
                                     <td>{{ elemento.nome }}</td>
                                     <td>{{ elemento.descricao }}</td>
                                     <td>{{ elemento.porcentagem_agua }}</td>
+                                    <td>{{ elemento.data_cadastro }}</td>
                                     <td class="align-right">
                                       <div class="btn-action-container">
                                         <a href="{% url 'inspecionar_traco' elemento.id %}" class="btn-action"><i class="fa fa-eye"></i></a>

@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'css/cadastros.css' %}">
+    <link rel="stylesheet" href="{% static 'css/erro.css' %}">
     <title>CalConc</title>
 </head>
 <h1>Editar Traço: {{ traco.nome }}</h1>
@@ -52,7 +53,7 @@
 
             <div class="field">
                 <label for="porcentagem_agregados">Porcentagem Agregado:</label>
-                <input type="number" name="porcentagem_agregados" class="form-control" value="{{ i.porcentagem }}" />
+                <input type="number" step="0.01"  name="porcentagem_agregados" class="form-control" value="{{ i.porcentagem }}" />
             </div>
         </div>
     {% endfor %}
