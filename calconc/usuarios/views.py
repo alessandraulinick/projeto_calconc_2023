@@ -275,7 +275,14 @@ def listar_traco(request):  # Renomeei a função para ser mais descritiva
 @login_required
 def inspecionar_traco(request, pk):
     traco = get_object_or_404(Traco, id=pk)
-    return render(request, 'traco/inspecionar.html', {'traco': traco})
+    agregados_traco = TracoAgregado.objects.filter(traco=traco)
+    tipos_agregado = TipoAgregado.objects.all()
+
+    context = {
+        'traco': traco,
+        'informacoes_agregados': GetInformacoesAgregados(agregados_traco, tipos_agregado)
+    }
+    return render(request, 'traco/inspecionar.html', context)
 
 
 @login_required
