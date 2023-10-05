@@ -41,11 +41,6 @@ def inspecionar_historico(request, calculo_id):
     })
 
 
-@login_required
-def listar_usuarios(request):
-    usuarios = CustomUsuario.objects.all()
-    return render(request, 'registration/index_usuario.html', {'usuarios': usuarios})
-
 
 # Calculadora
 @login_required
@@ -240,6 +235,11 @@ def inspecionar_fornecedor(request, pk):
 
 @login_required
 def cadastrar_fornecedor(request):
+    def get_success_url(self):
+        """ Redirects to the newly created object """
+        new = self.object
+        url = reverse_lazy("my-item", kwargs={"pk": new.pk})
+        return url
     if request.method == 'POST':
         form = FornecedorForms(request.POST)
         if form.is_valid():
@@ -556,6 +556,12 @@ def download_pdf(request, calculo_traco_id):
     return response
 
 
+@login_required
+def listar_usuarios(request):
+    usuarios = CustomUsuario.objects.all()
+    return render(request, 'registration/index_usuario.html', {'usuarios': usuarios})
+
+
 def cadastrar_usuarios(request):
     if request.method == 'POST':
         form = CustomUsuarioCreateForm(request.POST)
@@ -566,3 +572,16 @@ def cadastrar_usuarios(request):
     else:
         form = CustomUsuarioCreateForm()
     return render(request, 'registration/cadastrar_usuario.html', {'form': form})
+
+
+def inspecionar_usuario(request, pk):
+    return render(request, 'registration/inspecionar_usuario.html', null)
+
+
+def editar_usuario(request, pk):
+    return render(request, 'registration/editar_usuario.html', null)
+
+
+def desativar_usuario(request, pk):
+    return null
+

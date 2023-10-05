@@ -1,23 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
+{% load static %}
+{% load static %}
+
+{% include "utils/anonymous_user_redirect.html" %}
+
+{% block content %}
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro de Usuário</title>
+    <link rel="stylesheet" href="{% static 'css/cadastros.css' %}">
+    <link rel="stylesheet" href="{% static 'css/erro.css' %}">
+    <title>CalConc</title>
 </head>
 <body>
-    <h1>Cadastro de Usuário</h1>
+<h1>Cadastrar Usuário</h1>
+<form method="post" class="form-container">
+    {% csrf_token %}
 
-    <form method="post">
-        {% csrf_token %} <!-- Adicione isso para proteção contra CSRF -->
+    {% include "utils/error_message.html" %}
 
-        {{ form.login.label_tag }} {{ form.login }}<br>
-        {{ form.email.label_tag }} {{ form.email }}<br>
-        {{ form.nome.label_tag }} {{ form.nome }}<br>
-        {{ form.permissao.label_tag }} {{ form.permissao }}<br>
-        {{ form.password1.label_tag }} {{ form.password1 }}<br>
-        {{ form.password2.label_tag }} {{ form.password2 }}<br>
 
-        <button type="submit">Cadastrar</button>
+        <div class="field">
+            <label for="{{ form.cidade.id_for_label }}">Login</label>
+            {{ form.login }}
+            <ul class="error-message">{{ form.login.errors }}</ul>
+        </div>
+
+
+        <div class="field">
+            <label for="{{ form.email.id_for_label }}">Email</label>
+            {{ form.email }}
+            <ul class="error-message">{{ form.email.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.nome.id_for_label }}">Nome</label>
+            {{ form.nome }}
+            <ul class="error-message">{{ form.nome.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.permissao.id_for_label }}">Permissão</label>
+            {{ form.permissao }}
+            <ul class="error-message">{{ form.permissao.errors }}</ul>
+        </div>
+
+        <!-- TODO fazer drop box com as permissões   -->
+        <div class="field">
+            <label for="{{ form.password1.id_for_label }}">Senha</label>
+            {{ form.password1 }}
+            <ul class="error-message">{{ form.password1.errors }}</ul>
+        </div>
+
+        <div class="field">
+            <label for="{{ form.password2.id_for_label }}">Repita a senha</label>
+            {{ form.password2 }}
+            <ul class="error-message">{{ form.password2.errors }}</ul>
+        </div>
+
+        {% include "utils/salvar_cancelar_botoes.html" %}
     </form>
 </body>
 </html>
+
+{% endblock %}

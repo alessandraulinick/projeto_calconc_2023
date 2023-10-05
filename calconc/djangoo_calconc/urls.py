@@ -37,6 +37,9 @@ urlpatterns = [
     ### Usuarios
     path('usuarios/', views.listar_usuarios, name='usuarios'),
     path('cadastrar_usuario', views.cadastrar_usuarios, name='cadastrar_usuario'),
+    path('inspecionar_usuario/<int:pk>/', views.inspecionar_usuario, name='inspecionar_usuario'),
+    path('editar_usuario/<int:pk>/', views.editar_usuario, name='editar_usuario'),
+    path('desativar_usuario/<int:pk>/', views.desativar_usuario, name='desativar_usuario'),
 
     ### Agregados
     path('agregados/', views.listar_agregados, name='agregados'),

@@ -3,7 +3,7 @@
         <input type="text" id="filtro_nome" name="nome" placeholder="Nome">
         <!-- Use a estrutura condicional para exibir ou ocultar a parte de data -->
         {% if exibir_data %}
-        <input type="date" id="filtro_data" name="data" placeholder="Data">
+        <input type="date" id="filtro_data" name="data" placeholder="Data" lang="pt-BR">
         {% endif %}
         <button type="submit">Filtrar</button>
         <a href="{% url filtro_url %}" class="limpar-filtros">Limpar Filtros</a>

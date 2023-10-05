@@ -82,10 +82,7 @@
                 <ul class="error-message">{{ form.observacao.errors }}</ul>
             </div>
 
-            <div class="button-container">
-                <button type="submit" class="save-button">Salvar</button>
-                <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>
-            </div>
+            {% include "utils/salvar_cancelar_botoes.html" %}
         </div>
     </div>
 </form>

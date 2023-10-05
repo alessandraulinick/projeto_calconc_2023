@@ -45,6 +45,7 @@ class CustomUsuario(AbstractUser):
     login = models.CharField('Login', max_length=50, unique=False)
     permissao = models.CharField('Permissão', max_length=100)
     is_staff = models.BooleanField('Membro da equipe', default=True)
+    is_active = models.BooleanField('Ativo', default=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nome', 'login', 'permissao', 'password']

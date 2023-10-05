@@ -1,10 +1,14 @@
+{% extends 'base.html' %}
 {% load static %}
+
+{% include "utils/anonymous_user_redirect.html" %}
 
 {% block content %}
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'css/listar.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>CalConc</title>
 </head>
 <body>
@@ -27,13 +31,29 @@
                         <thead>
                             <tr>
                                 <th>Nome</th>
+                                <th>Email</th>
+                                <th>Nome</th>
+                                <th>Login</th>
+                                <th>Permissao</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for i in usuario %}
+                            {% for usuario in usuarios %}
                                 <tr>
-                                    <td>{{ i.nome }}</td>
-                            </tr>
+                                    <td>{{ usuario.nome }}</td>
+                                    <td>{{ usuario.email }}</td>
+                                    <td>{{ usuario.nome }}</td>
+                                    <td>{{ usuario.login }}</td>
+                                    <td>{{ usuario.permissao }}</td>
+                                    <td class="align-right">
+                                      <div class="btn-action-container">
+                                        <a href="{% url 'inspecionar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
+                                        <a href="{% url 'editar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
+                                        <button class="btn-action btn-deletar" data-id="{{ usuario.id }}" data-url="{% url 'desativar_usuario' usuario.id %}"><i class="fa fa-trash"></i></button>
+                                      </div>
+                                    </td>
+                                </tr>
                             {% endfor %}
                         </tbody>
                     </table>

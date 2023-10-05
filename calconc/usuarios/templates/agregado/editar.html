@@ -116,10 +116,7 @@
         {% endif %}
         </div>
     </div>
-    <div class="button-container">
-        <button type="submit" class="save-button">Salvar</button>
-        <button type="button" onclick="goBack()" class="exit-button">Cancelar</button>
-    </div>
+    {% include "utils/salvar_cancelar_botoes.html" %}
     </form>
     <div id="mensagemSucesso" style="display: none;">Agregado cadastrado com sucesso!</div>
     <script>

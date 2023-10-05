@@ -48,12 +48,12 @@
                                     <td>{{ elemento.data_cadastro }}</td>
                                     <td class="align-right">
                                       <div class="btn-action-container">
-                                        <a href="{% url 'inspecionar_traco' elemento.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
-                                        <a href="{% url 'editar_traco' elemento.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
-                                        <button class="btn-action btn-deletar" data-id="{{ elemento.id }}" data-url="{% url 'deletar_traco' elemento.id %}"><i class="fa fa-trash"></i></button>
+                                        <a href="{% url 'inspecionar_usuario' elemento.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
+                                        <a href="{% url 'editar_usuario' elemento.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
+                                        <button class="btn-action btn-deletar" data-id="{{ elemento.id }}" data-url="{% url 'desativar_usuario' elemento.id %}"><i class="fa fa-trash"></i></button>
                                       </div>
                                     </td>
-                            </tr>
+                                </tr>
                             {% endfor %}
                         </tbody>
                     </table>
