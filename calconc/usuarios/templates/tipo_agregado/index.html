@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block content %}
 {% include "utils/anonymous_user_redirect.html" %}
 
-{% block content %}
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -20,8 +20,9 @@
         <div class="content">
             <div class="cadastrar_btn">
                 <a class="nome-pagina">Tipo de Agregado</a>
-                <a href="{% url 'cadastrar_tipo_agregado' %}" class="btn_cadastrar">Cadastrar Tipo de Agregado</a>
+                <a href="{% url 'cadastrar_tipo_agregado' %}" class="btn_cadastrar">Adicionar Tipo de Agregado</a>
             </div>
+
 
             <div class = 'all-content'>
                 {% with filtro_url='filtrar_tipo_agregados' %}
@@ -36,7 +37,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for tipo_agregado in tipos_agregados %}
+                            {% for tipo_agregado in page_obj %}
                                 <tr>
                                     <td>{{ tipo_agregado.nome }}</td>
                                     <td class="align-right">
@@ -54,4 +55,8 @@
     </div>
     <script src="{% static 'js/deletar.js' %}"></script>
 </body>
+
+
+{% include "utils/paginador.html" %}
+
 {% endblock %}

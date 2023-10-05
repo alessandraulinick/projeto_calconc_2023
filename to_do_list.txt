@@ -1,0 +1,12 @@
+Lista de afazeres:
+
+- Arrumar CSS de pagina (listar_tipo_agregado)
+- aplicar paginação em todos os 'listar'
+- deixar coluna Ações em 'listar' melhor
+- Adicionar cadastro de usuários
+- Adicionar permissões de usuarios
+- Melhor PDF (adicioar cabeçalho ...)
+- Adicionar icones no menu inicial
+- Fazer interfaces de cadastro e edição de traço não resetarem as informações quando soma das porcentagens for diferente de 100%
+- Melhorar interfaces de cadastro, principalmente forncedor
+- Alterar pesquisa por data para formato brasileiro de data

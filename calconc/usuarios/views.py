@@ -16,6 +16,9 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
 from django import forms
 from textwrap import wrap
+from django.core.paginator import Paginator
+
+itens_por_pagina = 5
 @login_required
 def listar_historico(request):
     historico = CalculoTraco.objects.all()
@@ -93,8 +96,15 @@ def calculadora(request):
 @login_required
 def listar_tipo_agregado(request):
     tipos_agregados = TipoAgregado.objects.all()
-    exibir_data = True
-    return render(request, 'tipo_agregado/index.html', {'tipos_agregados': tipos_agregados, 'exibir_data': exibir_data})
+    paginator = Paginator(tipos_agregados, 5)
+
+    page_number = request.GET.get("page")
+    context = {
+        'tipos_agregados': tipos_agregados,
+        'page_obj': paginator.get_page(page_number),
+        'exibir_data': False
+    }
+    return render(request, 'tipo_agregado/index.html', context)
 
 
 @login_required
@@ -142,7 +152,7 @@ def deletar_tipo_agregado(request, pk):
 @login_required
 def listar_agregados(request):  # Renomeei a função para ser mais descritiva
     agregados = Agregado.objects.all()
-    exibir_data = True
+    exibir_data = False
     return render(request, 'agregado/index.html', {'agregados': agregados, 'exibir_data': exibir_data})
 
 

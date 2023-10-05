@@ -20,7 +20,7 @@
         <div class="content">
             <div class="cadastrar_btn">
                 <a class="nome-pagina">Fornecedor</a>
-                <a href="{% url 'cadastrar_fornecedor' %}" class="btn_cadastrar">Cadastrar Fornecedor</a>
+                <a href="{% url 'cadastrar_fornecedor' %}" class="btn_cadastrar">Adicionar Fornecedor</a>
             </div>
 
             <div class = 'all-content'>
@@ -32,14 +32,17 @@
                         <thead>
                             <tr>
                                 <th>Nome</th>
+                                <th>Cidade</th>
+                                <th>Fone 1</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for fornecedor in fornecedores %}
                                 <tr>
-<!--                                    <td>{{ fornecedor.data_cadastro }}</td>-->
                                     <td>{{ fornecedor.nome }}</td>
+                                    <td>{{ fornecedor.cidade }}</td>
+                                    <td>{{ fornecedor.fone_1 }}</td>
                                     <td class="align-right">
                                         <div class="btn-action-container">
                                             <a href="{% url 'inspecionar_fornecedor' fornecedor.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
