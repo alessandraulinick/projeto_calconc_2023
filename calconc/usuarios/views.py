@@ -18,7 +18,7 @@ from django import forms
 from textwrap import wrap
 from django.core.paginator import Paginator
 
-itens_por_pagina = 5
+itens_por_pagina = 8
 @login_required
 def listar_historico(request):
     historico = CalculoTraco.objects.all()
@@ -91,7 +91,7 @@ def calculadora(request):
 @login_required
 def listar_tipo_agregado(request):
     tipos_agregados = TipoAgregado.objects.all()
-    paginator = Paginator(tipos_agregados, 5)
+    paginator = Paginator(tipos_agregados, 8)
 
     page_number = request.GET.get("page")
     context = {
