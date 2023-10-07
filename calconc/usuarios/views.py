@@ -17,6 +17,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from django import forms
 from textwrap import wrap
 from django.core.paginator import Paginator
+from django.db.models.functions import Lower
 
 itens_por_pagina = 8
 @login_required
@@ -90,7 +91,7 @@ def calculadora(request):
 # Tipo Agregado
 @login_required
 def listar_tipo_agregado(request):
-    tipos_agregados = TipoAgregado.objects.all()
+    tipos_agregados = TipoAgregado.objects.all().order_by(Lower('nome'))
     paginator = Paginator(tipos_agregados, 8)
 
     page_number = request.GET.get("page")
@@ -104,11 +105,17 @@ def listar_tipo_agregado(request):
 
 @login_required
 def cadastrar_tipo_agregado(request):
+
     if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('tipo_agregado')
         form = TipoAgregadoForms(request.POST)
+
         if form.is_valid():
             form.save()
             return redirect('tipo_agregado')
+        else:
+            return render(request, 'tipo_agregado/cadastrar.html', {'form': form})
     else:
         form = TipoAgregadoForms()
 
@@ -119,6 +126,8 @@ def editar_tipo_agregado(request, pk):
     tipo_agregado = get_object_or_404(TipoAgregado, id=pk)
 
     if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('tipo_agregado')
         form = TipoAgregadoForms(request.POST, instance=tipo_agregado)
         if form.is_valid():
             form.save()
@@ -146,7 +155,7 @@ def deletar_tipo_agregado(request, pk):
 # Agregado
 @login_required
 def listar_agregados(request):  # Renomeei a função para ser mais descritiva
-    agregados = Agregado.objects.all()
+    agregados = Agregado.objects.all().order_by(Lower('nome'))
     exibir_data = False
     return render(request, 'agregado/index.html', {'agregados': agregados, 'exibir_data': exibir_data})
 
@@ -154,6 +163,8 @@ def listar_agregados(request):  # Renomeei a função para ser mais descritiva
 @login_required
 def cadastrar_agregado(request):
     if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('agregados')
         form = AgregadoForms(request.POST)
         if form.is_valid():
             agregado = form.save(commit=False)
@@ -189,6 +200,8 @@ def editar_agregado(request, pk):
     agregado = get_object_or_404(Agregado, id=pk)
 
     if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('agregados')
         form = AgregadoForms(request.POST, instance=agregado)
 
         # TODO adicnioar logica com numero de modificação Agregado.objects.filter(pk=agregado.pk).update(num_modificacao=F('num_modificacao') + 1)
@@ -222,7 +235,7 @@ def deletar_agregado(request, pk):
 # Fornecedor
 @login_required
 def listar_fornecedor(request):
-    fornecedores = Fornecedor.objects.all()
+    fornecedores = Fornecedor.objects.all().order_by(Lower('nome'))
     exibir_data = False
     return render(request, 'fornecedor/index.html', {'fornecedores': fornecedores, 'exibir_data': exibir_data})
 
@@ -235,18 +248,15 @@ def inspecionar_fornecedor(request, pk):
 
 @login_required
 def cadastrar_fornecedor(request):
-    def get_success_url(self):
-        """ Redirects to the newly created object """
-        new = self.object
-        url = reverse_lazy("my-item", kwargs={"pk": new.pk})
-        return url
     if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('fornecedor')
         form = FornecedorForms(request.POST)
         if form.is_valid():
             form.save()
             return redirect('fornecedor')
         else:
-            print("Erro cadastrar_fornecedor")
+            return  null
 
     else:
         form = FornecedorForms()
@@ -258,6 +268,8 @@ def editar_fornecedor(request, pk):
     fornecedor = get_object_or_404(Fornecedor, id=pk)
 
     if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('fornecedor')
         form = FornecedorForms(request.POST, instance=fornecedor)
         if form.is_valid():
             form.save()
@@ -277,7 +289,7 @@ def editar_fornecedor(request, pk):
 # Traço
 @login_required
 def listar_traco(request):  # Renomeei a função para ser mais descritiva
-    traco = Traco.objects.all()
+    traco = Traco.objects.all().order_by(Lower('nome'))
     exibir_data = True
     return render(request, 'traco/index.html', {'traco': traco, 'exibir_data': exibir_data})
 
@@ -299,6 +311,8 @@ def inspecionar_traco(request, pk):
 def cadastrar_traco(request):
     tipos_agregado = TipoAgregado.objects.all()
     if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('traco')
         form = TracoForms(request.POST)
         agregados = request.POST.getlist('agregados')
         porcentagem_agregados = request.POST.getlist('porcentagem_agregados')
@@ -343,6 +357,8 @@ def editar_traco(request, pk):
     tipos_agregado = TipoAgregado.objects.all()
 
     if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('traco')
         form = TracoForms(request.POST, instance=traco)
         agregados = request.POST.getlist('agregados')
         porcentagem_agregados = request.POST.getlist('porcentagem_agregados')
@@ -558,12 +574,14 @@ def download_pdf(request, calculo_traco_id):
 
 @login_required
 def listar_usuarios(request):
-    usuarios = CustomUsuario.objects.all()
+    usuarios = CustomUsuario.objects.all().order_by(Lower('login'))
     return render(request, 'registration/index_usuario.html', {'usuarios': usuarios})
 
 
 def cadastrar_usuarios(request):
     if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('usuarios')
         form = CustomUsuarioCreateForm(request.POST)
         if form.is_valid():
             user = form.save()
@@ -583,5 +601,5 @@ def editar_usuario(request, pk):
 
 
 def desativar_usuario(request, pk):
-    return null
+    return listar_usuarios(request)
 
