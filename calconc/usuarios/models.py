@@ -61,13 +61,13 @@ class CustomUsuario(AbstractUser):
 
 # TODO verificar camo limitar valor mínimo
 class Fornecedor(models.Model):
-    nome = models.CharField(max_length=50)
+    nome = models.CharField(max_length=50, unique=True)
     cidade = models.CharField(max_length=50, null=True)
     bairro = models.CharField(max_length=50, null=True)
     logradouro = models.CharField(max_length=50, null=True)
     CEP = models.CharField(max_length=8)
     complemento = models.CharField(max_length=150, null=True)
-    cpf_cnpj = models.CharField(max_length=14)
+    cpf_cnpj = models.CharField(max_length=14, unique=True)
     fone_1 = models.CharField(max_length=11)
     fone_2 = models.CharField(max_length=11, null=True)
     ie = models.CharField(max_length=9, null=True)

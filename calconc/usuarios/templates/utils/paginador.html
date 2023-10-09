@@ -18,7 +18,12 @@
         {% endif %}
 
         <span class="current">
-            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+
+            {% if not page_obj.number %}
+                Página 1 de 1
+            {% else %}
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            {% endif %}
         </span>
 
         {% if page_obj.has_next %}

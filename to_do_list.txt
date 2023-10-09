@@ -1,11 +1,11 @@
 Lista de afazeres:
 
-- Arrumar CSS de pagina (listar_tipo_agregado) (feito)
-- Ordenar alfabeticamente paginas   (feito)
-- Quando há apenenas uma pagina paginador fica 'Página de'
+- Arrumar CSS de pagina (listar_tipo_agregado)              (feito)
+- Ordenar alfabeticamente paginas                           (feito)
+- Quando há apenenas uma pagina paginador fica 'Página de'  (feito)
 - Criar paginas de erro genérica (404, 500...) - cadastros com nomes duplicados estão causando erro
 - Adicionar validações de CEP, cpf, ie, telefone
-- Cadastro de fornecedor está deixando duplicar nomes
+- Cadastro de fornecedor está deixando duplicar nomes       (feito)
 - deixar coluna Ações em 'listar' melhor
 - Adicionar cadastro de usuários
 - Adicionar permissões de usuarios

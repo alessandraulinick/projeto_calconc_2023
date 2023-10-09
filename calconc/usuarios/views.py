@@ -256,7 +256,11 @@ def cadastrar_fornecedor(request):
             form.save()
             return redirect('fornecedor')
         else:
-            return  null
+            context = {'form': form, 'errors': {
+                'code': 2,
+                'message': f"O formulário enviado não é válido: {form.errors}"
+            }}
+        return render(request, 'fornecedor/cadastrar.html', context)
 
     else:
         form = FornecedorForms()
