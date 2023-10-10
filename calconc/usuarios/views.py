@@ -587,10 +587,23 @@ def cadastrar_usuarios(request):
         if "cancel" in request.POST:
             return redirect('usuarios')
         form = CustomUsuarioCreateForm(request.POST)
+        if form.password1 != form.password2:
+            context = {'form': form, 'errors': {
+                'code': 1,
+                'message': f"A senhas informadas estão diferêntes."
+            }}
+            return render(request, 'registration/cadastrar_usuario.html', context)
+
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('usuarios')  # Redireciona para a página inicial após o cadastro
+        else:
+            context = {'form': form, 'errors': {
+                'code': 2,
+                'message': f"O formulário enviado não é válido: {form.errors}"
+            }}
+        return render(request, 'registration/cadastrar_usuario.html', context)
     else:
         form = CustomUsuarioCreateForm()
     return render(request, 'registration/cadastrar_usuario.html', {'form': form})

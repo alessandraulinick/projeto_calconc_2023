@@ -4,7 +4,7 @@ Lista de afazeres:
 - Ordenar alfabeticamente paginas                           (feito)
 - Quando há apenenas uma pagina paginador fica 'Página de'  (feito)
 - Criar paginas de erro genérica (404, 500...) - cadastros com nomes duplicados estão causando erro
-- Adicionar validações de CEP, cpf, ie, telefone
+- Adicionar validações de CEP, cpf, ie, telefone            (feito)
 - Cadastro de fornecedor está deixando duplicar nomes       (feito)
 - deixar coluna Ações em 'listar' melhor
 - Adicionar cadastro de usuários
@@ -12,5 +12,5 @@ Lista de afazeres:
 - Melhor PDF (adicioar cabeçalho ...)
 - Adicionar icones no menu inicial
 - Fazer interfaces de cadastro e edição de traço não resetarem as informações quando soma das porcentagens for diferente de 100%
-- Melhorar interfaces de cadastro, principalmente forncedor
-- Alterar pesquisa por data para formato brasileiro de data (feito)
+- Melhorar interfaces de cadastro, principalmente forncedor (ccs)
+- Alterar pesquisa por data para formato brasileiro de data     (feito)

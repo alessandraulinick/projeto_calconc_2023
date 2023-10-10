@@ -3,6 +3,7 @@ from django.core.validators import MinValueValidator
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from .validator import validate_cep, validate_fone, validate_cpf_cnpj, validate_ie
 
 # from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser, BaseUserManager
@@ -65,12 +66,12 @@ class Fornecedor(models.Model):
     cidade = models.CharField(max_length=50, null=True)
     bairro = models.CharField(max_length=50, null=True)
     logradouro = models.CharField(max_length=50, null=True)
-    CEP = models.CharField(max_length=8)
+    CEP = models.CharField(max_length=15, validators=[validate_cep])
     complemento = models.CharField(max_length=150, null=True)
-    cpf_cnpj = models.CharField(max_length=14, unique=True)
-    fone_1 = models.CharField(max_length=11)
-    fone_2 = models.CharField(max_length=11, null=True)
-    ie = models.CharField(max_length=9, null=True)
+    cpf_cnpj = models.CharField(max_length=20, unique=True, validators=[validate_cpf_cnpj])
+    fone_1 = models.CharField(max_length=20, validators=[validate_fone])
+    fone_2 = models.CharField(max_length=20, validators=[validate_fone])
+    ie = models.CharField(max_length=9, null=True, validators=[validate_ie])
     observacao = models.CharField(max_length=200, null=True)
     data_cadastro = models.DateTimeField(default=timezone.now)
 
