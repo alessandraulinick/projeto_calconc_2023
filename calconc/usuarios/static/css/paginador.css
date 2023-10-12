@@ -1,7 +1,12 @@
 /* Estilo para a div de paginação */
 .pagination {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 90%; /* Isso fará com que o paginador ocupe a largura total da página. */
     text-align: center;
-    margin-top: 20px;
+    margin-bottom: 15px;
+    margin-left: 10%;
 }
 
 /* Estilo para os links de página */
@@ -36,5 +41,5 @@
     pointer-events: none;
     color: #ccc;
     border-color: #ccc;
-    
+
 }

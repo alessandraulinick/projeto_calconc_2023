@@ -92,7 +92,7 @@ def calculadora(request):
 @login_required
 def listar_tipo_agregado(request):
     tipos_agregados = TipoAgregado.objects.all().order_by(Lower('nome'))
-    paginator = Paginator(tipos_agregados, 8)
+    paginator = Paginator(tipos_agregados, 6)
 
     page_number = request.GET.get("page")
     context = {

@@ -121,10 +121,10 @@ body {
     background-color: white;
     border-radius: 10px;
     overflow: auto;
+    margin-top: 15px;
 }
 
 .filtros{
-    margin-top:20px;
     margin-left:20px;
 }
 
