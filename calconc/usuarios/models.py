@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from .validator import validate_cep, validate_fone, validate_cpf_cnpj, validate_ie
+from django.contrib.auth import get_user_model
 
 # from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser, BaseUserManager
@@ -41,15 +42,11 @@ class UsuarioManager(BaseUserManager):
 
 class CustomUsuario(AbstractUser):
     email = models.EmailField('E-mail', unique=True)
-    fone = models.CharField('Telefone', max_length=15)
-    nome = models.CharField('Nome', max_length=255)
-    login = models.CharField('Login', max_length=50, unique=True)
-    permissao = models.CharField('Permissão', max_length=100)
+    fone = models.CharField('Telefone', max_length=25, null=True)
     is_staff = models.BooleanField('Membro da equipe', default=True)
-    is_active = models.BooleanField('Ativo', default=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['nome', 'login', 'permissao', 'password']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'fone']
 
     def _str_(self):
         return self.email
