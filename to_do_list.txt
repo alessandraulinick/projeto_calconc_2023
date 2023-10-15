@@ -1,16 +1,19 @@
 Lista de afazeres:
 
-- Arrumar CSS de pagina (listar_tipo_agregado)              (feito)
-- Ordenar alfabeticamente paginas                           (feito)
-- Quando há apenenas uma pagina paginador fica 'Página de'  (feito)
 - Criar paginas de erro genérica (404, 500...) - cadastros com nomes duplicados estão causando erro
-- Adicionar validações de CEP, cpf, ie, telefone            (feito)
-- Cadastro de fornecedor está deixando duplicar nomes       (feito)
-- deixar coluna Ações em 'listar' melhor (feito)
 - Adicionar cadastro de usuários
 - Adicionar permissões de usuarios
 - Melhor PDF (adicioar cabeçalho ...)
-- Adicionar icones no menu inicial (Feito)
 - Fazer interfaces de cadastro e edição de traço não resetarem as informações quando soma das porcentagens for diferente de 100%
 - Melhorar interfaces de cadastro, principalmente forncedor (ccs)
-- Alterar pesquisa por data para formato brasileiro de data     (feito)
+- Padronizar html/css de 'utils/404.html'
+- Padronizar html/css de 'utils/500.html'
+
+- Arrumar CSS de pagina (listar_tipo_agregado)              (feito)
+- Ordenar alfabeticamente paginas                           (feito)
+- Quando há apenenas uma pagina paginador fica 'Página de'  (feito)
+- Adicionar validações de CEP, cpf, ie, telefone            (feito)
+- Cadastro de fornecedor está deixando duplicar nomes       (feito)
+- deixar coluna Ações em 'listar' melhor                    (feito)
+- Adicionar icones no menu inicial                          (feito)
+- Alterar pesquisa por data para formato brasileiro de data (feito)

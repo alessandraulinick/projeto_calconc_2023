@@ -43,7 +43,7 @@ class CustomUsuario(AbstractUser):
     email = models.EmailField('E-mail', unique=True)
     fone = models.CharField('Telefone', max_length=15)
     nome = models.CharField('Nome', max_length=255)
-    login = models.CharField('Login', max_length=50, unique=False)
+    login = models.CharField('Login', max_length=50, unique=True)
     permissao = models.CharField('Permissão', max_length=100)
     is_staff = models.BooleanField('Membro da equipe', default=True)
     is_active = models.BooleanField('Ativo', default=True)

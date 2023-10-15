@@ -18,8 +18,18 @@ from django import forms
 from textwrap import wrap
 from django.core.paginator import Paginator
 from django.db.models.functions import Lower
+from django.shortcuts import render
 
 itens_por_pagina = 8
+
+
+def custom_404(request, exception):
+    return render(request, 'utils/404.html', status=404)
+
+
+def custom_500(request):
+    return render(request, 'utils/500.html', status=500)
+
 @login_required
 def listar_historico(request):
     historico = CalculoTraco.objects.all()
@@ -581,22 +591,21 @@ def cadastrar_usuarios(request):
         if "cancel" in request.POST:
             return redirect('usuarios')
         form = CustomUsuarioCreateForm(request.POST)
-        if form.password1 != form.password2:
+        if form.data['password1'] != form.data['password2']:
             context = {'form': form, 'errors': {
                 'code': 1,
                 'message': f"A senhas informadas estão diferêntes."
             }}
             return render(request, 'registration/cadastrar_usuario.html', context)
+        else:
+            form.data['password'] = form.data['password1']
 
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('usuarios')  # Redireciona para a página inicial após o cadastro
         else:
-            context = {'form': form, 'errors': {
-                'code': 2,
-                'message': f"O formulário enviado não é válido: {form.errors}"
-            }}
+            context = {'form': form}
         return render(request, 'registration/cadastrar_usuario.html', context)
     else:
         form = CustomUsuarioCreateForm()
