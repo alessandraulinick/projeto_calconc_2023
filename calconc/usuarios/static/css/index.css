@@ -55,6 +55,11 @@ body {
   margin-right: 15px;
 }
 
+.texto-direita {
+  text-align: right;
+}
+
+
 .box-row {
   display: flex;
   justify-content: space-between;
@@ -88,29 +93,28 @@ body {
   height: 150px;
   background-color: #E6E6FA;
   display: flex;
-  justify-content: center;
-  align-items: center;
   text-decoration: none;
   color: #000;
   border-radius: 10px;
-  text-align: center; /* Centraliza o texto horizontalmente */
-  flex-direction: column;
+  flex-direction: row; /* Alterado para "row" para alinhar elementos horizontalmente */
+  position: relative;
+  justify-content: center; /* Centraliza verticalmente */
+  align-items: center; /* Centraliza horizontalmente */
+  text-align: left; /* Centraliza o texto horizontalmente */
 }
 
-.box-2 {
-  font-size: 16px;
-  font-weight: 600;
-  width: calc(33.3% - 10px);
-  height: 150px;
-  background-color: #E6E6FA;
+.box-image img{
+  height: 40%;
+  margin-right: 30px; /* Move a imagem para a esquerda */
   display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  color: #000;
-  border-radius: 10px;
-  text-align: center; /* Centraliza o texto horizontalmente */
+  align-items: center; /* Centraliza verticalmente a imagem */
+}
+
+.box-content {
+  display: flex;
   flex-direction: column;
+  justify-content: center; /* Centraliza verticalmente */
+  align-items: center; /* Centraliza horizontalmente */
 }
 
 .box-title {
@@ -120,9 +124,27 @@ body {
 }
 
 .box-description {
-  font-size: 12px; /* Tamanho menor para a descrição */
-  color: #888; /* Cor mais clara para a descrição */
-  margin-top:10px;
+  font-size: 12px;
+  color: #888;
+  margin-top: 10px;
+    text-align: left;
+}
+
+.box-2 {
+  font-size: 16px;
+  font-weight: 600;
+  width: calc(33.3% - 10px);
+  height: 150px;
+  background-color: #E6E6FA;
+  display: flex;
+  text-decoration: none;
+  color: #000;
+  border-radius: 10px;
+  flex-direction: row; /* Alterado para "row" para alinhar elementos horizontalmente */
+  position: relative;
+  justify-content: center; /* Centraliza verticalmente */
+  align-items: center; /* Centraliza horizontalmente */
+  text-align: left; /* Centraliza o texto horizontalmente */
 }
 
 /* Estilos adicionais para hover (opcional) */
@@ -141,3 +163,4 @@ body {
     border: 2px solid #001A5F;
     border-radius: 10px;
 }
+

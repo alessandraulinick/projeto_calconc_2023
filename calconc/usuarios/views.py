@@ -92,16 +92,16 @@ def calculadora(request):
 @login_required
 def listar_tipo_agregado(request):
     tipos_agregados = TipoAgregado.objects.all().order_by(Lower('nome'))
+    exibir_data = False
     paginator = Paginator(tipos_agregados, 6)
 
     page_number = request.GET.get("page")
     context = {
         'tipos_agregados': tipos_agregados,
         'page_obj': paginator.get_page(page_number),
-        'exibir_data': False
+        'exibir_data': exibir_data
     }
     return render(request, 'tipo_agregado/index.html', context)
-
 
 @login_required
 def cadastrar_tipo_agregado(request):
@@ -471,22 +471,16 @@ def filtrar_agregados(request):
 @login_required
 def filtrar_tipo_agregados(request):
     if request.method == 'GET':
-        filtro_data = request.GET.get('data')
         filtro_nome = request.GET.get('nome')
 
-        tipo_agregados_filtrados = TipoAgregado.objects.all()
+        tipo_agregados_filtrados = TipoAgregado .objects.all()
 
-        if filtro_data:
-            data_selecionada = timezone.make_aware(datetime.strptime(filtro_data, '%Y-%m-%d'))
-            data_selecionada_date = data_selecionada.date()
-            tipo_agregados_filtrados = tipo_agregados_filtrados.filter(data_cadastro__date=data_selecionada_date)
         if filtro_nome:
             tipo_agregados_filtrados = tipo_agregados_filtrados.filter(nome__icontains=filtro_nome)
         if 'limpar' in request.GET:
             return HttpResponseRedirect(request.path_info)
-        exibir_data = True
         context = {
-            'tipos_agregados': tipo_agregados_filtrados, 'exibir_data': exibir_data
+            'tipos_agregados': tipo_agregados_filtrados,
         }
 
         return render(request, 'tipo_agregado/index.html', context)

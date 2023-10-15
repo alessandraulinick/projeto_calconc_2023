@@ -134,6 +134,7 @@ body {
 
 .lista {
     margin: 15px;
+
 }
 
 .lista table {
@@ -146,7 +147,7 @@ body {
 
 .btn-action-container {
   display: flex;
-  justify-content: flex-end; /* Alinhar os botões à direita */
+  justify-content: left; /* Alinhar os botões à direita */
   gap: 10px; /* Espaçamento entre os botões */
 }
 
