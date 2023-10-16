@@ -24,6 +24,10 @@
                 <a href="{% url 'cadastrar_usuario' %}" class="btn_cadastrar">Adicionar Usuario</a>
             </div>
 
+
+            {% for usuario in usuarios %}
+                <b1> {{ usuario.first_name }}</b1>
+            {% endfor %}
             <div class = 'all-content'>
 
                 <div class="lista">
@@ -32,20 +36,24 @@
                             <tr>
                                 <th>Nome</th>
                                 <th>Email</th>
-                                <th>Nome</th>
-                                <th>Login</th>
+                                <th>Usuário</th>
                                 <th>Permissao</th>
+                                <th>Status</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for usuario in usuarios %}
                                 <tr>
-                                    <td>{{ usuario.nome }}</td>
+                                    <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
                                     <td>{{ usuario.email }}</td>
-                                    <td>{{ usuario.nome }}</td>
-                                    <td>{{ usuario.login }}</td>
+                                    <td>{{ usuario.username }}</td>
                                     <td>{{ usuario.permissao }}</td>
+                                    {% if usuario.is_active %}
+                                        <td>Ativo</td>
+                                    {% else %}
+                                        <td>Inativo</td>
+                                    {% endif %}
                                     <td class="align-right">
                                       <div class="btn-action-container">
                                         <a href="{% url 'inspecionar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-eye"></i></a>

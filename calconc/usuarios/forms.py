@@ -9,16 +9,20 @@ from django.db import models
 class CustomUsuarioCreateForm(UserCreationForm):
     class Meta:
         model = CustomUsuario
-        fields = ('first_name', 'last_name', 'fone')
-        labels = {'username': 'username/E-mail'}
+        fields = ('first_name', 'last_name', 'fone', 'username', 'email')
+        labels = {'username': 'Usuário'}
 
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
-        user.email = self.cleaned_data["username"]
+        # user.email = self.cleaned_data["username"]
         if commit:
             user.save()
         return user
+    def inactivate(self):
+        user = super().save(commit=False)
+        user.is_active = False
+        user.save()
 
 
 class CustomUsuarioChangeForm(UserChangeForm):

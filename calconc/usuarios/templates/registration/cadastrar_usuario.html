@@ -18,48 +18,20 @@
 
     {% include "utils/error_message.html" %}
 
-
-        <div class="field">
-            <label for="{{ form.cidade.id_for_label }}">Login<span class="required-label">*</span></label>
-            {{ form.login }}
-            <ul class="error-message">{{ form.login.errors }}</ul>
-        </div>
-
-
-        <div class="field">
-            <label for="{{ form.email.id_for_label }}">Email<span class="required-label">*</span></label>
-            {{ form.email }}
-            <ul class="error-message">{{ form.email.errors }}</ul>
-        </div>
-
-        <div class="field">
-            <label for="{{ form.nome.id_for_label }}">Nome<span class="required-label">*</span></label>
-            {{ form.nome }}
-            <ul class="error-message">{{ form.nome.errors }}</ul>
-        </div>
-
-        <div class="field">
-            <label for="{{ form.permissao.id_for_label }}">Permissão<span class="required-label">*</span></label>
-            {{ form.permissao }}
-            <ul class="error-message">{{ form.permissao.errors }}</ul>
-        </div>
-
-        <!-- TODO fazer drop box com as permissões   -->
-        <div class="field">
-            <label for="{{ form.password1.id_for_label }}">Senha<span class="required-label">*</span></label>
-            {{ form.password1 }}
-            <ul class="error-message">{{ form.password1.errors }}</ul>
-        </div>
-
-        <div class="field">
-            <label for="{{ form.password2.id_for_label }}">Repita a senha<span class="required-label">*</span></label>
-            {{ form.password2 }}
-            <ul class="error-message">{{ form.password2.errors }}</ul>
-        </div>
-
+    {% for field in form %}
+      <p>
+        {{ field.label_tag }}<br>
+        {{ field }}
+        {% if field.help_text %}
+          <small style="color: grey">{{ field.help_text }}</small>
+        {% endif %}
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </p>
+    {% endfor %}
         {% include "utils/salvar_cancelar_botoes.html" %}
-    </form>
+  </form>
 </body>
 </html>
-
 {% endblock %}

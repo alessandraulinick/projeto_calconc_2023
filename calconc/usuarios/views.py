@@ -582,8 +582,9 @@ def download_pdf(request, calculo_traco_id):
 
 @login_required
 def listar_usuarios(request):
-    usuarios = CustomUsuario.objects.all().order_by(Lower('login'))
+    usuarios = CustomUsuario.objects.all().order_by(Lower('username'))
     return render(request, 'registration/index_usuario.html', {'usuarios': usuarios})
+
 
 
 def cadastrar_usuarios(request):
@@ -591,35 +592,42 @@ def cadastrar_usuarios(request):
         if "cancel" in request.POST:
             return redirect('usuarios')
         form = CustomUsuarioCreateForm(request.POST)
-        if form.data['password1'] != form.data['password2']:
-            context = {'form': form, 'errors': {
-                'code': 1,
-                'message': f"A senhas informadas estão diferêntes."
-            }}
-            return render(request, 'registration/cadastrar_usuario.html', context)
-        else:
-            form.data['password'] = form.data['password1']
-
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('usuarios')  # Redireciona para a página inicial após o cadastro
-        else:
-            context = {'form': form}
-        return render(request, 'registration/cadastrar_usuario.html', context)
+            form.save()
+            return redirect('usuarios')
     else:
         form = CustomUsuarioCreateForm()
     return render(request, 'registration/cadastrar_usuario.html', {'form': form})
 
-
 def inspecionar_usuario(request, pk):
+    # TODO - implementar isso
     return render(request, 'registration/inspecionar_usuario.html', null)
 
 
 def editar_usuario(request, pk):
-    return render(request, 'registration/editar_usuario.html', null)
+    usuario = get_object_or_404(CustomUsuario, id=pk)
+
+    if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('usuarios')
+        form = CustomUsuarioCreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('usuarios')
+    else:
+        form = CustomUsuarioCreateForm(instance=usuario)
+
+    context = {
+        'form': form,
+        'usuario': usuario
+    }
+    return render(request, 'registration/editar_usuario.html', context)
 
 
 def desativar_usuario(request, pk):
+    # TODO - testar isso
+    usuario = get_object_or_404(CustomUsuario, id=pk)
+    form = CustomUsuarioCreateForm(instance=usuario)
+    form.inactivate()
     return listar_usuarios(request)
 
