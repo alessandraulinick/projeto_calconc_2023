@@ -33,7 +33,15 @@
       </p>
     </div>
     {% endfor %}
-        {% include "utils/salvar_cancelar_botoes.html" %}
+     <div class="field">
+        <label for="group">Grupo:</label>
+        <select name="group" id="group">
+            {% for group in groups %}
+                <option value="{{ group.name }}">{{ group }}</option>
+            {% endfor %}
+        </select>
+     </div>
+    {% include "utils/salvar_cancelar_botoes.html" %}
   </form>
 {% include "utils/duvidas.html" %}
 </body>

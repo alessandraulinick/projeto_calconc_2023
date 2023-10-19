@@ -19,6 +19,8 @@ from textwrap import wrap
 from django.core.paginator import Paginator
 from django.db.models.functions import Lower
 from django.shortcuts import render
+from .decorators import allowed_users
+from django.contrib.auth.models import Group
 
 itens_por_pagina = 8
 
@@ -52,9 +54,9 @@ def inspecionar_historico(request, calculo_id):
     })
 
 
-
 # Calculadora
 @login_required
+@allowed_users(allowed_roles=['Administrador'])
 def calculadora(request):
     tracos = Traco.objects.all()
     if request.method == 'POST':
@@ -586,18 +588,27 @@ def listar_usuarios(request):
     return render(request, 'registration/index_usuario.html', {'usuarios': usuarios})
 
 
-
 def cadastrar_usuarios(request):
     if request.method == 'POST':
         if "cancel" in request.POST:
             return redirect('usuarios')
         form = CustomUsuarioCreateForm(request.POST)
+        group_name = request.POST.get('group')
         if form.is_valid():
-            form.save()
+            user = form.save()
+            group = Group.objects.get(name=group_name)
+            user.groups.add(group)
             return redirect('usuarios')
+
     else:
         form = CustomUsuarioCreateForm()
-    return render(request, 'registration/cadastrar_usuario.html', {'form': form})
+    groups = Group.objects.all().order_by()
+    context = {
+        'form': form,
+        'groups': groups
+    }
+    return render(request, 'registration/cadastrar_usuario.html', context)
+
 
 def inspecionar_usuario(request, pk):
     # TODO - implementar isso

@@ -104,7 +104,7 @@ body {
 }
 
 .box-image img{
-  height: 40%;
+  height: 40px;
   margin-right: 30px; /* Move a imagem para a esquerda */
   display: flex;
   align-items: center; /* Centraliza verticalmente a imagem */
