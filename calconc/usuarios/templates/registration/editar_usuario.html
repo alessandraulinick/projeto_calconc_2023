@@ -19,6 +19,9 @@
     {% include "utils/error_message.html" %}
 
     {% for field in form %}
+    <div class="form-columns">
+        <div class="form-column">
+    <div class="field">
       <p>
         {{ field.label_tag }}<br>
         {{ field }}
@@ -29,6 +32,9 @@
           <p style="color: red">{{ error }}</p>
         {% endfor %}
       </p>
+    </div>
+        </div>
+    </div>
     {% endfor %}
         {% include "utils/salvar_cancelar_botoes.html" %}
   </form>
