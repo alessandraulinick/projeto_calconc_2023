@@ -23,7 +23,6 @@
                 <a href="{% url 'cadastrar_tipo_agregado' %}" class="btn_cadastrar">Adicionar Tipo de Agregado</a>
             </div>
 
-
             <div class = 'all-content'>
                 {% with filtro_url='filtrar_tipo_agregados' %}
                     {% include "utils/filtrar.html" %}
@@ -50,6 +49,7 @@
                         </tbody>
                     </table>
                     {% include "utils/paginador.html" %}
+                    {% include "utils/duvidas.html" %}
                 </div>
             </div>
         </div>

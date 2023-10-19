@@ -87,9 +87,11 @@
                     {% if calculo_object %}
                         <a href="{% url 'download_pdf' calculo_traco_id %}" class="download-button">Baixar PDF</a> <!-- Cria um link para baixar um PDF -->
                     {% endif %}
+                    {% include "utils/duvidas.html" %}
                 </div>
             </div>
         </div>
+
     </div>
 </body>
 </html>

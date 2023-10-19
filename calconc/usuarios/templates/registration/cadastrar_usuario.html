@@ -12,6 +12,7 @@
     <title>CalConc</title>
 </head>
 <body>
+    {% include "utils/header_cadastros.html" %}
 <h1>Cadastrar Usuário</h1>
 <form method="post" class="form-container">
     {% csrf_token %}
@@ -19,6 +20,7 @@
     {% include "utils/error_message.html" %}
 
     {% for field in form %}
+    <div class="field">
       <p>
         {{ field.label_tag }}<br>
         {{ field }}
@@ -29,9 +31,11 @@
           <p style="color: red">{{ error }}</p>
         {% endfor %}
       </p>
+    </div>
     {% endfor %}
         {% include "utils/salvar_cancelar_botoes.html" %}
   </form>
+{% include "utils/duvidas.html" %}
 </body>
 </html>
 {% endblock %}

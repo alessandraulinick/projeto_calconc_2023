@@ -12,6 +12,7 @@
     <title>CalConc</title>
 </head>
 <body>
+{% include "utils/header_cadastros.html" %}
 <h1>Cadastrar Traço</h1>
 <form method="post" class="form-container">
     {% csrf_token %}
@@ -59,6 +60,7 @@
     {% endfor %}
 
     {% include "utils/salvar_cancelar_botoes.html" %}
+    {% include "utils/duvidas.html" %}
 </form>
 </body>
 </html>

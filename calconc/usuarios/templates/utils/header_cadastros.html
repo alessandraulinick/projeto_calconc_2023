@@ -1,0 +1,11 @@
+{% load static %}
+<div class="header">
+        <div class="texto-header">
+            <div class="logo">
+                <img src="{% static 'images/img-01.png' %}" alt="IMG">
+            </div>
+            <ul class="menu">
+                <li><a class="btn-logout" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
