@@ -1,6 +1,9 @@
 from django.apps import AppConfig
 
 
+default_calconc_users = ['Administrador', 'Consultor', 'Editor']
+
+
 class UsuariosConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'usuarios'
@@ -8,6 +11,5 @@ class UsuariosConfig(AppConfig):
     def ready(self):
         from django.contrib.auth.models import Group
 
-        Group.objects.get_or_create(name='Administrador')
-        Group.objects.get_or_create(name='Consultor')
-        Group.objects.get_or_create(name='Editor')
+        for group in default_calconc_users:
+            Group.objects.get_or_create(name=group)

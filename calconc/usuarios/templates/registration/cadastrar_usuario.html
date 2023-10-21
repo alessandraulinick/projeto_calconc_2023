@@ -12,35 +12,75 @@
     <title>CalConc</title>
 </head>
 <body>
-    {% include "utils/header_cadastros.html" %}
-<h1>Cadastrar Usuário</h1>
+<h1>Editar Usuário</h1>
 <form method="post" class="form-container">
     {% csrf_token %}
 
     {% include "utils/error_message.html" %}
 
-    {% for field in form %}
     <div class="field">
-      <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
-        {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
-        {% endfor %}
-      </p>
+        <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label_tag }}</label>
+        {{ form.first_name }}
+        <ul class="error-message">{{ form.first_name.errors }}</ul>
     </div>
-    {% endfor %}
-     <div class="field">
+    <div class="field">
+        <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label_tag }}</label>
+        {{ form.last_name }}
+        <ul class="error-message">{{ form.last_name.errors }}</ul>
+    </div>
+    <div class="field">
+        <label for="{{ form.fone.id_for_label }}">{{ form.fone.label_tag }}</label>
+        {{ form.fone }}
+        <ul class="error-message">{{ form.fone.errors }}</ul>
+    </div>
+    <div class="field">
+        <label for="{{ form.username.id_for_label }}">{{ form.username.label_tag }}</label>
+        {{ form.username }}
+        <ul class="error-message">{{ form.username.errors }}</ul>
+    </div>
+    <div class="field">
+        <label for="{{ form.email.id_for_label }}">{{ form.email.label_tag }}</label>
+        {{ form.email }}
+        <ul class="error-message">{{ form.email.errors }}</ul>
+    </div>
+    <div class="field">
         <label for="group">Grupo:</label>
         <select name="group" id="group">
             {% for group in groups %}
-                <option value="{{ group.name }}">{{ group }}</option>
+                <option value="{{ group }}" {% if current_group == group %} selected="selected" {% endif %}> {{ group }} </option>
             {% endfor %}
         </select>
-     </div>
+    </div>
+
+    <div class="field">
+        <label for="{{ form.password1.id_for_label }}">{{ form.password1.label_tag }}</label>
+        {{ form.password1 }}
+        <ul class="error-message">{{ form.password1.errors }}</ul>
+    </div>
+    <div class="field">
+        <label for="{{ form.password2.id_for_label }}">{{ form.password2.label_tag }}</label>
+        {{ form.password2 }}
+        <ul class="error-message">{{ form.password2.errors }}</ul>
+    </div>
+<!--    {% for field in form %}-->
+<!--    <div class="form-columns">-->
+<!--        <div class="form-column">-->
+<!--            <div class="field">-->
+<!--                <p>-->
+<!--                    {{ field.label_tag }}<br>-->
+<!--                    {{ field }}-->
+<!--&lt;!&ndash;                    {% if field.help_text %}&ndash;&gt;-->
+<!--&lt;!&ndash;                        <small style="color: grey">{{ field.help_text }}</small>&ndash;&gt;-->
+<!--&lt;!&ndash;                    {% endif %}&ndash;&gt;-->
+<!--                    {% for error in field.errors %}-->
+<!--                        <p style="color: red">{{ error }}</p>-->
+<!--                    {% endfor %}-->
+<!--                </p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    {% endfor %}-->
+
     {% include "utils/salvar_cancelar_botoes.html" %}
   </form>
 {% include "utils/duvidas.html" %}

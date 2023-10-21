@@ -11,7 +11,7 @@ from datetime import datetime
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from .scripts import GetInformacoesAgregados, InsertTraco, CalcularTraco, get_last_agregado, resolve_unidade_medida
+from .scripts import GetInformacoesAgregados, InsertTraco, CalcularTraco, get_last_agregado, resolve_unidade_medida, get_user_group
 from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
 from django import forms
@@ -21,6 +21,8 @@ from django.db.models.functions import Lower
 from django.shortcuts import render
 from .decorators import allowed_users
 from django.contrib.auth.models import Group
+from .apps import default_calconc_users
+
 
 itens_por_pagina = 8
 
@@ -32,33 +34,56 @@ def custom_404(request, exception):
 def custom_500(request):
     return render(request, 'utils/500.html', status=500)
 
+
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Consultor', 'Editor'])
+def index(request):
+    context = {
+        'user_group': get_user_group(request)
+    }
+    return render(request, 'index.html', context)
+
+@login_required
+@allowed_users(allowed_roles=['Administrador', 'Consultor', 'Editor'])
 def listar_historico(request):
     historico = CalculoTraco.objects.all()
 
     exibir_data = True
-    return render(request, 'historico/index.html', {'historico': historico, 'exibir_data': exibir_data})
+
+    context = {
+        'historico': historico,
+        'exibir_data': exibir_data,
+        'user_group': get_user_group(request)
+    }
+    return render(request, 'historico/index.html', context)
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Consultor', 'Editor'])
 def inspecionar_historico(request, calculo_id):
     historico = CalculoTraco.objects.all()
 
     calculo_traco = CalculoTraco.objects.get(id=calculo_id)
     agregados_calculo = AgregadosCalculo.objects.filter(fk_calculo_traco=calculo_traco)
 
-    return render(request, 'historico/inspecionar.html', {
+    context = {
         'historico': historico,
         'calculo_traco': calculo_traco,
-        'agregados_calculo': agregados_calculo
-    })
+        'agregados_calculo': agregados_calculo,
+        'user_group': get_user_group(request)
+    }
+    return render(request, 'historico/inspecionar.html', context)
 
 
 # Calculadora
 @login_required
-@allowed_users(allowed_roles=['Administrador'])
+@allowed_users(allowed_roles=['Administrador', 'Consultor', 'Editor'])
 def calculadora(request):
     tracos = Traco.objects.all()
+    context = {
+        'tracos': tracos,
+        'user_group': get_user_group(request)
+    }
     if request.method == 'POST':
         traco_id = request.POST.get('traco_id')
         volume_traco = float(request.POST.get('volume_traco'))
@@ -95,13 +120,17 @@ def calculadora(request):
             )
             agregados_calculo.save()
 
-        return render(request, 'calculadora/index.html', {'tracos': tracos, 'calculo_object': calculo_object, 'calculo_traco_id': calculo_traco.id})
+        context['calculo_object'] = calculo_object
+        context['calculo_traco_id'] = calculo_traco.id
+
+        return render(request, 'calculadora/index.html', context)
     else:
-        return render(request, 'calculadora/index.html', {'tracos': tracos})
+        return render(request, 'calculadora/index.html', context)
 
 
 # Tipo Agregado
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def listar_tipo_agregado(request):
     tipos_agregados = TipoAgregado.objects.all().order_by(Lower('nome'))
     exibir_data = False
@@ -111,13 +140,18 @@ def listar_tipo_agregado(request):
     context = {
         'tipos_agregados': tipos_agregados,
         'page_obj': paginator.get_page(page_number),
-        'exibir_data': exibir_data
+        'exibir_data': exibir_data,
+        'user_group': get_user_group(request)
     }
     return render(request, 'tipo_agregado/index.html', context)
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def cadastrar_tipo_agregado(request):
 
+    context = {
+        'user_group': get_user_group(request)
+    }
     if request.method == 'POST':
         if "cancel" in request.POST:
             return redirect('tipo_agregado')
@@ -127,13 +161,17 @@ def cadastrar_tipo_agregado(request):
             form.save()
             return redirect('tipo_agregado')
         else:
-            return render(request, 'tipo_agregado/cadastrar.html', {'form': form})
+            context['form'] = form
+            return render(request, 'tipo_agregado/cadastrar.html',context)
     else:
         form = TipoAgregadoForms()
+        context['form'] = form
 
-        return render(request, 'tipo_agregado/cadastrar.html', {'form': form})
+        return render(request, 'tipo_agregado/cadastrar.html', context)
 
 
+@login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def editar_tipo_agregado(request, pk):
     tipo_agregado = get_object_or_404(TipoAgregado, id=pk)
 
@@ -149,11 +187,14 @@ def editar_tipo_agregado(request, pk):
 
     context = {
         'form': form,
-        'tipo_agregado': tipo_agregado
+        'tipo_agregado': tipo_agregado,
+        'user_group': get_user_group(request)
     }
     return render(request, 'tipo_agregado/editar.html', context)
 
 
+@login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def deletar_tipo_agregado(request, pk):
     tipo_agregado = get_object_or_404(TipoAgregado, pk=pk)
     if request.method == 'POST':
@@ -166,13 +207,20 @@ def deletar_tipo_agregado(request, pk):
 
 # Agregado
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def listar_agregados(request):  # Renomeei a função para ser mais descritiva
     agregados = Agregado.objects.all().order_by(Lower('nome'))
     exibir_data = False
-    return render(request, 'agregado/index.html', {'agregados': agregados, 'exibir_data': exibir_data})
+    context = {
+        'agregados': agregados,
+        'exibir_data': exibir_data,
+        'user_group': get_user_group(request)
+        }
+    return render(request, 'agregado/index.html', context)
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def cadastrar_agregado(request):
     if request.method == 'POST':
         if "cancel" in request.POST:
@@ -199,15 +247,27 @@ def cadastrar_agregado(request):
     if fornecedor_id:
         form.fields['fk_fornecedor_id'].initial = fornecedor_id
 
-    return render(request, 'agregado/cadastrar.html', {'form': form})
+    context = {
+        'form': form,
+        'user_group': get_user_group(request)
+    }
+
+    return render(request, 'agregado/cadastrar.html', context)
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def inspecionar_agregado(request, pk):
     agregado = get_object_or_404(Agregado, pk=pk)
-    return render(request, 'agregado/inspecionar.html', {'agregado': agregado})
+    context = {
+        'agregado': agregado,
+        'user_group': get_user_group(request)
+    }
+    return render(request, 'agregado/inspecionar.html', context)
 
 
+@login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def editar_agregado(request, pk):
     agregado = get_object_or_404(Agregado, id=pk)
 
@@ -216,7 +276,6 @@ def editar_agregado(request, pk):
             return redirect('agregados')
         form = AgregadoForms(request.POST, instance=agregado)
 
-        # TODO adicnioar logica com numero de modificação Agregado.objects.filter(pk=agregado.pk).update(num_modificacao=F('num_modificacao') + 1)
         if form.is_valid():
             agregado = form.save(commit=False)
             agregado.fk_usuario_id = request.user.id
@@ -231,10 +290,13 @@ def editar_agregado(request, pk):
     context = {
         'form': form,
         'agregado': agregado,
+        'user_group': get_user_group(request)
     }
     return render(request, 'agregado/editar.html', context)
 
 
+@login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def deletar_agregado(request, pk):
     agregado = get_object_or_404(Agregado, pk=pk)
     if request.method == 'POST':
@@ -246,19 +308,27 @@ def deletar_agregado(request, pk):
 
 # Fornecedor
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def listar_fornecedor(request):
     fornecedores = Fornecedor.objects.all().order_by(Lower('nome'))
     exibir_data = False
-    return render(request, 'fornecedor/index.html', {'fornecedores': fornecedores, 'exibir_data': exibir_data})
+    context = {
+        'fornecedores': fornecedores,
+        'exibir_data': exibir_data,
+        'user_group': get_user_group(request)
+    }
+    return render(request, 'fornecedor/index.html', context)
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def inspecionar_fornecedor(request, pk):
     fornecedor = get_object_or_404(Fornecedor, pk=pk)
     return render(request, 'fornecedor/inspecionar.html', {'fornecedor': fornecedor})
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def cadastrar_fornecedor(request):
     if request.method == 'POST':
         if "cancel" in request.POST:
@@ -268,18 +338,26 @@ def cadastrar_fornecedor(request):
             form.save()
             return redirect('fornecedor')
         else:
-            context = {'form': form, 'errors': {
-                'code': 2,
-                'message': f"O formulário enviado não é válido: {form.errors}"
-            }}
+            context = {
+                'form': form,
+                'user_group': get_user_group(request),
+                'errors': {
+                    'code': 2,
+                    'message': f"O formulário enviado não é válido: {form.errors}"
+                }}
         return render(request, 'fornecedor/cadastrar.html', context)
 
     else:
         form = FornecedorForms()
-    return render(request, 'fornecedor/cadastrar.html', {'form': form})
+    context = {
+        'form': form,
+        'user_group': get_user_group(request)
+    }
+    return render(request, 'fornecedor/cadastrar.html', context)
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def editar_fornecedor(request, pk):
     fornecedor = get_object_or_404(Fornecedor, id=pk)
 
@@ -295,7 +373,8 @@ def editar_fornecedor(request, pk):
 
     context = {
         'form': form,
-        'fornecedor': fornecedor
+        'fornecedor': fornecedor,
+        'user_group': get_user_group(request)
     }
     return render(request, 'fornecedor/editar.html', context)
 
@@ -304,13 +383,20 @@ def editar_fornecedor(request, pk):
 
 # Traço
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def listar_traco(request):  # Renomeei a função para ser mais descritiva
     traco = Traco.objects.all().order_by(Lower('nome'))
     exibir_data = True
-    return render(request, 'traco/index.html', {'traco': traco, 'exibir_data': exibir_data})
+    context = {
+        'traco': traco,
+        'exibir_data': exibir_data,
+        'user_group': get_user_group(request)
+    }
+    return render(request, 'traco/index.html', context)
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def inspecionar_traco(request, pk):
     traco = get_object_or_404(Traco, id=pk)
     agregados_traco = TracoAgregado.objects.filter(traco=traco)
@@ -318,12 +404,14 @@ def inspecionar_traco(request, pk):
 
     context = {
         'traco': traco,
-        'informacoes_agregados': GetInformacoesAgregados(agregados_traco, tipos_agregado)
+        'informacoes_agregados': GetInformacoesAgregados(agregados_traco, tipos_agregado),
+        'user_group': get_user_group(request)
     }
     return render(request, 'traco/inspecionar.html', context)
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador'])
 def cadastrar_traco(request):
     tipos_agregado = TipoAgregado.objects.all()
     if request.method == 'POST':
@@ -335,7 +423,8 @@ def cadastrar_traco(request):
 
         context = {
             'form': form,
-            'tipos_agregado': tipos_agregado
+            'tipos_agregado': tipos_agregado,
+            'user_group': get_user_group(request)
         }
 
         if form.is_valid() and (agregados is not None) and (porcentagem_agregados is not None):
@@ -351,13 +440,15 @@ def cadastrar_traco(request):
 
         context = {
             'form': form,
-            'tipos_agregado': tipos_agregado
+            'tipos_agregado': tipos_agregado,
+            'user_group': get_user_group(request)
         }
 
         return render(request, 'traco/cadastrar.html', context)
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def deletar_traco(request, pk):
     traco = get_object_or_404(Traco, pk=pk)
     if request.method == 'POST':
@@ -367,6 +458,7 @@ def deletar_traco(request, pk):
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador'])
 def editar_traco(request, pk):
     traco = get_object_or_404(Traco, id=pk)
     agregados_traco = TracoAgregado.objects.filter(traco=traco)
@@ -382,7 +474,8 @@ def editar_traco(request, pk):
         context = {
             'form': form,
             'traco': traco,
-            'informacoes_agregados': GetInformacoesAgregados(agregados_traco, tipos_agregado)
+            'informacoes_agregados': GetInformacoesAgregados(agregados_traco, tipos_agregado),
+            'user_group': get_user_group(request)
         }
 
         if form.is_valid() and (agregados is not None) and (porcentagem_agregados is not None):
@@ -399,13 +492,15 @@ def editar_traco(request, pk):
         context = {
             'form': form,
             'traco': traco,
-            'informacoes_agregados': GetInformacoesAgregados(agregados_traco, tipos_agregado)
+            'informacoes_agregados': GetInformacoesAgregados(agregados_traco, tipos_agregado),
+            'user_group': get_user_group(request)
         }
 
         return render(request, 'traco/editar.html', context)
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def filtrar_tracos(request):
     if request.method == 'GET':
         filtro_data = request.GET.get('data')
@@ -425,13 +520,16 @@ def filtrar_tracos(request):
             return HttpResponseRedirect(request.path_info)
         exibir_data = True
         context = {
-            'traco': tracos_filtrados, 'exibir_data': exibir_data
+            'traco': tracos_filtrados,
+            'exibir_data': exibir_data,
+            'user_group': get_user_group(request)
         }
 
         return render(request, 'traco/index.html', context)
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def filtrar_historico(request):
     if request.method == 'GET':
         filtro_data = request.GET.get('data')
@@ -450,12 +548,15 @@ def filtrar_historico(request):
 
         exibir_data = True
         context = {
-            'historico': historico_filtrado, 'exibir_data': exibir_data
+            'historico': historico_filtrado,
+            'exibir_data': exibir_data,
+            'user_group': get_user_group(request)
         }
 
         return render(request, 'historico/index.html', context)
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def filtrar_agregados(request):
     if request.method == 'GET':
         filtro_data = request.GET.get('data')
@@ -474,13 +575,16 @@ def filtrar_agregados(request):
 
         exibir_data = True
         context = {
-            'agregados': agregados_filtrados, 'exibir_data': exibir_data
+            'agregados': agregados_filtrados,
+            'exibir_data': exibir_data,
+            'user_group': get_user_group(request)
         }
 
         return render(request, 'agregado/index.html', context)
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def filtrar_tipo_agregados(request):
     if request.method == 'GET':
         filtro_nome = request.GET.get('nome')
@@ -493,12 +597,14 @@ def filtrar_tipo_agregados(request):
             return HttpResponseRedirect(request.path_info)
         context = {
             'tipos_agregados': tipo_agregados_filtrados,
+            'user_group': get_user_group(request)
         }
 
         return render(request, 'tipo_agregado/index.html', context)
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Editor'])
 def filtrar_fornecedor(request):
     if request.method == 'GET':
         filtro_nome = request.GET.get('nome')
@@ -512,6 +618,7 @@ def filtrar_fornecedor(request):
 
         context = {
             'fornecedores': fornecedores_filtrados,
+            'user_group': get_user_group(request)
         }
 
         return render(request, 'fornecedor/index.html', context)
@@ -522,6 +629,7 @@ def decrease_y(y):
     return y[0]
 
 @login_required
+@allowed_users(allowed_roles=['Administrador', 'Consultor', 'Editor'])
 def download_pdf(request, calculo_traco_id):
 
     calculo_traco = CalculoTraco.objects.get(id=calculo_traco_id)
@@ -583,11 +691,19 @@ def download_pdf(request, calculo_traco_id):
 
 
 @login_required
+@allowed_users(allowed_roles=['Administrador'])
+@login_required
 def listar_usuarios(request):
     usuarios = CustomUsuario.objects.all().order_by(Lower('username'))
-    return render(request, 'registration/index_usuario.html', {'usuarios': usuarios})
+    context = {
+        'usuarios': usuarios,
+        'user_group': get_user_group(request)
+    }
+    return render(request, 'registration/index_usuario.html', context)
 
 
+@login_required
+@allowed_users(allowed_roles=['Administrador'])
 def cadastrar_usuarios(request):
     if request.method == 'POST':
         if "cancel" in request.POST:
@@ -602,39 +718,56 @@ def cadastrar_usuarios(request):
 
     else:
         form = CustomUsuarioCreateForm()
-    groups = Group.objects.all().order_by()
+
     context = {
         'form': form,
-        'groups': groups
+        'groups': default_calconc_users,
+        'user_group': get_user_group(request)
     }
     return render(request, 'registration/cadastrar_usuario.html', context)
 
 
+@login_required
+@allowed_users(allowed_roles=['Administrador'])
 def inspecionar_usuario(request, pk):
     # TODO - implementar isso
     return render(request, 'registration/inspecionar_usuario.html', null)
 
 
+@login_required
+@allowed_users(allowed_roles=['Administrador'])
 def editar_usuario(request, pk):
     usuario = get_object_or_404(CustomUsuario, id=pk)
+    current_group = usuario.groups.all()[0].name
 
     if request.method == 'POST':
         if "cancel" in request.POST:
             return redirect('usuarios')
-        form = CustomUsuarioCreateForm(request.POST)
+        form = CustomUsuarioCreateForm(request.POST, instance=usuario)
+        group_name = request.POST.get('group')
         if form.is_valid():
-            form.save()
+            user = form.save()
+            group = Group.objects.get(name=group_name)
+            # caso o grupo seja editado, removemos o usuário do grupo atual, e adicionamos o novo
+            if current_group != group:
+                user.groups.remove(Group.objects.get(name=current_group))
+                user.groups.add(group)
             return redirect('usuarios')
     else:
         form = CustomUsuarioCreateForm(instance=usuario)
 
     context = {
         'form': form,
-        'usuario': usuario
+        'usuario': usuario,
+        'current_group': current_group,
+        'groups': default_calconc_users,
+        'user_group': get_user_group(request)
     }
     return render(request, 'registration/editar_usuario.html', context)
 
 
+@login_required
+@allowed_users(allowed_roles=['Administrador'])
 def desativar_usuario(request, pk):
     # TODO - testar isso
     usuario = get_object_or_404(CustomUsuario, id=pk)

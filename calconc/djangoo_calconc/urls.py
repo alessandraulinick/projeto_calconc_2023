@@ -14,7 +14,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('contas/', include('django.contrib.auth.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', TemplateView.as_view(template_name='index.html'), name='index'),
+    # path('', TemplateView.as_view(template_name='index.html'), name='index'),
+    path('', views.index, name='index'),
 
     #### Calculadora
     path('calculadora/', views.calculadora, name='calculadora'),

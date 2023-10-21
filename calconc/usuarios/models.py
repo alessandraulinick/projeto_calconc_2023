@@ -42,6 +42,7 @@ class UsuarioManager(BaseUserManager):
 
 class CustomUsuario(AbstractUser):
     email = models.EmailField('E-mail', unique=True)
+    username = models.CharField('Usuário', max_length=50, unique=True)
     fone = models.CharField('Telefone', max_length=25, null=True)
     is_staff = models.BooleanField('Membro da equipe', default=True)
 

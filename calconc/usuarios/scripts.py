@@ -143,3 +143,7 @@ def resolve_unidade_medida(unidade_medida):
         unidade_medida_display = 'ERRO AO RESOLVER resolve_unidade_medida()'
 
     return multiplicador, unidade_medida_display
+
+
+def get_user_group(request):
+    return request.user.groups.all()[0].name

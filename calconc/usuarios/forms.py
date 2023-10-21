@@ -12,6 +12,11 @@ class CustomUsuarioCreateForm(UserCreationForm):
         fields = ('first_name', 'last_name', 'fone', 'username', 'email')
         labels = {'username': 'Usuário'}
 
+    def __init__(self, *args, **kwargs):
+        super(CustomUsuarioCreateForm, self).__init__(*args, **kwargs)
+        self.fields['password1'].required = False
+        self.fields['password2'].required = False
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])

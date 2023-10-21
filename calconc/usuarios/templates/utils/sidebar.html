@@ -3,32 +3,47 @@
     <ul>
         <li><a href="{% url 'index' %}">Menu Inicial</a></li>
 
+        {% if user_group in 'Administrador,Editor' %}
         <li class="{% if request.resolver_match.view_name == 'agregados' %}active{% endif %}">
             <a href="{% url 'agregados' %}">Agregado</a>
         </li>
+        {% endif %}
 
+        {% if user_group in 'Administrador,Editor' %}
         <li class="{% if request.resolver_match.view_name == 'tipo_agregado' %}active{% endif %}">
             <a href="{% url 'tipo_agregado' %}">Tipo de Agregado</a>
         </li>
+        {% endif %}
 
+        {% if user_group in 'Administrador,Editor,Consultor' %}
         <li class="{% if request.resolver_match.view_name == 'calculadora' %}active{% endif %}">
             <a href="{% url 'calculadora' %}">Calculadora</a>
         </li>
+        {% endif %}
 
+        {% if user_group in 'Administrador' %}
         <li class="{% if request.resolver_match.view_name == 'traco' %}active{% endif %}">
             <a href="{% url 'traco' %}">Traço</a>
         </li>
+        {% endif %}
 
+        {% if user_group in 'Administrador,Editor' %}
         <li class="{% if request.resolver_match.view_name == 'fornecedor' %}active{% endif %}">
             <a href="{% url 'fornecedor' %}">Fornecedor</a>
         </li>
+        {% endif %}
 
+        {% if user_group in 'Administrador' %}
         <li class="{% if request.resolver_match.view_name == 'usuarios' %}active{% endif %}">
             <a href="{% url 'usuarios' %}">Usuários</a>
         </li>
+        {% endif %}
 
+        {% if user_group in 'Administrador,Editor,Consultor' %}
         <li class="{% if request.resolver_match.view_name == 'historico' %}active{% endif %}">
             <a href="{% url 'historico' %}">Histórico</a>
         </li>
+        {% endif %}
+
     </ul>
 </div>
