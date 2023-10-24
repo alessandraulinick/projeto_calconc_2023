@@ -1,5 +1,6 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
+from django.urls import reverse
 
 # TODO - adicionar isso, não permite usuário ir para a tela de login se já estiver logado
 # https://www.youtube.com/watch?v=eBsc65jTKvw
@@ -21,7 +22,7 @@ def allowed_users(allowed_roles=[]):
             if group in allowed_roles:
                 return view_func(request, *args, **kwargs)
             else:
-                # todo redirecionar para uma tela bonitinha
-                return HttpResponse('não autorizado')
+                # Redireciona para a página de erro personalizada
+                return HttpResponseRedirect(reverse('error_page'))
         return wrapper_func
     return decorator

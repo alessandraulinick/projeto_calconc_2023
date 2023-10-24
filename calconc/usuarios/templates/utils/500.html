@@ -5,22 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>500 Internal Server Error</title>
     <style>
-        /* Your custom CSS styles go here */
+        /* Seu CSS personalizado aqui */
         body {
             font-family: Arial, sans-serif;
             background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .container {
             text-align: center;
-            padding: 100px;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
         }
         h1 {
             font-size: 48px;
             color: #ff5733;
+            margin-bottom: 20px;
         }
         p {
             font-size: 18px;
             color: #555;
+            margin-bottom: 20px;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -28,7 +46,7 @@
     <div class="container">
         <h1>Oops! Something Went Wrong</h1>
         <p>We're experiencing technical difficulties. Please try again later.</p>
-        <p>If the issue persists, you can contact our support team at support@example.com.</p>
+        <p>If the issue persists, you can contact our <a href="mailto:support@example.com">support team</a>.</p>
     </div>
 </body>
 </html>

@@ -22,6 +22,15 @@ from django.shortcuts import render
 from .decorators import allowed_users
 from django.contrib.auth.models import Group
 from .apps import default_calconc_users
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib import colors
+
 
 
 itens_por_pagina = 8
@@ -628,65 +637,132 @@ def decrease_y(y):
     y[0] -= 20
     return y[0]
 
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from io import BytesIO
+from django.http import HttpResponse
+from datetime import datetime
+
+def create_pdf_with_footer(buffer, content, footer_text):
+    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=60)
+    styles = getSampleStyleSheet()
+    story = []
+
+    # Add content to the PDF
+    story += content
+
+    # Add a spacer to create space for the footer
+    story.append(Spacer(1, 20))
+
+    # Add the footer text
+    footer_style = ParagraphStyle(
+        name='FooterStyle',
+        parent=styles['Normal'],
+        fontSize=10,
+        leading=12,
+        textColor=colors.black,
+        alignment=1  # 1 corresponds to TA_CENTER (centered text)
+    )
+
+    footer_paragraph = Paragraph(footer_text, footer_style)
+    story.append(footer_paragraph)
+
+    doc.build(story)
+
 @login_required
 @allowed_users(allowed_roles=['Administrador', 'Consultor', 'Editor'])
 def download_pdf(request, calculo_traco_id):
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
+    styles = getSampleStyleSheet()
+    story = []
+    content = []
 
+    # Customize your paragraph styles
+    custom_style_center = ParagraphStyle(
+        name='CustomStyle',
+        parent=styles['Normal'],
+        fontSize=12,
+        textColor=colors.black,
+        alignment=1  # 1 corresponds to TA_CENTER (centered text)
+    )
+
+    custom_style = ParagraphStyle(
+        name='CustomStyle',
+        parent=styles['Normal'],
+        fontSize=12,
+        leading=14,
+        spaceAfter=12,
+        textColor=colors.black
+    )
+
+    # Start adding content to the PDF
     calculo_traco = CalculoTraco.objects.get(id=calculo_traco_id)
-    agregados_calculo = AgregadosCalculo.objects.filter(fk_calculo_traco=calculo_traco)
-
+    traco = CalculoTraco.objects.get(id=calculo_traco_id)
+    agregados_calculo = AgregadosCalculo.objects.filter(fk_calculo_traco=traco)
     _, unidade_medida_display = resolve_unidade_medida(calculo_traco.unidade_medida)
-
     data_hora = calculo_traco.data_hora
     data_hora_formatado = f"{data_hora.hour}:{data_hora.minute} - {data_hora.day}/{data_hora.month}/{data_hora.year}"
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="documento.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="relatorio.pdf'
 
-    p = canvas.Canvas(response)
+    # Calculate the vertical center position
+    vertical_center = (letter[1] - doc.topMargin - doc.bottomMargin) / 2
 
-    # Cordenadas iniciais
-    x = [50]
-    y = [800]
+    # Add a title
+    title = "Relatório do Traço"
 
-    # Nome do arquivo
-    p.setTitle(calculo_traco.fk_traco.nome)
+    story.append(Paragraph(title, styles['Title']))
+    story.append(Paragraph("_______________________________________________________________________________", custom_style))
 
-    p.drawString(x[0], decrease_y(y), f"Traço: {calculo_traco.fk_traco.nome}")
+    # Add Traço information
+    user_name = f"Usuário: {traco.fk_usuario.first_name} {traco.fk_usuario.last_name}"
+    story.append(Paragraph(user_name, custom_style_center))
 
-    # Print de Descrição - Isso precisa ser feito pois pode haver quebra de linha aqui
-    t = p.beginText()
-    t.setTextOrigin(x[0], decrease_y(y))
-    wraped_text = wrap(f"Descrição do traço: {calculo_traco.fk_traco.descricao}", 100)
-    t.textLines("\n".join(wraped_text))
-    p.drawText(t)
-    for _ in range(len(wraped_text) - 1):
-        decrease_y(y)
-    ###
+    # Add Traço information
+    story.append(Paragraph(f"Traço: {traco.fk_traco.nome}", custom_style))
+    description = "Descrição do traço: " + traco.fk_traco.descricao
+    story.append(Spacer(1, 12))
+    story.append(Paragraph(description, custom_style))
+    story.append(Paragraph(f"Volume do Traço: {traco.volume} {unidade_medida_display}", custom_style))
+    story.append(Paragraph(f"Peso Final: {traco.peso_final} Kg", custom_style))
 
-    p.drawString(x[0], decrease_y(y), f"Volume do Traço: {calculo_traco.volume} {unidade_medida_display}")
-    p.drawString(x[0], decrease_y(y), f"Peso Final: {calculo_traco.peso_final} Kg")
+    story.append(Spacer(1, 24))
 
-    p.drawString(x[0], decrease_y(y), f"Data e hora: {data_hora_formatado}")
-    p.drawString(x[0], decrease_y(y), f"Usuário: {calculo_traco.fk_usuario.nome}")
-
-    decrease_y(y)
-    # Agregados
-    p.drawString(x[0], decrease_y(y), f"Agregados")
-
-    column_start = [80, 210, 400]
-    p.drawString(column_start[0], decrease_y(y), 'Tipo de Agregado')
-    p.drawString(column_start[1], y[0], 'Agregado')
-    p.drawString(column_start[2], y[0], 'Quantidade')
-
+    # Add Agregados information in a table
+    data = [["Tipo de Agregado", "Agregado", "Quantidade"]]
     for agregado in agregados_calculo:
-        x = [80]
-        p.drawString(column_start[0], decrease_y(y), f"{agregado.tipo_agregado}")
-        p.drawString(column_start[1], y[0], f"{agregado.nome}")
-        p.drawString(column_start[2], y[0], f"{agregado.quantidade} {agregado.unidade_medida}")
+        data.append([agregado.tipo_agregado, agregado.nome, f"{agregado.quantidade} {agregado.unidade_medida}"])
 
-    p.showPage()
-    p.save()
+    # Defina uma lista de larguras de coluna desejadas
+    column_widths = [100, 200, 200, 500]
 
+    # Crie a tabela com os dados
+    table = Table(data, colWidths=column_widths)
+
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),  # Define a cor de fundo da primeira linha como azul
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),  # Define a cor do texto na primeira linha como branco
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold', colors.white),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.white),  # Define a cor de fundo do restante da tabela como cinza
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+
+    story.append(table)
+
+    data_hora = datetime.now().strftime("%H:%M - %d/%m/%Y")
+    footer_text = f"Data e hora: {data_hora}"
+
+    create_pdf_with_footer(buffer, story, footer_text)
+
+    buffer.seek(0)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="relatorio.pdf"'
+    response.write(buffer.read())
     return response
 
 
@@ -775,3 +851,5 @@ def desativar_usuario(request, pk):
     form.inactivate()
     return listar_usuarios(request)
 
+def error_page(request):
+    return render(request, 'utils/erro_autorizacao.html')

@@ -61,4 +61,6 @@ urlpatterns = [
     path('cadastrar_fornecedor/', views.cadastrar_fornecedor, name='cadastrar_fornecedor'),
     path('editar_fornecedor/<int:pk>', views.editar_fornecedor, name='editar_fornecedor'),
     path('filtrar_fornecedores/', views.filtrar_fornecedor, name='filtrar_fornecedores'),
+
+    path('error/', views.error_page, name='error_page'),
 ]
