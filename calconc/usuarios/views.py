@@ -809,7 +809,7 @@ def inspecionar_usuario(request, pk):
     # TODO - implementar isso
     return render(request, 'registration/inspecionar_usuario.html', null)
 
-
+from .forms import CustomUsuarioChangeForm
 @login_required
 @allowed_users(allowed_roles=['Administrador'])
 def editar_usuario(request, pk):
@@ -819,7 +819,7 @@ def editar_usuario(request, pk):
     if request.method == 'POST':
         if "cancel" in request.POST:
             return redirect('usuarios')
-        form = CustomUsuarioCreateForm(request.POST, instance=usuario)
+        form = CustomUsuarioChangeForm(request.POST, instance=usuario)
         group_name = request.POST.get('group')
         if form.is_valid():
             user = form.save()

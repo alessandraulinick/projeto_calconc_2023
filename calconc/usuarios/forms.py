@@ -33,7 +33,7 @@ class CustomUsuarioCreateForm(UserCreationForm):
 class CustomUsuarioChangeForm(UserChangeForm):
     class Meta:
         model = CustomUsuario
-        fields = ('first_name', 'last_name', 'fone')
+        fields = ('first_name', 'last_name', 'fone', 'username', 'email')
 
 
 class FornecedorForms(forms.ModelForm):
