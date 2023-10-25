@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
 from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms, TracoAgregadoForms, \
-    CustomUsuarioCreateForm
+    CustomUsuarioCreateForm, CustomUsuarioChangeForm
 from .models import Fornecedor, TipoAgregado, Agregado, Traco, TracoAgregado, CalculoTraco, CustomUsuario, \
     AgregadosCalculo
 from django.utils import timezone
@@ -30,7 +30,13 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Table, TableStyle
 from reportlab.lib import colors
-
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from io import BytesIO
+from django.http import HttpResponse
+from datetime import datetime
 
 
 itens_por_pagina = 8
@@ -333,7 +339,12 @@ def listar_fornecedor(request):
 @allowed_users(allowed_roles=['Administrador', 'Editor'])
 def inspecionar_fornecedor(request, pk):
     fornecedor = get_object_or_404(Fornecedor, pk=pk)
-    return render(request, 'fornecedor/inspecionar.html', {'fornecedor': fornecedor})
+
+    context = {
+        'fornecedor': fornecedor,
+        'user_group': get_user_group(request)
+    }
+    return render(request, 'fornecedor/inspecionar.html', context)
 
 
 @login_required
@@ -637,13 +648,6 @@ def decrease_y(y):
     y[0] -= 20
     return y[0]
 
-from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from io import BytesIO
-from django.http import HttpResponse
-from datetime import datetime
 
 def create_pdf_with_footer(buffer, content, footer_text):
     doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=60)
@@ -670,6 +674,7 @@ def create_pdf_with_footer(buffer, content, footer_text):
     story.append(footer_paragraph)
 
     doc.build(story)
+
 
 @login_required
 @allowed_users(allowed_roles=['Administrador', 'Consultor', 'Editor'])
@@ -768,7 +773,6 @@ def download_pdf(request, calculo_traco_id):
 
 @login_required
 @allowed_users(allowed_roles=['Administrador'])
-@login_required
 def listar_usuarios(request):
     usuarios = CustomUsuario.objects.all().order_by(Lower('username'))
     context = {
@@ -806,15 +810,29 @@ def cadastrar_usuarios(request):
 @login_required
 @allowed_users(allowed_roles=['Administrador'])
 def inspecionar_usuario(request, pk):
-    # TODO - implementar isso
-    return render(request, 'registration/inspecionar_usuario.html', null)
+    usuario = get_object_or_404(CustomUsuario, id=pk)
+    current_group = usuario.groups.all()[0].name
 
-from .forms import CustomUsuarioChangeForm
+    context = {
+        'user_group': get_user_group(request),
+        'usuario': usuario,
+        'current_group': current_group
+    }
+    return render(request, 'registration/inspecionar_usuario.html', context)
+
+
 @login_required
 @allowed_users(allowed_roles=['Administrador'])
 def editar_usuario(request, pk):
     usuario = get_object_or_404(CustomUsuario, id=pk)
     current_group = usuario.groups.all()[0].name
+
+    context = {
+        'usuario': usuario,
+        'current_group': current_group,
+        'groups': default_calconc_users,
+        'user_group': get_user_group(request)
+    }
 
     if request.method == 'POST':
         if "cancel" in request.POST:
@@ -823,33 +841,69 @@ def editar_usuario(request, pk):
         group_name = request.POST.get('group')
         if form.is_valid():
             user = form.save()
+            pass1 = request.POST.get('password1')
+            pass2 = request.POST.get('password2')
+            if pass1 != "":
+
+                context['form'] = form
+
+                if pass1 == pass2:
+                    min_length = 8
+
+                    if len(pass1) < min_length:
+                        context['errors'] = {
+                            'code': 2002,
+                            'message': f"As senha informada deve ter mais que 8 caracteres."
+                        }
+                        return render(request, 'registration/editar_usuario.html', context)
+
+                    elif not any(char.isdigit() for char in pass1):
+                        context['errors'] = {
+                            'code': 2003,
+                            'message': f"As senha informada deve ter ao menos 1 número."
+                        }
+                        return render(request, 'registration/editar_usuario.html', context)
+
+                    elif not any(char.isalpha() for char in pass1):
+                        context['errors'] = {
+                            'code': 2004,
+                            'message': f"As senha informada deve ter ao menos 1 letra."
+                        }
+                        return render(request, 'registration/editar_usuario.html', context)
+
+                    else:
+                        user.set_password(pass1)
+                        user.save()
+                else:
+                    context['errors'] = {
+                        'code': 2001,
+                        'message': f"As senhas informadas não são iguais."
+                    }
+                    return render(request, 'registration/editar_usuario.html', context)
+
             group = Group.objects.get(name=group_name)
             # caso o grupo seja editado, removemos o usuário do grupo atual, e adicionamos o novo
-            if current_group != group:
+            if current_group != group.name:
                 user.groups.remove(Group.objects.get(name=current_group))
                 user.groups.add(group)
             return redirect('usuarios')
     else:
         form = CustomUsuarioCreateForm(instance=usuario)
 
-    context = {
-        'form': form,
-        'usuario': usuario,
-        'current_group': current_group,
-        'groups': default_calconc_users,
-        'user_group': get_user_group(request)
-    }
+    context['form'] = form
+
     return render(request, 'registration/editar_usuario.html', context)
 
 
 @login_required
 @allowed_users(allowed_roles=['Administrador'])
 def desativar_usuario(request, pk):
-    # TODO - testar isso
     usuario = get_object_or_404(CustomUsuario, id=pk)
-    form = CustomUsuarioCreateForm(instance=usuario)
-    form.inactivate()
+    usuario.is_active = False
+    usuario.save()
+
     return listar_usuarios(request)
+
 
 def error_page(request):
     return render(request, 'utils/erro_autorizacao.html')

@@ -24,16 +24,19 @@ class CustomUsuarioCreateForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class CustomUsuarioChangeForm(UserChangeForm):
+    password1 = forms.CharField(widget=forms.PasswordInput, required=False)
+    password2 = forms.CharField(widget=forms.PasswordInput, required=False)
+    class Meta:
+        model = CustomUsuario
+        fields = ('first_name', 'last_name', 'fone', 'username', 'email')
+
     def inactivate(self):
         user = super().save(commit=False)
         user.is_active = False
         user.save()
-
-
-class CustomUsuarioChangeForm(UserChangeForm):
-    class Meta:
-        model = CustomUsuario
-        fields = ('first_name', 'last_name', 'fone', 'username', 'email')
 
 
 class FornecedorForms(forms.ModelForm):

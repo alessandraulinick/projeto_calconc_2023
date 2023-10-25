@@ -24,10 +24,6 @@
                 <a href="{% url 'cadastrar_usuario' %}" class="btn_cadastrar">Adicionar Usuario</a>
             </div>
 
-
-            {% for usuario in usuarios %}
-                <b1> {{ usuario.first_name }}</b1>
-            {% endfor %}
             <div class = 'all-content'>
 
                 <div class="lista">
@@ -37,7 +33,7 @@
                                 <th>Nome</th>
                                 <th>Email</th>
                                 <th>Usuário</th>
-                                <th>Permissao</th>
+                                <th>Grupo</th>
                                 <th>Status</th>
                                 <th>Ações</th>
                             </tr>
@@ -48,7 +44,7 @@
                                     <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
                                     <td>{{ usuario.email }}</td>
                                     <td>{{ usuario.username }}</td>
-                                    <td>{{ usuario.permissao }}</td>
+                                    <td>{{ usuario.groups.all.0 }}</td>
                                     {% if usuario.is_active %}
                                         <td>Ativo</td>
                                     {% else %}

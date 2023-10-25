@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% include "utils/anonymous_user_redirect.html" %}
+
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/inspectionar.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>CalConc</title>
+</head>
+<body>
+     {% include "utils/header.html" %}
+
+    <div class="container">
+        {% include "utils/sidebar.html" %}
+
+        <!-- Conteúdo principal -->
+        <div class="content">
+            <div class="cadastrar_btn">
+                <a class="nome-pagina">Visualizar Fornecedor</a>
+            </div>
+            <div class = 'all-content'>
+                <div class="lista">
+                    <table class="resultado-table">
+                        <tbody>
+                            <tr class="header-row">
+                                <td class="header-cell">Primeiro Nome:</td>
+                                <td>{{ usuario.first_name }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Ultimo Nome:</td>
+                                <td>{{ usuario.last_name }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Usuário:</td>
+                                <td>{{ usuario.username }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">E-Mail:</td>
+                                <td>{{ usuario.email }}</td>
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Status:</td>
+                                {% if usuario.is_active %}
+                                    <td>Ativo</td>
+                                {% else %}
+                                    <td>Inativo</td>
+                                {% endif %}
+                            </tr>
+                            <tr class="header-row">
+                                <td class="header-cell">Grupo:</td>
+                                <td>{{ current_group }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% include "utils/duvidas.html" %}
+        </div>
+    </div>
+</body>
+{% endblock %}
