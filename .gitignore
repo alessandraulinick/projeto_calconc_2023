@@ -1,7 +1,11 @@
 calconc/db.sqlite3
 
-calconc/__pycache__
+__pycache__
 *.*-
 *.pyc
 .idea
+
+calconc/__pycache__
+calconc/*.*-
+calconc/*.pyc
 calconc/.idea
