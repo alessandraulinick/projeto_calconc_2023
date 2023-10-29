@@ -1,0 +1,1 @@
+web: gunicorn calconc.djangoo_calconc.wsgi --log-file -
