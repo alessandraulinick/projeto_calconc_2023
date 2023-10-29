@@ -1,0 +1,239 @@
+/* Define estilos padrão para todos os elementos */
+* {
+  margin: 0;
+  padding: 0;
+  color: inherit;
+}
+
+/* Estilos para o corpo da página */
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  background: #F5F5F5;
+  min-height: 100vh;
+}
+
+/* Estilos para o cabeçalho */
+.header {
+  background: #171717;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px; /* Adiciona um espaçamento interno para os elementos dentro do cabeçalho */
+}
+
+.header-row .header-cell {
+    font-weight: bold;
+    color: #3498db; /* Cor desejada para o texto */
+}
+
+/* Estilos para o logotipo no cabeçalho */
+.logo {
+  width: 36px;
+}
+
+.logo img {
+  max-width: 100%;
+}
+
+/* Estilos para o botão de logout */
+.btn-logout {
+  text-decoration: none;
+  color: black;
+  background-color: white;
+  border: 2px solid #333;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+/* Estilos para a lista de menu */
+.menu {
+  list-style: none;
+}
+
+.menu li {
+  display: inline-block; /* Para que os itens do menu fiquem na mesma linha */
+  margin-right: 10px; /* Adiciona um espaçamento entre os itens do menu */
+}
+
+/* Estilos para o contêiner principal */
+.container {
+  display: flex;
+  min-height: calc(100vh - 40px);
+}
+
+/* Estilos para a barra lateral */
+.sidebar {
+  width: 200px;
+  background-color: #C0C0C0;
+}
+
+.sidebar ul {
+  list-style: none;
+  margin: none;
+}
+
+.sidebar ul li {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+/* Estilos para itens de barra lateral ativos */
+.sidebar ul li.active {
+  background-color: white;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+/* Estilos para o conteúdo principal e a barra lateral */
+.all-content {
+  width: 100%;
+  display: flex;
+  flex-direction: row; /* Mantém os elementos em linha horizontalmente */
+  justify-content: space-between; /* Distribui o espaço horizontalmente entre "nome-pagina" e "all-content" */
+}
+
+/* Estilos para o contêiner do formulário e resultado */
+.form-container,
+.resultado {
+  width: calc(50% - 10px);
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-left: 5px;
+  height: 96%;
+  font-size: 20px;
+  color: #333;
+}
+
+.form-container h2 {
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  margin-top: 10px;
+  font-size: 16px; /* Tamanho da fonte desejado */
+  margin-bottom: 10px; /* Espaçamento abaixo do label */
+  display: block; /* Faz com que os labels ocupem uma linha inteira */
+}
+
+/* Estilo para os campos de seleção e campos de texto */
+select, input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.button-container {
+  position: sticky;
+}
+
+/* Estilo para o botão Salvar */
+.save-button {
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.save-button:hover {
+  background-color: #0056b3;
+}
+
+/* Estilo para o conteúdo principal */
+.content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between; /* Adicione isso para separar os elementos horizontalmente */
+}
+
+/* Estilo para a seção do formulário */
+.form-container {
+  width: calc(50% - 20px); /* 50% do espaço disponível menos o espaçamento */
+  margin-bottom: 20px; /* Espaço entre as seções */
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil */
+}
+
+/* Estilos para a seção de resultados */
+.resultado {
+  text-align: center;
+  margin: 0 auto;
+  padding: 20px;
+  min-width: 60%;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-left: 1%;
+}
+
+/* Estilos para a tabela de resultados */
+.resultado-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.resultado-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.resultado-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Estilo para a tabela */
+.resultado-table-th {
+  background-color: white;
+  border-radius: 10px;
+  margin-left: 2%;
+  margin-top: 5px;
+  width: 91%;
+}
+
+.resultado-table-th th,
+.resultado-table-th td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Estilo para o link de download */
+.download-button {
+  display: inline-block;
+  margin-left: 2%;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.download-button:hover {
+  background-color: #0056b3;
+}
+

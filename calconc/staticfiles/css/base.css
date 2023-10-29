@@ -352,6 +352,21 @@ iframe {
   }
 }
 
+.has-error {
+    border-color: #ff0000; /* Cor da borda vermelha */
+}
+
+.error-message {
+    color: #ff0000; /* Cor vermelha */
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+
+.error-icon {
+    font-size: 20px;
+    margin-right: 5px;
+}
 
 /*------------------------------------------------------------------
 [ Alert validate ]*/

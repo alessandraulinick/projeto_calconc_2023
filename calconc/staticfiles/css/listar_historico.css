@@ -1,0 +1,237 @@
+* {
+  margin: 0;
+  padding: 0;
+  color: inherit;
+}
+
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  background: #F5F5F5;
+  min-height: 100vh;
+}
+
+.header {
+  background: #171717;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px; /* Adiciona um espaçamento interno para os elementos dentro do cabeçalho */
+}
+
+.logo {
+  width: 36px;
+}
+
+.logo img {
+  max-width: 100%;
+}
+
+.btn-logout {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    border: 2px solid #333;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+.menu {
+  list-style: none;
+}
+
+.menu li {
+  display: inline-block; /* Para que os itens do menu fiquem na mesma linha */
+  margin-right: 10px; /* Adiciona um espaçamento entre os itens do menu */
+}
+
+.container {
+    display: flex;
+    min-height: 96%; /* Use min-height em vez de height */
+    max-height: 80vh; /* Defina a altura máxima que desejar */
+    overflow-y: auto; /* Adicione uma barra de rolagem vertical quando o conteúdo exceder a altura máxima */
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #C0C0C0;
+}
+
+.sidebar ul {
+  list-style: none;
+  margin: none;
+}
+
+.sidebar ul li {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar ul li.active {
+        background-color: white;
+}
+
+.sidebar ul li a {
+    text-decoration:none;
+    color: black;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.content {
+  flex: 1;
+  margin-left: 15px;
+  margin-rigth: 15px;
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+.nome-pagina{
+    text-align: left;
+    font-size: 24px;
+}
+
+.cadastrar_btn {
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.btn_cadastrar {
+    height: 40px;
+    line-height: 40px;
+    width: 200px;
+    padding: 0px 15px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.all-content {
+    width: 100%;
+    max-height: 89vh;
+    background-color: white;
+    border-radius: 10px;
+    overflow: auto;
+}
+
+.filtros{
+    margin-top:20px;
+    margin-left:20px;
+}
+
+.sidebar ul li:hover{
+    background-color: white;
+}
+
+.lista {
+    margin: 15px;
+}
+
+.lista table {
+    width: 100%;
+    font-size: 14px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+.btn-action-container {
+  display: flex;
+  justify-content: flex-end; /* Alinhar os botões à direita */
+  gap: 10px; /* Espaçamento entre os botões */
+}
+
+.btn-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #333;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+
+.btn-action:hover {
+  color: #007bff; /* Cor ao passar o mouse */
+}
+
+.lista td {
+    font-size: 12px;
+    white-space: pre-line;
+    width: 20%;
+}
+
+.lista th, .lista td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+    width: 18%;
+}
+
+.filtros label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.filtros form {
+    display: flex; /* Usar flexbox para alinhar os itens na mesma linha */
+    flex-wrap: wrap; /* Permitir que os itens quebrem para a próxima linha quando o espaço é limitado */
+}
+
+.filtros input[type="date"],
+.filtros input[type="text"] {
+    flex: 1;
+    margin-top: 20px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 5px;
+    max-width: calc(50% - 5px);
+    height: 40px; /* Define a mesma altura dos botões */
+}
+
+.filtros button[type="submit"],
+.filtros .limpar-filtros {
+    height: 40px;
+    line-height: 40px;
+    width: 100px; /* Largura igual para ambos os botões */
+    padding: 0px 15px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-right: 5px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filtros button[type="submit"]:hover,
+.filtros .limpar-filtros:hover {
+    background-color: #2980b9;
+}
+
+/* Estilo para o botão de limpar filtros */
+.filtros .limpar-filtros {
+    background-color: #e74c3c;
+}
+
+.filtros .limpar-filtros:hover {
+    background-color: #c0392b;
+}

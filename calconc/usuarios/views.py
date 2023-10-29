@@ -716,23 +716,42 @@ def download_pdf(request, calculo_traco_id):
     # Calculate the vertical center position
     vertical_center = (letter[1] - doc.topMargin - doc.bottomMargin) / 2
 
+    import os
+    from reportlab.platypus import Image
+    from django.conf import settings
+
+    # Construa o caminho completo para a imagem no sistema de arquivos do servidor
+    image_path = os.path.join(settings.STATIC_ROOT, "images", "img-01.png")
+
+    # Adicione a imagem ao PDF
+    if os.path.exists(image_path):
+        image = Image(image_path, width=200, height=200)
+        story.append(image)
+    else:
+        print('nao deu')
+        pass
+
     # Add a title
     title = "Relatório do Traço"
 
     story.append(Paragraph(title, styles['Title']))
+    # Adicione Traço information em negrito
+    traço_label = "Traço"
+    traço_valor = traco.fk_traco.nome
+    story.append(Paragraph(f"<b>{traço_label.upper()} {traço_valor.upper()}</b>", custom_style_center))
     story.append(Paragraph("_______________________________________________________________________________", custom_style))
 
-    # Add Traço information
-    user_name = f"Usuário: {traco.fk_usuario.first_name} {traco.fk_usuario.last_name}"
-    story.append(Paragraph(user_name, custom_style_center))
+    # Add Traço information com o nome do usuário em letras maiúsculas
+    user_name = f"<b>Usuário:</b> {traco.fk_usuario.first_name.capitalize()} {traco.fk_usuario.last_name.capitalize()}"
+    story.append(Paragraph(user_name, custom_style))
 
-    # Add Traço information
-    story.append(Paragraph(f"Traço: {traco.fk_traco.nome}", custom_style))
-    description = "Descrição do traço: " + traco.fk_traco.descricao
-    story.append(Spacer(1, 12))
-    story.append(Paragraph(description, custom_style))
-    story.append(Paragraph(f"Volume do Traço: {traco.volume} {unidade_medida_display}", custom_style))
-    story.append(Paragraph(f"Peso Final: {traco.peso_final} Kg", custom_style))
+    # Adicione a Descrição do traço em negrito
+    description = traco.fk_traco.descricao
+    descricao_label = "Descrição do traço:"
+    story.append(Paragraph(f"<b>{descricao_label}</b> {description}", custom_style))
+
+    story.append(Paragraph(f"<b>Volume do Traço: </b>{traco.volume} {unidade_medida_display}", custom_style))
+    story.append(Paragraph(f"<b>Peso Final:</b> {traco.peso_final} Kg", custom_style))
 
     story.append(Spacer(1, 24))
 
@@ -760,7 +779,7 @@ def download_pdf(request, calculo_traco_id):
     story.append(table)
 
     data_hora = datetime.now().strftime("%H:%M - %d/%m/%Y")
-    footer_text = f"Data e hora: {data_hora}"
+    footer_text = f"{data_hora}"
 
     create_pdf_with_footer(buffer, story, footer_text)
 

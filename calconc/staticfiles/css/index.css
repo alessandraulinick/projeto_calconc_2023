@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  color: inherit;
 }
 
 body {
@@ -11,39 +12,30 @@ body {
 
 .header {
   background: #171717;
-}
-
-.logo,
-.texto-header {
-  display: inline-block;
-  width: 50%;
-  vertical-align: top;
+  color: #171717;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px; /* Adiciona um espaçamento interno para os elementos dentro do cabeçalho */
 }
 
 .logo {
-  width: 50px;
-  margin-left: 10px;
+ color:#171717;
+  width: 36px;
 }
 
 .logo img {
-  max-width: 50%;
-}
-
-.texto-header {
-  text-decoration: none;
-  display: flex;
+  max-width: 100%;
 }
 
 .btn-logout {
-    color: white;
-    display: flex;
     text-decoration: none;
-    justify-content: right;
-    list-style: none;
-    margin-top: 5px;
-    margin-left: 90%;
-    padding: 0;
-    width: 100%;
+    color: black;
+    background-color: white;
+    border: 2px solid #333;
+    padding: 6px 12px;
+    border-radius: 4px;
 }
 
 .menu-principal {
@@ -62,6 +54,11 @@ body {
   margin-top: 15px;
   margin-right: 15px;
 }
+
+.texto-direita {
+  text-align: right;
+}
+
 
 .box-row {
   display: flex;
@@ -96,11 +93,41 @@ body {
   height: 150px;
   background-color: #E6E6FA;
   display: flex;
-  justify-content: center;
-  align-items: center;
   text-decoration: none;
   color: #000;
   border-radius: 10px;
+  flex-direction: row; /* Alterado para "row" para alinhar elementos horizontalmente */
+  position: relative;
+  justify-content: center; /* Centraliza verticalmente */
+  align-items: center; /* Centraliza horizontalmente */
+  text-align: left; /* Centraliza o texto horizontalmente */
+}
+
+.box-image img{
+  height: 40px;
+  margin-right: 30px; /* Move a imagem para a esquerda */
+  display: flex;
+  align-items: center; /* Centraliza verticalmente a imagem */
+}
+
+.box-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centraliza verticalmente */
+  align-items: center; /* Centraliza horizontalmente */
+}
+
+.box-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+}
+
+.box-description {
+  font-size: 12px;
+  color: #888;
+  margin-top: 10px;
+    text-align: left;
 }
 
 .box-2 {
@@ -110,23 +137,30 @@ body {
   height: 150px;
   background-color: #E6E6FA;
   display: flex;
-  justify-content: center;
-  align-items: center;
   text-decoration: none;
   color: #000;
   border-radius: 10px;
+  flex-direction: row; /* Alterado para "row" para alinhar elementos horizontalmente */
+  position: relative;
+  justify-content: center; /* Centraliza verticalmente */
+  align-items: center; /* Centraliza horizontalmente */
+  text-align: left; /* Centraliza o texto horizontalmente */
 }
-
 
 /* Estilos adicionais para hover (opcional) */
 .box:hover {
-  background-color: #F8F8FF;
-  color: black;
-  border-radius: 10px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 2px solid #001A5F;
+    border-radius: 10px;
 }
 
 .box-2:hover {
-  background-color: #F8F8FF;
-  color: black;
-  border-radius: 10px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 2px solid #001A5F;
+    border-radius: 10px;
 }
+
